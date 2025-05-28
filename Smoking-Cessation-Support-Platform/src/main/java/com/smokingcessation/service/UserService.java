@@ -5,6 +5,7 @@ import com.smokingcessation.entity.LoginRequest;
 import com.smokingcessation.entity.RegisterRequest;
 import com.smokingcessation.entity.Users;
 import com.smokingcessation.repository.UserRepository;
+import com.smokingcessation.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Service
@@ -29,7 +31,7 @@ public class UserService {
 
     public void register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email already exists");
+            throw new RuntimeException("Email này đã tồn tại trong hệ thống");
         }
 
         Users users = new Users();
@@ -37,7 +39,7 @@ public class UserService {
         users.setEmail(request.getEmail());
         users.setPassword(passwordEncoder.encode(request.getPassword()));
         users.setRole("MEMBER");
-        users.setCreateAt(date.now());
+        users.setCreateAt(LocalDate.now());
 
         userRepository.save(users);
     }
@@ -47,7 +49,12 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("Email not found"));
 
         if (!passwordEncoder.matches(request.getPassword(), users.getPassword())) {
-            throw new RuntimeException("Invalid password");
+            throw new RuntimeException("Password is incorrect");
+        }
+
+        // Check role Users
+        if (!users.getRole().equals("ADMIN") && !users.getRole().equals("MEMBER")) {
+            throw new RuntimeException("Invalid user role");
         }
 
         String token = jwtUtil.generateToken(users);
@@ -57,22 +64,6 @@ public class UserService {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-    @Component
-    public class JwtUtil {
-        private final String jwtSecret = "secret";
-        private final long expiration = 86400000;
-
-        public String generateToken(Users user) {
-            return Jwts.builder()
-                    .setSubject(user.getEmail())
-                    .claim("role", user.getRole())
-                    .claim("name", user.getName())
-                    .setIssuedAt(new Date())
-                    .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                    .signWith(SignatureAlgorithm.HS512, jwtSecret)
-                    .compact();
-        }
     }
 
 }

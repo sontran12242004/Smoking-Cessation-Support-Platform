@@ -8,7 +8,8 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
+import jakarta.persistence.Id;
+
 
 import java.time.LocalDate;
 
@@ -20,6 +21,11 @@ import java.time.LocalDate;
 @Table(name = "users")
 
 public class Users {
+
+    public Users(){
+
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String userID;
