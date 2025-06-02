@@ -1,43 +1,8 @@
 package com.smokingcessation.dto;
 
+import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import jakarta.persistence.Id;
-
-
-import java.time.LocalDate;
-
-
-@Getter
-@Setter
-@AllArgsConstructor
-@Entity
-@Table(name = "users")
-
+@RestController
 public class Users {
 
-    public Users(){
-
-    }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String userID;
-    private String name;
-    private String email;
-    private String password;
-    private String role;
-    private LocalDate createAt;
-    private LocalDate quitDate;
-    private int dailyCost;
-
-    protected void onCreate(){
-        this.createAt = LocalDate.now();
-    }
 }
