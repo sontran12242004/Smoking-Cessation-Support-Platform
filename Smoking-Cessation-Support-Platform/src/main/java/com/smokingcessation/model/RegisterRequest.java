@@ -1,4 +1,4 @@
-package com.smokingcessation.entity;
+package com.smokingcessation.model;
 
 
 import lombok.AllArgsConstructor;

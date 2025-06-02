@@ -1,20 +1,18 @@
 package com.smokingcessation.service;
 
-import com.smokingcessation.entity.AuthResponse;
-import com.smokingcessation.entity.LoginRequest;
-import com.smokingcessation.entity.RegisterRequest;
-import com.smokingcessation.entity.Users;
+import com.smokingcessation.repository.AuthReponsitory;
+import com.smokingcessation.model.LoginRequest;
+import com.smokingcessation.model.RegisterRequest;
+import com.smokingcessation.dto.Users;
 import com.smokingcessation.repository.UserRepository;
 import com.smokingcessation.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Service
 
@@ -44,7 +42,7 @@ public class UserService {
         userRepository.save(users);
     }
 
-    public AuthResponse login(LoginRequest request) {
+    public AuthReponsitory login(LoginRequest request) {
         Users users = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Email not found"));
 
@@ -58,7 +56,7 @@ public class UserService {
         }
 
         String token = jwtUtil.generateToken(users);
-        return new AuthResponse(token, users.getRole(), users.getName());
+        return new AuthReponsitory(token, users.getRole(), users.getName());
     }
 
     @Bean

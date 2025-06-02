@@ -1,8 +1,8 @@
 package com.smokingcessation.controller;
 
-import com.smokingcessation.entity.AuthResponse;
-import com.smokingcessation.entity.LoginRequest;
-import com.smokingcessation.entity.RegisterRequest;
+import com.smokingcessation.repository.AuthReponsitory;
+import com.smokingcessation.model.LoginRequest;
+import com.smokingcessation.model.RegisterRequest;
 import com.smokingcessation.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<AuthReponsitory> login(@RequestBody LoginRequest request) {
         return ResponseEntity.ok(userService.login(request));
     }
 }

@@ -1,4 +1,4 @@
-package com.smokingcessation.entity;
+package com.smokingcessation.dto;
 
 
 import jakarta.persistence.Entity;
@@ -34,6 +34,8 @@ public class Users {
     private String password;
     private String role;
     private LocalDate createAt;
+    private LocalDate quitDate;
+    private int dailyCost;
 
     protected void onCreate(){
         this.createAt = LocalDate.now();
