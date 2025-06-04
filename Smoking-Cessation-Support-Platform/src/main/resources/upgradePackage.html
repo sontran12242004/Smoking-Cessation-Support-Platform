@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upgrade from Standard to another Pakage | NicOff</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80') no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(245, 249, 246, 0.85);
+      backdrop-filter: blur(4px);
+      z-index: 0;
+    }
+
+    .header-bar {
+      background: linear-gradient(90deg, #d6f5dd 0%, #e6f9ee 100%);
+      padding: 18px 32px 0 32px;
+      border-radius: 8px 8px 0 0;
+      margin: 12px 12px 0 12px;
+      box-shadow: 0 2px 8px #0001;
+    }
+
+    .logo-title-bar {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .logo-box {
+      width: 48px;
+      height: 48px;
+      background: #fff;
+      border: 2px solid #6bbf59;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #6bbf59;
+      font-size: 1.1em;
+      margin-right: 6px;
+    }
+
+    .brand-block {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .brand-block .brand {
+      color: #43a047;
+      font-weight: bold;
+      font-size: 2em;
+      margin-bottom: 2px;
+      line-height: 1;
+    }
+
+    .brand-block .slogan {
+      font-size: 1.05em;
+      color: #5e8e6e;
+      font-style: italic;
+      margin-left: 2px;
+    }
+
+    .navbar {
+      margin-top: 18px;
+      background: #43b36a;
+      border-radius: 0 0 2px 2px;
+      display: flex;
+      justify-content: center;
+      box-shadow: 0 2px 8px #0001;
+    }
+
+    .navbar ul {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar li {
+      margin: 0;
+    }
+
+    .navbar a {
+      display: block;
+      color: #fff;
+      font-weight: bold;
+      text-decoration: none;
+      padding: 16px 0 14px 0;
+      font-size: 1.15em;
+      letter-spacing: 0.5px;
+      transition: color 0.2s, background 0.2s;
+      border-bottom: 2.5px solid transparent;
+    }
+
+    .navbar a:hover,
+    .navbar a.active {
+      color: #fff;
+      background: #388e3c;
+      border-bottom: 2.5px solid #fff;
+    }
+
+    .upgrade-main {
+      text-align: center;
+      margin-top: 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .upgrade-main h2 {
+      color: #388e3c;
+      margin-bottom: 10px;
+      font-size: 2.2em;
+      letter-spacing: 1px;
+    }
+
+    .upgrade-main p {
+      color: #444;
+      font-size: 1.1em;
+      margin-bottom: 30px;
+    }
+
+    .packages {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+
+    .package {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 18px;
+      box-shadow: 0 6px 32px #6bbf591a, 0 1.5px 6px #0001;
+      padding: 36px 28px 32px 28px;
+      width: 320px;
+      position: relative;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: 2.5px solid transparent;
+      margin-bottom: 24px;
+    }
+
+    .package:hover {
+      transform: translateY(-8px) scale(1.03);
+      box-shadow: 0 12px 40px #6bbf5933, 0 2px 8px #0002;
+      border-color: #b2e59e;
+      z-index: 2;
+    }
+
+    .package .badge {
+      position: absolute;
+      top: -18px;
+      left: 24px;
+      background: #6bbf59;
+      color: #fff;
+      padding: 5px 18px;
+      border-radius: 14px;
+      font-size: 1em;
+      font-weight: bold;
+      box-shadow: 0 2px 8px #6bbf5922;
+      letter-spacing: 0.5px;
+    }
+
+    .package .badge.current {
+      background: #4caf50;
+    }
+
+    .package .badge.popular {
+      background: #ffb300;
+      color: #fff;
+      left: unset;
+      right: 24px;
+    }
+
+    .package .badge.elite {
+      background: #1976d2;
+      color: #fff;
+      left: unset;
+      right: 24px;
+    }
+
+    .package h3 {
+      margin: 24px 0 10px 0;
+      font-size: 1.4em;
+      color: #388e3c;
+      letter-spacing: 0.5px;
+    }
+
+    .package .price {
+      font-size: 2.3em;
+      color: #222;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    .package .price span {
+      font-size: 0.5em;
+      color: #888;
+      font-weight: normal;
+    }
+
+    .package ul {
+      list-style: none;
+      padding: 0;
+      margin: 22px 0 0 0;
+      text-align: left;
+    }
+
+    .package ul li {
+      margin: 12px 0;
+      font-size: 1.08em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .package ul li .fa-check-circle {
+      color: #4caf50;
+    }
+
+    .package ul li .fa-times-circle {
+      color: #e57373;
+    }
+
+    .package .save,
+    .package .upgrade-info {
+      color: #388e3c;
+      font-size: 1em;
+      margin: 8px 0;
+      font-weight: 500;
+    }
+
+    .package .upgrade-btn {
+      margin-top: 22px;
+      background: linear-gradient(90deg, #6bbf59 60%, #388e3c 100%);
+      color: #fff;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 10px;
+      font-size: 1.15em;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 2px 8px #6bbf5922;
+      transition: background 0.2s, transform 0.2s;
+      letter-spacing: 0.5px;
+    }
+
+    .package .upgrade-btn:hover {
+      background: linear-gradient(90deg, #388e3c 60%, #6bbf59 100%);
+      transform: scale(1.05);
+    }
+
+    .premium.highlight {
+      border: 2.5px solid #ffb300;
+      box-shadow: 0 8px 36px #ffb30033, 0 2px 8px #0002;
+      z-index: 1;
+    }
+
+    .elite.highlight {
+      border: 2.5px solid #1976d2;
+      box-shadow: 0 8px 36px #1976d233, 0 2px 8px #0002;
+      z-index: 1;
+    }
+
+    @media (max-width: 1100px) {
+      .packages {
+        gap: 20px;
+      }
+
+      .package {
+        width: 90vw;
+        max-width: 400px;
+      }
+    }
+
+    @media (max-width: 800px) {
+      .packages {
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+      }
+
+      .package {
+        width: 95vw;
+        max-width: 400px;
+      }
+
+      .header-bar {
+        margin: 0;
+        border-radius: 0;
+        padding: 12px 4vw 0 4vw;
+      }
+    }
+
+    .payment-section {
+      background: #eafbe7cc;
+      padding: 36px 0 48px 0;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      opacity: 1;
+      transform: translateY(0);
+      transition: all 0.7s cubic-bezier(.4, 2, .6, 1);
+      z-index: 10;
+      position: relative;
+    }
+
+    .payment-form {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(60, 179, 113, 0.08);
+      padding: 32px 32px 24px 32px;
+      min-width: 340px;
+      max-width: 480px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .payment-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #3cb371;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .payment-icon {
+      font-size: 1.7rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 0;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 16px;
+    }
+
+    .form-group.half {
+      flex: 1;
+    }
+
+    .payment-form label {
+      font-size: 1rem;
+      color: #222;
+      font-weight: 500;
+    }
+
+    .payment-form input {
+      padding: 10px 14px;
+      border-radius: 7px;
+      border: 2px solid #b2d8b2;
+      font-size: 1.08rem;
+      outline: none;
+      transition: border 0.2s;
+      background: #f6fff7;
+    }
+
+    .payment-form input:focus {
+      border: 2px solid #3cb371;
+      box-shadow: 0 0 0 2px #b2d8b2;
+      background: #eafbe7;
+      transition: box-shadow 0.2s, background 0.2s;
+    }
+
+    .complete-btn {
+      margin-top: 18px;
+      background: #3cb371;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 13px 0;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+      width: 100%;
+      box-shadow: 0 2px 8px rgba(60, 179, 113, 0.08);
+    }
+
+    .payment-form .row {
+      display: flex;
+      gap: 18px;
+    }
+
+    .payment-form .row label {
+      flex: 1;
+    }
+
+    .complete-btn:hover {
+      background: #2e8b57;
+    }
+
+    .complete-btn:active {
+      background: #26734d;
+      transform: scale(0.97);
+    }
+
+    @media (max-width: 600px) {
+      .payment-form {
+        padding: 18px 6vw 16px 6vw;
+        min-width: unset;
+      }
+
+      .form-row {
+        flex-direction: column;
+        gap: 0;
+      }
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+      const upgradeBtns = document.querySelectorAll('.upgrade-btn');
+      const paymentSection = document.querySelector('.payment-section');
+      const selectPackage = document.querySelector('.payment-form select');
+
+      upgradeBtns.forEach(btn => {
+        btn.addEventListener('click', function () {
+          if (paymentSection) {
+            paymentSection.style.display = 'flex';
+            paymentSection.scrollIntoView({ behavior: 'smooth' });
+          }
+
+          const card = btn.closest('.package');
+          const pkgName = card.querySelector('h3').innerText;
+
+          if (selectPackage) {
+            Array.from(selectPackage.options).forEach(option => {
+              if (option.value.toLowerCase() === pkgName.split(' ')[0].toLowerCase()) {
+                option.selected = true;
+              } else {
+                option.selected = false;
+              }
+            });
+          }
+        });
+      });
+
+      const paymentForm = document.querySelector('.payment-form');
+      if (paymentForm) {
+        paymentForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          alert('Payment form submitted!');
+        });
+      }
+
+    });
+  </script>
+</head>
+
+<body>
+  <div class="overlay"></div>
+  <div class="header-bar">
+    <div class="logo-title-bar">
+      <div class="logo-box">LOGO</div>
+      <div class="brand-block">
+        <span class="brand">NicOff</span>
+        <span class="slogan">Turn Off Nicotine, Turn On Life!</span>
+      </div>
+    </div>
+    <nav class="navbar">
+      <ul>
+        <li><a href="#" class="active">Home</a></li>
+        <li><a href="#">Dashboard</a></li>
+        <li><a href="#">Achievement</a></li>
+        <li><a href="#">Coach</a></li>
+        <li><a href="#">Community</a></li>
+        <li><a href="#">Feedback</a></li>
+      </ul>
+    </nav>
+  </div>
+  <main class="upgrade-main">
+    <h2>Upgrade Your Account</h2>
+    <p>NicOff offers comprehensive support packages for your quitting smoking journey.</p>
+    <div class="packages">
+      <!-- Standard Package -->
+      <div class="package standard">
+        <div class="badge current">Current Plan</div>
+        <h3>Standard Package</h3>
+        <div class="price">$29 <span>/month</span></div>
+        <ul>
+          <li><i class="fa-solid fa-check-circle"></i> Basic progress tracking</li>
+          <li><i class="fa-solid fa-check-circle"></i> Community Access</li>
+          <li><i class="fa-solid fa-check-circle"></i> Weekly tips</li>
+        </ul>
+      </div>
+      <!-- Premium Package -->
+      <div class="package premium highlight">
+        <div class="badge popular">Popular</div>
+        <h3>Premium Package</h3>
+        <div class="price">$159 <span>/6 month</span></div>
+        <div class="save">Save 11% on Standard Package</div>
+        <div class="upgrade-info">
+          Upgrade from Standard: <b>$119</b> (Save $40)
+        </div>
+        <ul>
+          <li><i class="fa-solid fa-check-circle"></i> Premium progress tracking</li>
+          <li><i class="fa-solid fa-check-circle"></i> Community access</li>
+          <li><i class="fa-solid fa-check-circle"></i> Weekly tips</li>
+          <li><i class="fa-solid fa-times-circle"></i> Personal coach</li>
+          <li><i class="fa-solid fa-times-circle"></i> Advanced analytics</li>
+          <li><i class="fa-solid fa-check-circle"></i> Email reminders</li>
+        </ul>
+        <button class="upgrade-btn">Upgrade to Premium</button>
+      </div>
+      <!-- Elite Package -->
+      <div class="package elite highlight">
+        <div class="badge elite">Elite</div>
+        <h3>Elite Package</h3>
+        <div class="price">$299 <span>/12 month</span></div>
+        <div class="save">Save 17% on Premium Package</div>
+        <div class="upgrade-info">
+          Upgrade from Premium: <b>$50</b> (Save $50)
+        </div>
+        <ul>
+          <li><i class="fa-solid fa-check-circle"></i> Pro progress tracking</li>
+          <li><i class="fa-solid fa-check-circle"></i> Community Access</li>
+          <li><i class="fa-solid fa-check-circle"></i> Daily tips</li>
+          <li><i class="fa-solid fa-check-circle"></i> Book a consultation appointment</li>
+          <li><i class="fa-solid fa-check-circle"></i> Personal Coach</li>
+          <li><i class="fa-solid fa-check-circle"></i> Advanced analytics</li>
+        </ul>
+        <button class="upgrade-btn" style="background: linear-gradient(90deg, #1976d2 60%, #43b36a 100%);">Upgrade to
+          Elite</button>
+      </div>
+    </div>
+  </main>
+  <div class="payment-section">
+    <form class="payment-form" autocomplete="off">
+      <div class="payment-title">
+        <span class="payment-icon">💳</span> Payment Information
+      </div>
+      <div class="form-group">
+        <label for="card-number">Card Number</label>
+        <input type="text" id="card-number" name="card-number" placeholder="1234 5678 9012 ..." maxlength="19"
+          required />
+      </div>
+      <div class="form-group">
+        <label for="card-name">Name of Card</label>
+        <input type="text" id="card-name" name="card-name" placeholder="John Smith ..." required />
+      </div>
+      <div class="form-row">
+        <div class="form-group half">
+          <label for="card-expiry">Expired Date</label>
+          <input type="text" id="card-expiry" name="card-expiry" placeholder="MM/YY ..." maxlength="5" required />
+        </div>
+        <div class="form-group half">
+          <label for="card-cvv">CVV</label>
+          <input type="password" id="card-cvv" name="card-cvv" placeholder="123 ..." maxlength="4" required />
+        </div>
+      </div>
+      <label>Select Package
+        <select required>
+          <option value="">-- Select Package --</option>
+          <option value="premium">Premium Package</option>
+          <option value="elite">Elite Package</option>
+        </select>
+      </label>
+      <button type="submit" class="complete-btn">Complete Upgrade</button>
+    </form>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to NicOff!</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(245, 249, 246, 0.85);
+            z-index: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin-top: 50px;
+            margin-bottom: 50px;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .container.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-icon {
+            font-size: 24px;
+            color: #4CAF50;
+        }
+
+        .standard-member-badge {
+            background-color: #81C784;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .header-center {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-center .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .header-center .brand-text h1 {
+            font-size: 20px;
+            margin: 0;
+            color: #4CAF50;
+        }
+
+        .header-center .brand-text p {
+            font-size: 12px;
+            margin: 0;
+            color: #66BB6A;
+            font-style: italic;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .notification-icon {
+            font-size: 24px;
+            color: #FFC107;
+            position: relative;
+        }
+
+        .notification-icon .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #F44336;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 5px;
+            font-size: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.9);
+        }
+
+        .logout-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-button:hover {
+            background-color: #388E3C;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0 30px 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        nav ul li {
+            margin: 0;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #555;
+            font-weight: bold;
+            font-size: 14px;
+            padding-bottom: 5px;
+            transition: color 0.3s ease, border-bottom 0.3s ease;
+        }
+
+        nav ul li a:hover,
+        nav ul li a.active {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+        }
+
+        .welcome-section {
+            margin-top: 0;
+            margin-bottom: 0;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .welcome-section h2 {
+            color: #4CAF50;
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+
+        .welcome-section p {
+            color: #388E3C;
+            font-size: 20px;
+            margin-bottom: 10px;
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        .welcome-section .quote {
+            color: #666;
+            font-size: 14px;
+            margin-top: 20px;
+            font-style: normal;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .explore-button {
+            background-color: #81C784;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .explore-button:hover {
+            background-color: #66BB6A;
+            transform: scale(1.03);
+        }
+
+        /* Footer styles */
+        footer {
+            background-color: #38493f;
+            color: white;
+            padding: 40px 20px 20px 20px;
+            width: 100%;
+            margin-top: 40px;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        footer.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .footer-section {
+            padding: 0;
+        }
+
+        .footer-container {
+            display: flex;
+            justify-content: space-around;
+            gap: 32px;
+            max-width: 1200px;
+            margin: 0 auto;
+            margin-bottom: 30px;
+            padding: 0 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-title {
+            font-size: 24px;
+            color: #81C784;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .footer-col {
+            flex: 1 1 220px;
+            min-width: 220px;
+            margin: 10px;
+        }
+
+        .footer-col.about {
+            flex-basis: 270px;
+            min-width: 270px;
+        }
+
+        .footer-column h3 {
+            color: #fff;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .footer-column p,
+        .footer-column ul,
+        .footer-column input,
+        .footer-column button {
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .footer-column ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-column ul li a:hover {
+            color: #81C784;
+        }
+
+        .footer-col.newsletter {
+            flex-basis: 260px;
+            min-width: 260px;
+        }
+
+        .footer-column input[type="email"] {
+            padding: 10px 12px;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            width: 100%;
+            background: #4e6357;
+            color: #fff;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .footer-column input[type="email"]::placeholder {
+            color: #b2d8b2;
+            opacity: 0.9;
+        }
+
+        .footer-column button {
+            background-color: #81C784;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .footer-column button:hover {
+            background-color: #66BB6A;
+            transform: translateY(-1px);
+        }
+
+        .footer-newsletter-desc {
+            color: #eee;
+            font-size: 0.9em;
+            margin-top: 10px;
+            line-height: 1.4;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: #8ee4af;
+        }
+
+        .footer-divider {
+            border-top: 1px solid #556B2F;
+            opacity: 1;
+            margin: 30px auto 20px auto;
+            width: 95%;
+            border-radius: 0;
+        }
+
+        .footer-copyright {
+            text-align: center;
+            color: #bbb;
+            font-size: 1em;
+            font-weight: normal;
+            padding: 0 0 20px 0;
+            letter-spacing: normal;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .footer-copyright-icon {
+            font-size: 1em;
+            margin-right: 0;
+        }
+
+        .footer-input {
+            flex: 1;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: none;
+            background: #4e6357;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .footer-input::placeholder {
+            color: #b2d8b2;
+            opacity: 1;
+        }
+
+        .footer-btn {
+            background: #6fdc8c;
+            color: #fff;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 18px;
+            margin-top: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .header-left,
+            .header-center,
+            .header-right {
+                width: 100%;
+                justify-content: center;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+
+            nav ul li a {
+                padding-bottom: 5px;
+            }
+
+            .welcome-section {
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
+
+            .welcome-section h2 {
+                font-size: 32px;
+            }
+
+            .welcome-section p {
+                font-size: 18px;
+            }
+
+            .welcome-section .quote {
+                font-size: 14px;
+            }
+
+            .explore-button {
+                padding: 12px 25px;
+                font-size: 16px;
+                margin-top: 30px;
+            }
+
+            .footer-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+                padding: 0 10px;
+            }
+
+            .footer-col {
+                width: 95%;
+                text-align: center;
+                margin: 0;
+            }
+
+            .footer-col.about {
+                flex-basis: auto;
+                min-width: 0;
+            }
+
+            .footer-col.newsletter {
+                flex-basis: auto;
+                min-width: 0;
+            }
+
+            .footer-column input[type="email"] {
+                width: calc(100% - 24px);
+                max-width: 300px;
+            }
+
+            .footer-newsletter-form {
+                justify-content: center;
+            }
+
+        }
+
+        @media (max-width: 480px) {
+            .user-info {
+                flex-direction: row;
+                gap: 8px;
+            }
+
+            .standard-member-badge {
+                font-size: 11px;
+                padding: 4px 8px;
+            }
+
+            .header-center .brand-text h1 {
+                font-size: 16px;
+            }
+
+            .header-center .brand-text p {
+                font-size: 9px;
+            }
+
+            .notification-icon {
+                font-size: 24px;
+            }
+
+            .notification-icon .badge {
+                top: -5px;
+                right: -5px;
+                padding: 2px 5px;
+            }
+
+            .logout-button {
+                padding: 8px 12px;
+                font-size: 13px;
+                gap: 5px;
+            }
+
+            nav ul {
+                gap: 8px;
+            }
+
+            nav ul li a {
+                font-size: 13px;
+            }
+
+            .welcome-section h2 {
+                font-size: 24px;
+            }
+
+            .welcome-section p {
+                font-size: 14px;
+            }
+
+            .welcome-section .quote {
+                font-size: 13px;
+            }
+
+            .explore-button {
+                padding: 10px 20px;
+                font-size: 15px;
+            }
+
+            .footer-column input[type="email"] {
+                width: calc(100% - 20px);
+                max-width: unset;
+            }
+
+            .footer-newsletter-form {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .footer-column button {
+                width: 100%;
+                padding: 10px;
+            }
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fade-in and slide-up effect for the main container
+            const mainContainer = document.querySelector('.container');
+            if (mainContainer) {
+                setTimeout(() => {
+                    mainContainer.classList.add('is-visible');
+                }, 100); // Short delay to ensure CSS is applied before transition
+            }
+
+            // Fade-in and slide-up effect on scroll for the footer
+            const footer = document.querySelector('footer');
+            if (footer) {
+                const observerOptions = {
+                    root: null, // Use the viewport as the root
+                    rootMargin: '0px',
+                    threshold: 0.1 // Trigger when 10% of the element is visible
+                };
+
+                const observer = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-visible');
+                            observer.unobserve(entry.target); // Stop observing once visible
+                        }
+                    });
+                }, observerOptions);
+
+                observer.observe(footer);
+            }
+
+            // Basic hover effect for buttons (already largely handled by CSS, but can add JS if needed)
+            // Example: const buttons = document.querySelectorAll('button');
+            // buttons.forEach(button => {
+            //     button.addEventListener('mouseover', () => { /* add effect */ });
+            //     button.addEventListener('mouseout', () => { /* remove effect */ });
+            // });
+
+             // Basic hover effect for links (already largely handled by CSS, but can add JS if needed)
+             // Example: const links = document.querySelectorAll('a');
+             // links.forEach(link => {
+             //     link.addEventListener('mouseover', () => { /* add effect */ });
+             //     link.addEventListener('mouseout', () => { /* remove effect */ });
+             // });
+        });
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-left">
+                <div class="user-info">
+                    <i class="fas fa-user-circle user-icon"></i>
+                    <span class="standard-member-badge">Standard Member</span>
+                </div>
+            </div>
+            <div class="header-center">
+                <div class="logo">LOGO</div>
+                <div class="brand-text">
+                    <h1>NicOff</h1>
+                    <p>Turn Off Nicotine, Turn On Life!</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="notification-icon">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">1</span>
+                </div>
+                <button class="logout-button">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+
+        <nav>
+            <ul>
+                <li><a href="#" class="active">Home</a></li>
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">Achievement</a></li>
+                <li><a href="#">Coach</a></li>
+                <li><a href="#">Community</a></li>
+                <li><a href="#">Feedback</a></li>
+            </ul>
+        </nav>
+
+        <div class="welcome-section">
+            <h2>Welcome to NicOff!</h2>
+            <p>Congratulations on taking the first step toward<br>a nicotine-free life!</p>
+            <p>
+                You've just joined a community of people<br>
+                supporting each other<br>
+                in turning off nicotine and turning on life.
+            </p>
+            <p class="quote">"Every journey begins with a single step - you've just taken yours!"</p>
+            <button class="explore-button">
+                Explore NicOff Now <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-section">
+            <div class="footer-container">
+                <div class="footer-col about">
+                    <div class="footer-title">NicOff</div>
+                    <div class="footer-desc">We're dedicated to helping you break free from smoking addiction through science-backed methods and community support</div>
+                </div>
+                <div class="footer-col">
+                    <div class="footer-title">Quick Links</div>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Our Programs</a></li>
+                        <li><a href="#">Success Stories</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <div class="footer-title">Support</div>
+                    <ul class="footer-links">
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Term Of Service</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col newsletter">
+                    <div class="footer-title">NewSletter</div>
+                    <form class="footer-newsletter-form">
+                        <input type="email" placeholder="Your Email Address..." class="footer-input" required />
+                        <button type="submit" class="footer-btn">Subscribe</button>
+                    </form>
+                    <div class="footer-newsletter-desc">Get the latest tips and motivation to stay smoke-free delivered to your inbox</div>
+                </div>
+            </div>
+            <div class="footer-divider"></div>
+            <div class="footer-copyright">
+                <span class="footer-copyright-icon">©</span>
+                <b>2025 NicOff. All rights reserved</b>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>
