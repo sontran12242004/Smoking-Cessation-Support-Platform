@@ -1,7 +1,7 @@
 package com.smokingcessation.repository;
 
 import com.smokingcessation.dto.HealthMetrics;
-import com.smokingcessation.dto.Users;
+import com.smokingcessation.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

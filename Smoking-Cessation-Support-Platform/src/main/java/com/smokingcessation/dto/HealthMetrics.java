@@ -1,4 +1,5 @@
 package com.smokingcessation.dto;
+import com.smokingcessation.entity.Users;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

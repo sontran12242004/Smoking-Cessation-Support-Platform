@@ -1,7 +1,7 @@
 package com.smokingcessation.controller;
 
 import com.smokingcessation.dto.HealthMetrics;
-import com.smokingcessation.dto.Users;
+import com.smokingcessation.entity.Users;
 import com.smokingcessation.repository.UserRepository;
 import com.smokingcessation.service.HealthMetricsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,4 +34,3 @@ public class HealthMetricsController {
         return ResponseEntity.ok(metrics);
     }
 }
-    

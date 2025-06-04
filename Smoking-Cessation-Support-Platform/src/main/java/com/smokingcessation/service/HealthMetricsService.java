@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import com.smokingcessation.dto.HealthMetrics;
-import com.smokingcessation.dto.Users;
+import com.smokingcessation.entity.Users;
 import com.smokingcessation.repository.HealthMetricsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDateTime;
@@ -49,7 +49,7 @@ public class HealthMetricsService {
         LocalDate today = LocalDate.now();
         for (LocalDate date = quitDate; !date.isAfter(today); date = date.plusDays(1)) {
             total += cigaretteLogRepository.findByUserAndLogDate(user, date)
-                .map(CigaretteLog::getCigarettesSmoked).orElse(0);
+                    .map(CigaretteLog::getCigarettesSmoked).orElse(0);
         }
         return total;
     }
@@ -165,21 +165,21 @@ public class HealthMetricsService {
         }
         try {
             HealthMetrics metrics = new HealthMetrics(
-                null,
-                user,
-                getDaysSmokeFree(user),
-                getMoneySaved(user),
-                getHealthImprovedPercent(user),
-                getHeartAttackRisk(user),
-                getLungCancerRisk(user),
-                getHeartDiseaseRisk(user),
-                getImmuneFunction(user),
-                getTeethWhitening(user),
-                getBreathFreshness(user),
-                getTasteAndSmell(user),
-                getCOLvls(user),
-                getOxygenLvls(user),
-                LocalDateTime.now()
+                    null,
+                    user,
+                    getDaysSmokeFree(user),
+                    getMoneySaved(user),
+                    getHealthImprovedPercent(user),
+                    getHeartAttackRisk(user),
+                    getLungCancerRisk(user),
+                    getHeartDiseaseRisk(user),
+                    getImmuneFunction(user),
+                    getTeethWhitening(user),
+                    getBreathFreshness(user),
+                    getTasteAndSmell(user),
+                    getCOLvls(user),
+                    getOxygenLvls(user),
+                    LocalDateTime.now()
             );
             return healthMetricsRepository.save(metrics);
         } catch (Exception e) {

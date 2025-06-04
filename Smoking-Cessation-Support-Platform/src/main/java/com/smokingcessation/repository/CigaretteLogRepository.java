@@ -1,7 +1,7 @@
 package com.smokingcessation.repository;
 
 import com.smokingcessation.entity.CigaretteLog;
-import com.smokingcessation.dto.Users;
+import com.smokingcessation.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

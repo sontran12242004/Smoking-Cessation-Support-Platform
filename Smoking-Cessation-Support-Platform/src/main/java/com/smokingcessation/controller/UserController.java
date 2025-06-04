@@ -8,26 +8,26 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 
 @RestController
-@RequestMapping("/api/student")
+@RequestMapping("/api/users")
 @CrossOrigin("*")
 public class UserController {
     ArrayList<Account> accounts = new ArrayList<>();
 
     @GetMapping
-    public ResponseEntity getListStudent(){
-        System.out.println("trả về danh sách sinh viên");
+    public ResponseEntity getListUser(){
+        System.out.println("trả về danh sách người dùng");
         return ResponseEntity.ok(accounts);
     }
 
     @PostMapping
-    public ResponseEntity createNewStudent(@Valid @RequestBody Account user){
+    public ResponseEntity createNewUser(@Valid @RequestBody Account account){
         // student => FE cho ng dùng điền r đẩy xuống cho BE
-        accounts.add(user);
-        return ResponseEntity.ok(user);
+        accounts.add(account);
+        return ResponseEntity.ok(account);
     }
 
-    @GetMapping("/api/student/id")
-    public void getStudentById(){
+    @GetMapping("/api/users/id")
+    public void getUserById(){
 
     }
 }
