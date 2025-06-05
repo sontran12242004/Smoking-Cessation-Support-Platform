@@ -28,6 +28,7 @@ public class UserController {
 
     @GetMapping("/api/users/id")
     public void getUserById(){
-
+        String name;
+        double age;
     }
 }
