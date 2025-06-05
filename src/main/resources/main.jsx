@@ -1,23 +1,39 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import App from './Dashboard.jsx'
+import './index.css'
+import Signup from './Signup'
+import Login from './Login'
 import Dashboard from './Dashboard'
-import Login from './components/Login'
+import Members from './Members' // Import component Members
+import Packages from './Packages'
+import Coaches from './Coaches'
 
 // 1. Tạo router configuration
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />, // Trang chính
+    element: <Signup />, // Trang đăng ký làm trang chính
+  },
+  {
+    path: "/login",
+    element: <Login />, // Trang đăng nhập
   },
   {
     path: "/dashboard",
     element: <Dashboard />, // Trang Dashboard
   },
   {
-    path: "/login",
-    element: <Login />, // Trang Login
+    path: "/members",
+    element: <Members />, // Trang Members
+  },
+  {
+    path: "/packages",
+    element: <Packages />,
+  },
+  {
+    path: "/coaches",
+    element: <Coaches />,
   },
 ])
 
