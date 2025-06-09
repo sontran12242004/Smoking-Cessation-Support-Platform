@@ -5,4 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AuthenticationRepository extends JpaRepository<Account, Long> {
 
+    // findAccountByEmail
+
+    Account findAccountByEmail(String email);
 }

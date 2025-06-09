@@ -8,7 +8,10 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<Users, Long> {
+
+    // Tìm người dùng theo email
     Optional<Users> findByEmail(String email);
+
+    // Kiểm tra email đã tồn tại trong hệ thống chưa
     boolean existsByEmail(String email);
 }
-
