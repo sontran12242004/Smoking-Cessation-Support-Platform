@@ -2,7 +2,6 @@ package com.smokingcessation.service;
 
 import com.smokingcessation.dto.EmailDetail;
 import jakarta.mail.internet.MimeMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -12,11 +11,13 @@ import org.thymeleaf.context.Context;
 @Service
 public class EmailService {
 
-    @Autowired
-    private TemplateEngine templateEngine;
+    private final TemplateEngine templateEngine;
+    private final JavaMailSender javaMailSender;
 
-    @Autowired
-    private JavaMailSender javaMailSender;
+    public EmailService(TemplateEngine templateEngine, JavaMailSender javaMailSender) {
+        this.templateEngine = templateEngine;
+        this.javaMailSender = javaMailSender;
+    }
 
     public void sendMail(EmailDetail emailDetail){
 
