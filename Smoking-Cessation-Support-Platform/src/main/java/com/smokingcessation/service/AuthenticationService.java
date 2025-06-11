@@ -28,7 +28,7 @@ public class AuthenticationService implements UserDetailsService {
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    AuthenticationManager authenticationManager; // giúp check đăng nhập
+    AuthenticationManager authenticationManager;    // giúp check đăng nhập
 
     @Autowired
     ModelMapper modelMapper;
