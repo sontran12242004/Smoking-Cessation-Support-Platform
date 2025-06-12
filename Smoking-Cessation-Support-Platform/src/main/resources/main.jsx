@@ -5,9 +5,16 @@ import './index.css'
 import Signup from './Signup'
 import Login from './Login'
 import Dashboard from './Dashboard'
-import Members from './Members' // Import component Members
+import Members from './Members.jsx'; // Import component Members
 import Packages from './Packages'
 import Coaches from './Coaches'
+import RatingsFeedbacksManagement from './RatingsFeedbacksManagement'
+import Contents from './Contents' // Import Contents component
+import ConfirmCoachSchedule from './ConfirmCoachSchedule' // Import ConfirmCoachSchedule
+import ForCoach from './ForCoach.jsx';
+import CoachProfile from './CoachProfile.jsx';
+import CoachEditProfile from './CoachEditProfile.jsx';
+import RequestSchedule from './RequestSchedule.jsx';
 
 // 1. Tạo router configuration
 const router = createBrowserRouter([
@@ -34,6 +41,34 @@ const router = createBrowserRouter([
   {
     path: "/coaches",
     element: <Coaches />,
+  },
+  {
+    path: "/ratings",
+    element: <RatingsFeedbacksManagement />,
+  },
+  {
+    path: "/contents",
+    element: <Contents />, // Thêm route cho Contents
+  },
+  {
+    path: "/confirm-coach-schedule",
+    element: <ConfirmCoachSchedule />, // Thêm route cho ConfirmCoachSchedule
+  },
+  {
+    path: "/coach-schedule",
+    element: <ForCoach />,
+  },
+  {
+    path: "/profile",
+    element: <CoachProfile />,
+  },
+  {
+    path: "/edit-profile",
+    element: <CoachEditProfile />,
+  },
+  {
+    path: "/request-schedule",
+    element: <RequestSchedule />,
   },
 ])
 

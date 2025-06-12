@@ -244,7 +244,7 @@ const Packages = () => {
               <Link to="/packages" style={styles.menuLink}>
                 <li style={activeMenu === 'Packages' ? styles.activeMenuItem : styles.menuItem} onClick={() => setActiveMenu('Packages')}>Packages</li>
               </Link>
-              <Link to="/dashboard" style={styles.menuLink}>
+              <Link to="/contents" style={styles.menuLink}>
                 <li style={activeMenu === 'Contents' ? styles.activeMenuItem : styles.menuItem} onClick={() => setActiveMenu('Contents')}>Contents</li>
               </Link>
               <Link to="/coaches" style={styles.menuLink}>

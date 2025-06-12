@@ -1,8 +1,42 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import SendNotificationToMembers from './SendNotificationToMembers';
+import MotivationMessagesList from './MotivationMessagesList';
+import SevenDaysMotivationalMessages from './SevenDaysMotivationalMessages';
 
-const Dashboard = () => {
-  const [activeMenu, setActiveMenu] = useState('Dashboard');
+const Contents = () => {
+  const [activeMenu, setActiveMenu] = useState('Contents');
+  const [showContentsSubmenu, setShowContentsSubmenu] = useState(false);
+  const [mainContentComponent, setMainContentComponent] = useState('ContentsManagement');
+
+  const handleSendNotification = () => {
+    setMainContentComponent('SendNotificationToMembers');
+  };
+
+  const handleSendMotivation = () => {
+    // Handle sending motivation to members
+    console.log('Sending motivation to members');
+    setMainContentComponent('MotivationMessagesList');
+  };
+
+  const handleSendEmail = () => {
+    // Handle sending email
+    console.log('Sending email');
+    setMainContentComponent('SevenDaysMotivationalMessages');
+  };
+
+  const renderMainContent = () => {
+    switch (mainContentComponent) {
+      case 'SendNotificationToMembers':
+        return <SendNotificationToMembers />;
+      case 'MotivationMessagesList':
+        return <MotivationMessagesList />;
+      case 'SevenDaysMotivationalMessages':
+        return <SevenDaysMotivationalMessages />;
+      default:
+        return <h1 style={styles.contentTitle}>Contents Management</h1>;
+    }
+  };
 
   return (
     <div style={styles.container}>
@@ -32,7 +66,7 @@ const Dashboard = () => {
                   Dashboard
                 </li>
               </Link>
-              <Link to="/dashboard" style={styles.menuLink}>
+              <Link to="/analytics" style={styles.menuLink}>
                 <li 
                   style={activeMenu === 'Analytics' ? styles.activeMenuItem : styles.menuItem}
                   onClick={() => setActiveMenu('Analytics')}
@@ -63,14 +97,37 @@ const Dashboard = () => {
                   Packages
                 </li>
               </Link>
-              <Link to="/contents" style={styles.menuLink}>
-                <li 
-                  style={activeMenu === 'Contents' ? styles.activeMenuItem : styles.menuItem}
-                  onClick={() => setActiveMenu('Contents')}
-                >
-                  Contents
-                </li>
-              </Link>
+              <li 
+                style={activeMenu === 'Contents' ? styles.activeMenuItem : styles.menuItem}
+                onClick={() => {
+                  setActiveMenu('Contents');
+                  setShowContentsSubmenu(!showContentsSubmenu);
+                }}
+              >
+                Contents {showContentsSubmenu ? '▼' : '▶'}
+                {showContentsSubmenu && (
+                  <ul style={styles.submenuList}>
+                    <li 
+                      style={styles.submenuItem}
+                      onClick={handleSendNotification}
+                    >
+                      Send Notification To Members
+                    </li>
+                    <li 
+                      style={styles.submenuItem}
+                      onClick={handleSendMotivation}
+                    >
+                      Send Motivation To Members
+                    </li>
+                    <li 
+                      style={styles.submenuItem}
+                      onClick={handleSendEmail}
+                    >
+                      Send Email
+                    </li>
+                  </ul>
+                )}
+              </li>
               <Link to="/coaches" style={styles.menuLink}>
                 <li 
                   style={activeMenu === 'Coaches' ? styles.activeMenuItem : styles.menuItem}
@@ -94,56 +151,9 @@ const Dashboard = () => {
 
       {/* Main Content */}
       <div style={styles.mainContent}>
-        {/* Welcome Section */}
-        <div style={styles.welcomeSection}>
-          <h1 style={styles.welcomeTitle}>Welcome to NicOff Admin Dashboard</h1>
-          <p style={styles.welcomeText}>
-            Manage your smoking cessation platform and help users on their journey to a healthier life.
-          </p>
-        </div>
-
-        {/* Stats Cards */}
-        <div style={styles.statsContainer}>
-          {/* Total Users */}
-          <div style={styles.statCard}>
-            <h3 style={styles.cardTitle}>Total Users</h3>
-            <p style={styles.cardNumber}>140</p>
-            <p style={styles.cardStatPositive}>+12% from last month</p>
-          </div>
-
-          {/* Active Members */}
-          <div style={styles.statCard}>
-            <h3 style={styles.cardTitle}>Active Members</h3>
-            <p style={styles.cardNumber}>100</p>
-            <p style={styles.cardStatPositive}>+8% from last month</p>
-          </div>
-
-          {/* 30-Day Smoke-Free Rate */}
-          <div style={styles.statCard}>
-            <h3 style={styles.cardTitle}>30-Day Smoke-Free Rate</h3>
-            <p style={styles.cardNumber}>18%</p>
-            <p style={styles.cardStatPositive}>+5% from last month</p>
-          </div>
-
-          {/* Avg. Response Rate */}
-          <div style={styles.statCard}>
-            <h3 style={styles.cardTitle}>Avg. Response Rate</h3>
-            <p style={styles.cardNumber}>4.5%</p>
-            <p style={styles.cardStatNegative}>-2% from last month</p>
-          </div>
-        </div>
-
-        {/* Charts */}
-        <div style={styles.chartsContainer}>
-          <div style={styles.chartCard}>
-            <h3 style={styles.chartTitle}>User Growth Chart</h3>
-            <div style={styles.chartPlaceholder}>USE GROWTH CHART</div>
-          </div>
-          <div style={styles.chartCard}>
-            <h3 style={styles.chartTitle}>Success Rates</h3>
-            <div style={styles.chartPlaceholder}>USE SUCCESS CHART</div>
-          </div>
-        </div>
+        <header style={styles.contentHeader}>
+          {renderMainContent()}
+        </header>
       </div>
     </div>
   );
@@ -237,86 +247,39 @@ const styles = {
     textDecoration: 'none',
     color: 'inherit'
   },
+  submenuList: {
+    listStyle: 'none',
+    padding: '0',
+    margin: '10px 0 0 15px'
+  },
+  submenuItem: {
+    padding: '8px 15px',
+    color: '#555',
+    cursor: 'pointer',
+    fontSize: '14px',
+    transition: 'all 0.2s ease',
+    ':hover': {
+      color: '#2E7D32',
+      backgroundColor: '#E8F5E9'
+    }
+  },
   mainContent: {
     flex: 1,
     padding: '30px',
     backgroundColor: '#DFF5DE'
   },
-  welcomeSection: {
-    margin: '0 0 30px 0',
-    padding: '0'
+  contentHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '30px'
   },
-  welcomeTitle: {
+  contentTitle: {
     fontSize: '28px',
     color: '#2E7D32',
-    margin: '0 0 10px 0',
-    fontWeight: 'bold'
-  },
-  welcomeText: {
-    fontSize: '16px',
-    color: '#555',
     margin: '0',
-    lineHeight: '1.5'
-  },
-  statsContainer: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(4, 1fr)',
-    gap: '20px',
-    marginBottom: '20px'
-  },
-  chartsContainer: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(2, 1fr)',
-    gap: '20px'
-  },
-  statCard: {
-    backgroundColor: '#fff',
-    borderRadius: '10px',
-    padding: '20px',
-    boxShadow: '0 2px 5px rgba(0,0,0,0.05)'
-  },
-  chartCard: {
-    backgroundColor: '#fff',
-    borderRadius: '10px',
-    padding: '20px',
-    boxShadow: '0 2px 5px rgba(0,0,0,0.05)'
-  },
-  cardTitle: {
-    fontSize: '16px',
-    color: '#555',
-    margin: '0 0 15px 0'
-  },
-  cardNumber: {
-    fontSize: '32px',
-    color: '#2E7D32',
-    margin: '0 0 5px 0',
     fontWeight: 'bold'
-  },
-  chartTitle: {
-    fontSize: '18px',
-    color: '#2E7D32',
-    margin: '0 0 15px 0',
-    fontWeight: 'bold'
-  },
-  cardStatPositive: {
-    fontSize: '14px',
-    color: '#2E7D32',
-    margin: '0'
-  },
-  cardStatNegative: {
-    fontSize: '14px',
-    color: '#C62828',
-    margin: '0'
-  },
-  chartPlaceholder: {
-    height: '200px',
-    backgroundColor: '#F5F5F5',
-    borderRadius: '5px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: '#999'
   }
 };
 
-export default Dashboard;
+export default Contents; 
