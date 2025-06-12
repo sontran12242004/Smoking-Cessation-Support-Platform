@@ -416,6 +416,8 @@ const Coaches = () => {
   const [showEdit, setShowEdit] = useState(false);
   const [editingCoachId, setEditingCoachId] = useState(null);
   const [coaches, setCoaches] = useState(initialCoaches);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [availabilityFilter, setAvailabilityFilter] = useState('All');
 
   const handleEditClick = (coachId) => {
     setEditingCoachId(coachId);
@@ -434,6 +436,15 @@ const Coaches = () => {
   };
 
   const coachToEdit = coaches.find(coach => coach.name === editingCoachId);
+
+  const filteredCoaches = coaches.filter(coach => {
+    const matchesSearchTerm = coach.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesAvailability = 
+      availabilityFilter === 'All' ||
+      (availabilityFilter === 'Available' && coach.schedule === true) ||
+      (availabilityFilter === 'Unavailable' && coach.schedule === false);
+    return matchesSearchTerm && matchesAvailability;
+  });
 
   return (
     <div style={styles.container}>
@@ -473,7 +484,7 @@ const Coaches = () => {
               <Link to="/coaches" style={styles.menuLink}>
                 <li style={activeMenu === 'Coaches' ? styles.activeMenuItem : styles.menuItem} onClick={() => setActiveMenu('Coaches')}>Coaches</li>
               </Link>
-              <Link to="/ratings-feedbacks" style={styles.menuLink}>
+              <Link to="/ratings" style={styles.menuLink}>
                 <li style={activeMenu === 'Ratings, Feedbacks' ? styles.activeMenuItem : styles.menuItem} onClick={() => setActiveMenu('Ratings, Feedbacks')}>Ratings, Feedbacks</li>
               </Link>
             </ul>
@@ -485,7 +496,25 @@ const Coaches = () => {
           <div style={styles.wrapper}>
             <div style={styles.headerRow}>
               <h1 style={styles.title}>Coaches Management</h1>
-              <button style={styles.addBtn} onClick={() => setShowAdd(true)}>+ Add New Coach</button>
+              <div style={styles.filterControls}>
+                <input
+                  type="text"
+                  placeholder="Search by name..."
+                  style={styles.searchInput}
+                  value={searchTerm}
+                  onChange={e => setSearchTerm(e.target.value)}
+                />
+                <select
+                  style={styles.dropdown}
+                  value={availabilityFilter}
+                  onChange={e => setAvailabilityFilter(e.target.value)}
+                >
+                  <option value="All">All</option>
+                  <option value="Available">Available</option>
+                  <option value="Unavailable">Unavailable</option>
+                </select>
+                <button style={styles.addBtn} onClick={() => setShowAdd(true)}>+ Add New Coach</button>
+              </div>
             </div>
             <div style={styles.statsRow}>
               <div style={styles.statBox}><div style={styles.statLabel}>Total Coaches</div><div style={styles.statValue}>32</div></div>
@@ -494,7 +523,7 @@ const Coaches = () => {
               <div style={styles.statBox}><div style={styles.statLabel}>Avg. Rating</div><div style={styles.statValue}>4.5%</div></div>
             </div>
             <div style={styles.cardRow}>
-              {coaches.map((c, idx) => (
+              {filteredCoaches.map((c, idx) => (
                 <div key={c.name + idx} style={styles.coachCard}>
                   <div style={styles.coachImage}>
                     <img src={c.avatar} alt={c.name} style={styles.coachImageContent} />
@@ -506,7 +535,9 @@ const Coaches = () => {
                   </div>
                   <div style={styles.coachBtnRow}>
                     <button style={styles.editBtn} onClick={() => handleEditClick(c.name)}>Edit</button>
-                    <button style={styles.scheduleBtn}>Schedule</button>
+                    <Link to="/confirm-coach-schedule" style={styles.scheduleButtonLink}>
+                      <button style={styles.scheduleButton}>Schedule</button>
+                    </Link>
                   </div>
                 </div>
               ))}
@@ -627,14 +658,47 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 30,
+    flexWrap: 'wrap',
+    gap: '15px',
   },
   title: {
     fontSize: 32,
     fontWeight: 700,
     color: '#406c2b',
-    margin: '0 0 30px 0',
+    margin: '0',
     letterSpacing: 0.5,
     textShadow: '0 1px 0 #fff',
+  },
+  filterControls: {
+    display: 'flex',
+    gap: '10px',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+  },
+  searchInput: {
+    padding: '10px 15px',
+    border: '1px solid #ddd',
+    borderRadius: '8px',
+    fontSize: '14px',
+    outline: 'none',
+    width: '200px',
+    transition: 'border-color 0.2s ease',
+    ':focus': {
+      borderColor: '#4d8b3c'
+    }
+  },
+  dropdown: {
+    padding: '10px 15px',
+    border: '1px solid #ddd',
+    borderRadius: '8px',
+    fontSize: '14px',
+    backgroundColor: '#fff',
+    outline: 'none',
+    cursor: 'pointer',
+    transition: 'border-color 0.2s ease',
+    ':focus': {
+      borderColor: '#4d8b3c'
+    }
   },
   addBtn: {
     background: '#4d8b3c',
@@ -782,6 +846,26 @@ const styles = {
     height: '100%',
     objectFit: 'cover',
     objectPosition: 'center',
+  },
+  scheduleButton: {
+    padding: '8px 15px',
+    backgroundColor: '#FFA726',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    fontSize: '14px',
+    fontWeight: 'bold',
+    transition: 'background-color 0.2s ease',
+    ':hover': {
+      backgroundColor: '#FB8C00'
+    }
+  },
+  scheduleButtonLink: {
+    textDecoration: 'none',
+  },
+  coachCardText: {
+    marginBottom: '10px',
   },
 };
 

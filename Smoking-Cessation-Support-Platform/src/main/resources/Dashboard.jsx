@@ -63,7 +63,7 @@ const Dashboard = () => {
                   Packages
                 </li>
               </Link>
-              <Link to="/dashboard" style={styles.menuLink}>
+              <Link to="/contents" style={styles.menuLink}>
                 <li 
                   style={activeMenu === 'Contents' ? styles.activeMenuItem : styles.menuItem}
                   onClick={() => setActiveMenu('Contents')}
@@ -79,7 +79,7 @@ const Dashboard = () => {
                   Coaches
                 </li>
               </Link>
-              <Link to="/dashboard" style={styles.menuLink}>
+              <Link to="/ratings" style={styles.menuLink}>
                 <li 
                   style={activeMenu === 'Ratings, Feedbacks' ? styles.activeMenuItem : styles.menuItem}
                   onClick={() => setActiveMenu('Ratings, Feedbacks')}
