@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
-const BookAppointment = () => {
+const BookAppointment = (props) => {
+  const location = useLocation();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
   const [unavailableDates] = useState([
@@ -14,12 +15,11 @@ const BookAppointment = () => {
     new Date(2025, 5, 2).toDateString(),  // June 2, 2025
   ]);
 
-  // Placeholder coach data
-  const coachData = {
-    name: "Dr. Sarah Johnson",
-    specialization: "Certified Smoking Cessation Specialist - 5 years experience",
-    bio: "Specializing in cognitive behavioral therapy for smoking cessation. Sarah has helped over 200 clients successfully quit nicotine and develop healthier habits. Her approach combines evidence-based techniques with personalized support.",
-  };
+  // Nhận mảng ngày đã đặt lịch từ props (chuỗi 'YYYY-MM-DD')
+  const bookedDates = props.bookedDates || [];
+
+  // Lấy coachData từ props hoặc từ location.state
+  const coachData = props.coachData || (location.state && location.state.coachData);
 
   // Dummy time slots for a selected date
   const dummyTimeSlots = [
@@ -51,14 +51,16 @@ const BookAppointment = () => {
       const isSelected = currentDate.toDateString() === selectedDate.toDateString();
       const isUnavailable = unavailableDates.includes(currentDate.toDateString());
       const isPast = currentDate < new Date().setHours(0, 0, 0, 0);
+      // Ngày đã có người đặt
+      const dateStr = currentDate.toISOString().slice(0, 10); // 'YYYY-MM-DD'
+      const isBooked = bookedDates.includes(dateStr);
 
-      const cellStyle = {
-        ...styles.calendarCell,
-        ...(isToday && styles.calendarCellToday),
-        ...(isSelected && styles.calendarCellSelected),
-        ...(isUnavailable && styles.calendarCellUnavailable),
-        ...(isPast && styles.calendarCellPast),
-      };
+      let cellStyle = { ...styles.calendarCell };
+      if (!isToday) cellStyle = { ...cellStyle, color: '#222', background: 'none' };
+      if (isSelected) cellStyle = { ...cellStyle, backgroundColor: '#2E7D32', color: '#fff' };
+      if (isUnavailable) cellStyle = { ...cellStyle, color: '#C62828', textDecoration: 'line-through' };
+      if (isBooked) cellStyle = { ...cellStyle, color: 'red', textDecoration: 'line-through', fontWeight: 600, cursor: 'not-allowed' };
+      if (isPast) cellStyle = { ...cellStyle, opacity: 0.6, cursor: 'not-allowed' };
 
       calendarDays.push(
         <td
@@ -116,12 +118,12 @@ const BookAppointment = () => {
         </div>
         <div style={styles.headerRight}>
           <ul style={styles.navLinks}>
-            <li><Link to="/" style={styles.navLink}>Home</Link></li>
-            <li><Link to="/dashboard" style={styles.navLink}>Dashboard</Link></li>
+            <li><Link to="/premiummemberhome" style={styles.navLink}>Home</Link></li>
+            <li><Link to="/premiummemberdashboard" style={styles.navLink}>Dashboard</Link></li>
             <li><Link to="/achievements" style={styles.navLink}>Achievement</Link></li>
-            <li><Link to="/coach" style={styles.navLink}>Coach</Link></li>
-            <li><Link to="/community" style={styles.navLink}>Community</Link></li>
-            <li><Link to="/feedback" style={styles.navLink}>Feedback</Link></li>
+            <li><Link to="/premiummembercoach" style={styles.navLink}>Coach</Link></li>
+            <li><Link to="/premiummembercommun" style={styles.navLink}>Community</Link></li>
+            <li><Link to="/feedbackpremium" style={styles.navLink}>Feedback</Link></li>
           </ul>
           <span style={styles.notificationIcon}>&#128276;</span>
           <button style={styles.logoutButton}>Logout</button>
@@ -130,19 +132,23 @@ const BookAppointment = () => {
 
       {/* Main Content */}
       <div style={styles.mainContent}>
-        <Link to="/coach" style={styles.backButton}>← Back To Coach</Link>
+        <Link to="/premiummembercoach" style={styles.backButton}>← Back To Coach</Link>
 
         {/* Coach Profile Section */}
-        <div style={styles.coachProfileCard}>
-          <div style={styles.coachAvatar}>
-            <img src="https://via.placeholder.com/100" alt="Coach Avatar" style={styles.avatarImage} />
+        {coachData ? (
+          <div style={styles.coachProfileCard}>
+            <div style={styles.coachAvatar}>
+              <img src={coachData.avatar || 'https://via.placeholder.com/100'} alt="Coach Avatar" style={styles.avatarImage} />
+            </div>
+            <div style={styles.coachInfo}>
+              <h2 style={styles.coachName}>{coachData.name}</h2>
+              <p style={styles.coachSpecialization}>{coachData.specialty}{coachData.experience ? ` - ${coachData.experience} years experience` : ''}</p>
+              <p style={styles.coachBio}>{coachData.bio || coachData.description}</p>
+            </div>
           </div>
-          <div style={styles.coachInfo}>
-            <h2 style={styles.coachName}>{coachData.name}</h2>
-            <p style={styles.coachSpecialization}>{coachData.specialization}</p>
-            <p style={styles.coachBio}>{coachData.bio}</p>
-          </div>
-        </div>
+        ) : (
+          <div style={{ color: '#C62828', fontWeight: 'bold', margin: '30px 0' }}>No coach data provided.</div>
+        )}
 
         {/* Calendar and Time Slots Section */}
         <div style={styles.scheduleContainer}>
@@ -189,17 +195,19 @@ const BookAppointment = () => {
               ))}
             </div>
           </div>
+        </div>
 
-          {/* Session Summary */}
+        {/* Session Summary dưới scheduleContainer */}
+        {selectedTimeSlot && (
           <div style={styles.sessionSummaryCard}>
             <h3 style={styles.sessionSummaryTitle}>Session Summary</h3>
             <p style={styles.summaryDetail}>Date: {formatSelectedDate(selectedDate)}</p>
-            <p style={styles.summaryDetail}>Time: {selectedTimeSlot || 'N/A'}</p>
+            <p style={styles.summaryDetail}>Time: {selectedTimeSlot}</p>
             <p style={styles.summaryDetail}>Duration: 45 minutes</p>
             <p style={styles.summaryDetail}>Type: Video Consultation</p>
             <button style={styles.confirmButton}>Confirm</button>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Footer */}
@@ -421,8 +429,8 @@ const styles = {
   },
   calendarCard: {
     backgroundColor: '#fff',
-    borderRadius: '10px',
-    boxShadow: '0 2px 5px rgba(0,0,0,0.05)',
+    // borderRadius: '10px',
+    // boxShadow: '0 2px 5px rgba(0,0,0,0.05)',
     padding: '20px',
   },
   calendarTitle: {
@@ -454,7 +462,11 @@ const styles = {
   },
   calendarTable: {
     width: '100%',
-    borderCollapse: 'collapse',
+    tableLayout: 'fixed',
+    borderCollapse: 'separate',
+    borderSpacing: '4px',
+    marginTop: '8px',
+    marginBottom: '8px',
   },
   calendarHeaderRow: {
     backgroundColor: '#E8F5E9',
@@ -466,14 +478,26 @@ const styles = {
     fontWeight: 'bold',
   },
   calendarCell: {
-    padding: '10px',
+    width: '40px',
+    height: '40px',
+    minWidth: '40px',
+    minHeight: '40px',
+    maxWidth: '40px',
+    maxHeight: '40px',
     textAlign: 'center',
+    verticalAlign: 'middle',
+    borderRadius: '8px',
+    fontSize: '18px',
+    fontWeight: 500,
     cursor: 'pointer',
-    borderRadius: '5px',
-    transition: 'background-color 0.2s ease',
-    ':hover': {
-      backgroundColor: '#DCEDC8',
-    },
+    transition: 'background 0.2s, color 0.2s',
+    background: 'none',
+    border: 'none',
+    lineHeight: '40px',
+    padding: 0,
+    boxSizing: 'border-box',
+    overflow: 'hidden',
+    display: 'table-cell',
   },
   calendarCellEmpty: {
     padding: '10px',
@@ -488,6 +512,17 @@ const styles = {
     backgroundColor: '#2E7D32',
     color: '#fff',
     fontWeight: 'bold',
+    borderRadius: '8px',
+    width: '40px',
+    height: '40px',
+    minWidth: '40px',
+    minHeight: '40px',
+    lineHeight: '40px',
+    display: 'table-cell',
+    boxSizing: 'border-box',
+    textAlign: 'center',
+    verticalAlign: 'middle',
+    fontSize: '18px',
   },
   calendarCellUnavailable: {
     color: '#C62828',
@@ -565,8 +600,10 @@ const styles = {
     borderRadius: '10px',
     boxShadow: '0 2px 5px rgba(0,0,0,0.05)',
     padding: '20px',
-    gridColumn: '2 / 3', // Places it in the second column
-    gridRow: '1 / span 2', // Spans two rows
+    marginTop: '30px',
+    fontSize: '16px',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   sessionSummaryTitle: {
     fontSize: '20px',

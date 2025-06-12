@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import EditProfileModal from './EditProfileModal';
+import EditProfileModal from '../EditProfileModal';
 
 function NotificationCenter() {
     // Placeholder for notifications, to be replaced with database data
