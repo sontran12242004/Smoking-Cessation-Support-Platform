@@ -1,7 +1,7 @@
 package com.smokingcessation.controller;
 
-import com.smokingcessation.dto.AccountResponse;
-import com.smokingcessation.dto.LoginRequest;
+import com.smokingcessation.dto.AccountDTO;
+import com.smokingcessation.dto.LoginDTO;
 import com.smokingcessation.entity.Account;
 import com.smokingcessation.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +23,9 @@ public class AuthenticationController {
     }
 
     @PostMapping("/api/login")
-    public ResponseEntity login(@RequestBody LoginRequest loginRequest){
+    public ResponseEntity login(@RequestBody LoginDTO loginDTO){
 
-        AccountResponse account = authenticationService.login(loginRequest);
+        AccountDTO account = authenticationService.login(loginDTO);
 
         return ResponseEntity.ok(account);
     }

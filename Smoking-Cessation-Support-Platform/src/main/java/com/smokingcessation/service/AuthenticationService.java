@@ -1,9 +1,9 @@
 package com.smokingcessation.service;
 
 
-import com.smokingcessation.dto.AccountResponse;
+import com.smokingcessation.dto.AccountDTO;
 import com.smokingcessation.dto.EmailDetail;
-import com.smokingcessation.dto.LoginRequest;
+import com.smokingcessation.dto.LoginDTO;
 import com.smokingcessation.entity.Account;
 import com.smokingcessation.exception.AuthenticationException;
 import com.smokingcessation.repository.AuthenticationRepository;
@@ -49,11 +49,11 @@ public class AuthenticationService implements UserDetailsService {
         emailService.sendMail(emailDetail);
         return newAccount;
     }
-    public AccountResponse login(LoginRequest loginRequest){
+    public AccountDTO login(LoginDTO loginDTO){
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    loginRequest.getEmail(),
-                    loginRequest.getPassword()
+                    loginDTO.getEmail(),
+                    loginDTO.getPassword()
             ));
         }catch (Exception e){
             // sai thông tin đăng nhập
@@ -62,11 +62,11 @@ public class AuthenticationService implements UserDetailsService {
             throw new AuthenticationException("Invalid username or password");
         }
 
-        Account account = authenticationRepository.findAccountByEmail(loginRequest.getEmail());
-        AccountResponse accountResponse = modelMapper.map(account, AccountResponse.class);
+        Account account = authenticationRepository.findAccountByEmail(loginDTO.getEmail());
+        AccountDTO accountDTO = modelMapper.map(account, AccountDTO.class);
         String token = tokenService.generateToken(account);
-        accountResponse.setToken(token);
-        return accountResponse;
+        accountDTO.setToken(token);
+        return accountDTO;
     }
 
     @Override

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class MyExceptionHandler {
+public class HandlerException {
 
     // mục tiêu: bắt lỗi và return message về cho phía FE
 

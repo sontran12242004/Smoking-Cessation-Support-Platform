@@ -3,8 +3,8 @@ package com.smokingcessation.service;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import com.smokingcessation.dto.HealthMetrics;
-import com.smokingcessation.entity.Users;
+import com.smokingcessation.dto.HealthMetricsDTO;
+import com.smokingcessation.entity.Members;
 import com.smokingcessation.repository.HealthMetricsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDateTime;
@@ -25,7 +25,7 @@ public class HealthMetricsService {
     /**
      * Tính số ngày không hút thuốc kể từ quitDate đến hiện tại
      */
-    public int getDaysSmokeFree(Users user) {
+    public int getDaysSmokeFree(Members user) {
         LocalDate quitDate = user.getQuitDate();
         if (quitDate == null) return 0;
         return (int) ChronoUnit.DAYS.between(quitDate, LocalDate.now());
@@ -34,7 +34,7 @@ public class HealthMetricsService {
     /**
      * Tính tổng số tiền tiết kiệm được kể từ khi bắt đầu cai thuốc
      */
-    public int getMoneySaved(Users user) {
+    public int getMoneySaved(Members user) {
         int days = getDaysSmokeFree(user);
         return days * user.getDailyCost();
     }
@@ -42,7 +42,7 @@ public class HealthMetricsService {
     /**
      * Lấy tổng số điếu thuốc đã hút từ quitDate đến hiện tại
      */
-    public int getTotalCigarettesSmoked(Users user) {
+    public int getTotalCigarettesSmoked(Members user) {
         LocalDate quitDate = user.getQuitDate();
         if (quitDate == null) return 0;
         int total = 0;
@@ -57,7 +57,7 @@ public class HealthMetricsService {
     /**
      * Kiểm tra dữ liệu đầu vào của user
      */
-    private void validateUserData(Users user) {
+    private void validateUserData(Members user) {
         if (user.getQuitDate() == null || user.getQuitDate().isAfter(LocalDate.now())) {
             throw new IllegalArgumentException("Ngày bắt đầu cai thuốc không hợp lệ");
         }
@@ -69,7 +69,7 @@ public class HealthMetricsService {
     /**
      * Tính % cải thiện sức khỏe tổng thể dựa trên số ngày cai và tổng số điếu hút
      */
-    public double getHealthImprovedPercent(Users user) {
+    public double getHealthImprovedPercent(Members user) {
         int days = getDaysSmokeFree(user);
         int cigarettes = getTotalCigarettesSmoked(user);
         double percent = 100.0 + days * 2.0 - cigarettes * 1.0;
@@ -79,7 +79,7 @@ public class HealthMetricsService {
     /**
      * Tính % giảm nguy cơ đau tim
      */
-    public double getHeartAttackRisk(Users user) {
+    public double getHeartAttackRisk(Members user) {
         int days = getDaysSmokeFree(user);
         int cigarettes = getTotalCigarettesSmoked(user);
         double percent = 100.0 - days * 1.2 - cigarettes * 0.8;
@@ -89,7 +89,7 @@ public class HealthMetricsService {
     /**
      * Tính % giảm nguy cơ ung thư phổi
      */
-    public double getLungCancerRisk(Users user) {
+    public double getLungCancerRisk(Members user) {
         int days = getDaysSmokeFree(user);
         int cigarettes = getTotalCigarettesSmoked(user);
         double percent = 100.0 - days * 1.1 - cigarettes * 0.7;
@@ -99,7 +99,7 @@ public class HealthMetricsService {
     /**
      * Tính % giảm nguy cơ bệnh tim
      */
-    public double getHeartDiseaseRisk(Users user) {
+    public double getHeartDiseaseRisk(Members user) {
         int days = getDaysSmokeFree(user);
         return Math.min(27, days * 1.9);
     }
@@ -107,7 +107,7 @@ public class HealthMetricsService {
     /**
      * Tính % cải thiện hệ miễn dịch
      */
-    public double getImmuneFunction(Users user) {
+    public double getImmuneFunction(Members user) {
         int days = getDaysSmokeFree(user);
         return Math.min(22, days * 1.6);
     }
@@ -115,7 +115,7 @@ public class HealthMetricsService {
     /**
      * Tính % trắng răng
      */
-    public double getTeethWhitening(Users user) {
+    public double getTeethWhitening(Members user) {
         int days = getDaysSmokeFree(user);
         return Math.min(19, days * 1.3);
     }
@@ -123,7 +123,7 @@ public class HealthMetricsService {
     /**
      * Tính % cải thiện hơi thở thơm mát
      */
-    public double getBreathFreshness(Users user) {
+    public double getBreathFreshness(Members user) {
         int days = getDaysSmokeFree(user);
         return Math.min(38.5, days * 2.75);
     }
@@ -131,7 +131,7 @@ public class HealthMetricsService {
     /**
      * Tính % cải thiện vị giác/khứu giác
      */
-    public double getTasteAndSmell(Users user) {
+    public double getTasteAndSmell(Members user) {
         int days = getDaysSmokeFree(user);
         return Math.min(45, days * 3.2);
     }
@@ -139,7 +139,7 @@ public class HealthMetricsService {
     /**
      * Tính % giảm CO trong máu
      */
-    public double getCOLvls(Users user) {
+    public double getCOLvls(Members user) {
         int days = getDaysSmokeFree(user);
         return Math.min(83, days * 5.9);
     }
@@ -147,7 +147,7 @@ public class HealthMetricsService {
     /**
      * Tính % tăng lượng Oxy trong máu
      */
-    public double getOxygenLvls(Users user) {
+    public double getOxygenLvls(Members user) {
         int days = getDaysSmokeFree(user);
         return Math.min(12, days * 0.85);
     }
@@ -156,15 +156,15 @@ public class HealthMetricsService {
      * Lấy hoặc tạo mới chỉ số sức khỏe cho user trong ngày, rollback nếu lỗi
      */
     @Transactional(rollbackFor = Exception.class)
-    public HealthMetrics getOrCreateTodayMetrics(Users user) {
+    public HealthMetricsDTO getOrCreateTodayMetrics(Members user) {
         validateUserData(user);
         LocalDate today = LocalDate.now();
-        Optional<HealthMetrics> existing = healthMetricsRepository.findByUserAndDate(user, today);
+        Optional<HealthMetricsDTO> existing = healthMetricsRepository.findByUserAndDate(user, today);
         if (existing.isPresent()) {
             return existing.get();
         }
         try {
-            HealthMetrics metrics = new HealthMetrics(
+            HealthMetricsDTO metrics = new HealthMetricsDTO(
                     null,
                     user,
                     getDaysSmokeFree(user),

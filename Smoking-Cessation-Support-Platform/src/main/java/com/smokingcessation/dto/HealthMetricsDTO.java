@@ -1,5 +1,5 @@
 package com.smokingcessation.dto;
-import com.smokingcessation.entity.Users;
+import com.smokingcessation.entity.Members;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,14 +10,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "health_metrics")
-public class HealthMetrics {
+public class HealthMetricsDTO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private Users user;
+    private Members user;
 
     private int daysSmokeFree;
     private int moneySaved;

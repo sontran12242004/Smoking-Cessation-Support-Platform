@@ -18,7 +18,7 @@ public class CigaretteLog {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private Users user;
+    private Members user;
     private LocalDate logDate;
     private int cigarettesSmoked;
 } 

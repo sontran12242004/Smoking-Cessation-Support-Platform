@@ -4,7 +4,7 @@ import com.smokingcessation.enums.Role;
 import lombok.Data;
 
 @Data
-public class AccountResponse {
+public class AccountDTO {
     public String email;
     public String phone;
     public String fullName;

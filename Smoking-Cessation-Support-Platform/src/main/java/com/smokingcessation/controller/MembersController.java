@@ -10,7 +10,7 @@ import java.util.ArrayList;
 @RestController
 @RequestMapping("/api/users")
 @CrossOrigin("*")
-public class UserController {
+public class MembersController {
     ArrayList<Account> accounts = new ArrayList<>();
 
     @GetMapping

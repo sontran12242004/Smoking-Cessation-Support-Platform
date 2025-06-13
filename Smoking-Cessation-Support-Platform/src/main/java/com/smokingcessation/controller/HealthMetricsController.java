@@ -1,8 +1,8 @@
 package com.smokingcessation.controller;
 
-import com.smokingcessation.dto.HealthMetrics;
-import com.smokingcessation.entity.Users;
-import com.smokingcessation.repository.UserRepository;
+import com.smokingcessation.dto.HealthMetricsDTO;
+import com.smokingcessation.entity.Members;
+import com.smokingcessation.repository.MembersRepository;
 import com.smokingcessation.service.HealthMetricsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.*;
 public class HealthMetricsController {
 
     @Autowired
-    private UserRepository userRepository;
+    private MembersRepository userRepository;
 
     @Autowired
     private HealthMetricsService healthMetricsService;
 
     @GetMapping("/{userId}")
-    public ResponseEntity<HealthMetrics> getHealthMetrics(@PathVariable Long userId) {
-        Users user = userRepository.findById(userId)
+    public ResponseEntity<HealthMetricsDTO> getHealthMetrics(@PathVariable Long userId) {
+        Members user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
 
         if (user.getQuitDate() == null) {
@@ -30,7 +30,7 @@ public class HealthMetricsController {
             throw new RuntimeException("Người dùng chưa thiết lập số tiền hút thuốc mỗi ngày");
         }
 
-        HealthMetrics metrics = healthMetricsService.getOrCreateTodayMetrics(user);
+        HealthMetricsDTO metrics = healthMetricsService.getOrCreateTodayMetrics(user);
         return ResponseEntity.ok(metrics);
     }
 }

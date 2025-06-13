@@ -3,7 +3,7 @@ package com.smokingcessation.controller;
 import com.smokingcessation.dto.AdminDTO;
 import com.smokingcessation.entity.Account;
 import com.smokingcessation.entity.Admin;
-import com.smokingcessation.entity.Users;
+import com.smokingcessation.entity.Members;
 import com.smokingcessation.enums.Role;
 import com.smokingcessation.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +29,6 @@ public class AdminController {
         return ResponseEntity.badRequest().build();
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<Admin> register(@RequestBody Admin admin) {
-        Admin createdAdmin = adminService.createAdmin(admin);
-        return ResponseEntity.ok(createdAdmin);
-    }
 
     @GetMapping("/{email}")
     public ResponseEntity<Admin> getAdminByEmail(@PathVariable String email) {
@@ -45,7 +40,7 @@ public class AdminController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<List<Users>> getAllUsers() {
+    public ResponseEntity<List<Members>> getAllUsers() {
         return ResponseEntity.ok(adminService.getAllUsers());
     }
 
@@ -79,8 +74,8 @@ public class AdminController {
     }
 
     @GetMapping("/users/{email}")
-    public ResponseEntity<Users> getUserByEmail(@PathVariable String email) {
-        Users user = adminService.findUserByEmail(email);
+    public ResponseEntity<Members> getUserByEmail(@PathVariable String email) {
+        Members user = adminService.findUserByEmail(email);
         if (user != null) {
             return ResponseEntity.ok(user);
         }
