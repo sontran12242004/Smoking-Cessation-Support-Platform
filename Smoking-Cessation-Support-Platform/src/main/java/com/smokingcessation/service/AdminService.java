@@ -1,5 +1,6 @@
 package com.smokingcessation.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smokingcessation.dto.AdminDTO;
 import com.smokingcessation.entity.Account;
 import com.smokingcessation.entity.Admin;
@@ -10,6 +11,7 @@ import com.smokingcessation.repository.AdminRepository;
 import com.smokingcessation.repository.AuthenticationRepository;
 import com.smokingcessation.repository.CoachRepository;
 import com.smokingcessation.repository.MembersRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,8 @@ public class AdminService {
     private final TokenService tokenService;
     private final MembersRepository membersRepository;
     private final AuthenticationRepository authenticationRepository;
+
+
 
     public AdminService(
             AdminRepository adminRepository,
@@ -85,6 +89,16 @@ public class AdminService {
             return true;
         }
         return false;
+    }
+
+    // Tìm member theo ID
+    public Members findMemberById(Long memberId) {
+        Members member = membersRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy thành viên"));
+        if (member.getRole() == Role.USER) {
+            return member;
+        }
+        throw new RuntimeException("Người dùng này không phải là thành viên");
     }
 
     public Long getTotalUsers() {
@@ -173,28 +187,19 @@ public class AdminService {
         return true;
     }
 
-    // Tìm coach theo email
+    @Autowired
+    private CoachRepository coachRepository;
+
     public Coach findCoachByEmail(String email) {
-        Coach coach = CoachRepository.findByEmail(email).orElse(null);
-        if (coach != null && coach.getRole() == Role.Coach) {
-            return coach;
-        }
-        return null;
+        return coachRepository.findByEmail(email)
+                .filter(coach -> coach.getRole() == Role.Coach)
+                .orElse(null);
     }
 
-    // Tìm member theo ID
-    public Members findMemberById(Long memberId) {
-        Members member = membersRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy thành viên"));
-        if (member.getRole() == Role.USER) {
-            return member;
-        }
-        throw new RuntimeException("Người dùng này không phải là thành viên");
-    }
 
     // Tìm coach theo ID
-    public Members findCoachById(Long coachId) {
-        Members coach = membersRepository.findById(coachId)
+    public Coach findCoachById(Long coachId) {
+        Coach coach = coachRepository.findById(coachId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy coach"));
         if (coach.getRole() == Role.Coach) {
             return coach;

@@ -26,6 +26,6 @@ public class Coach {
     private LocalDateTime createdAt;
     private boolean isActive = true;
     private String availability;      // Thời gian có thể tư vấn
-    private String rating;           // Đánh giá
+    private Double rating;           // Đánh giá
 
 }
