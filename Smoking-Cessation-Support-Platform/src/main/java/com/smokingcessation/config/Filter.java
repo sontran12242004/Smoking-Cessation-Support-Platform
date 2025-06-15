@@ -1,7 +1,7 @@
 package com.smokingcessation.config;
 
 import com.smokingcessation.entity.Account;
-import com.smokingcessation.exception.AuthenticationException;
+import com.smokingcessation.exception.exceptions.AuthenticationException;
 import com.smokingcessation.service.TokenService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -105,3 +105,4 @@ public class Filter extends OncePerRequestFilter {
         return authHeader.substring(7);
     }
 }
+

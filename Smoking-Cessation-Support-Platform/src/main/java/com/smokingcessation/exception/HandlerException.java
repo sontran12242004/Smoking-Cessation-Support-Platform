@@ -1,6 +1,7 @@
 package com.smokingcessation.exception;
 
 
+import com.smokingcessation.exception.exceptions.AuthenticationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;

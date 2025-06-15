@@ -1,4 +1,4 @@
-package com.smokingcessation.exception;
+package com.smokingcessation.exception.exceptions;
 
 public class AuthenticationException extends RuntimeException{
 

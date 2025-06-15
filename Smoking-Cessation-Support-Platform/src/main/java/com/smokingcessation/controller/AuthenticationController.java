@@ -16,8 +16,10 @@ public class AuthenticationController {
     @Autowired
     AuthenticationService authenticationService;
 
+    // api > service > repository
+
     @PostMapping("/api/register")
-    public ResponseEntity<Account> register(@RequestBody Account account) {
+    public ResponseEntity register(@RequestBody Account account){
         Account newAccount = authenticationService.register(account);
         return ResponseEntity.ok(newAccount);
     }
@@ -25,9 +27,8 @@ public class AuthenticationController {
     @PostMapping("/api/login")
     public ResponseEntity login(@RequestBody LoginDTO loginDTO){
 
-        AccountDTO account = authenticationService.login(loginDTO);
+        AccountDTO accountDTO = authenticationService.login(loginDTO);
 
-        return ResponseEntity.ok(account);
+        return ResponseEntity.ok(accountDTO);
     }
-
 }

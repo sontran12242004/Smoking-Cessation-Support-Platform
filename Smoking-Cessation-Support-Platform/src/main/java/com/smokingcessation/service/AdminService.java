@@ -10,6 +10,7 @@ import com.smokingcessation.repository.AdminRepository;
 import com.smokingcessation.repository.AuthenticationRepository;
 import com.smokingcessation.repository.CoachRepository;
 import com.smokingcessation.repository.MembersRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,10 @@ public class AdminService {
     private final TokenService tokenService;
     private final MembersRepository membersRepository;
     private final AuthenticationRepository authenticationRepository;
+
+
+    @Autowired
+    CoachRepository coachRepository;
 
     public AdminService(
             AdminRepository adminRepository,
@@ -175,7 +180,7 @@ public class AdminService {
 
     // Tìm coach theo email
     public Coach findCoachByEmail(String email) {
-        Coach coach = CoachRepository.findByEmail(email).orElse(null);
+        Coach coach = coachRepository.findByEmail(email).orElse(null);
         if (coach != null && coach.getRole() == Role.Coach) {
             return coach;
         }
@@ -185,7 +190,8 @@ public class AdminService {
     // Tìm member theo ID
     public Members findMemberById(Long memberId) {
         Members member = membersRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy thành viên"));
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy " +
+                        "thành viên"));
         if (member.getRole() == Role.USER) {
             return member;
         }

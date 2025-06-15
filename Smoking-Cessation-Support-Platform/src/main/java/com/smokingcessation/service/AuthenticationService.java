@@ -5,7 +5,7 @@ import com.smokingcessation.dto.AccountDTO;
 import com.smokingcessation.dto.EmailDetail;
 import com.smokingcessation.dto.LoginDTO;
 import com.smokingcessation.entity.Account;
-import com.smokingcessation.exception.AuthenticationException;
+import com.smokingcessation.exception.exceptions.AuthenticationException;
 import com.smokingcessation.repository.AuthenticationRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthenticationService implements UserDetailsService {
-    //Xu ly logic, nghiep vu.....
+
     @Autowired
     AuthenticationRepository authenticationRepository;
 
@@ -28,7 +28,7 @@ public class AuthenticationService implements UserDetailsService {
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    AuthenticationManager authenticationManager;    // giúp check đăng nhập
+    AuthenticationManager authenticationManager; // giúp check đăng nhập
 
     @Autowired
     ModelMapper modelMapper;
@@ -39,7 +39,7 @@ public class AuthenticationService implements UserDetailsService {
     @Autowired
     EmailService emailService;
 
-    public Account register(Account account){
+    public Account register(Account account) {
         account.password = passwordEncoder.encode(account.getPassword());
         Account newAccount = authenticationRepository.save(account);
 
@@ -49,6 +49,7 @@ public class AuthenticationService implements UserDetailsService {
         emailService.sendMail(emailDetail);
         return newAccount;
     }
+
     public AccountDTO login(LoginDTO loginDTO){
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
@@ -63,10 +64,10 @@ public class AuthenticationService implements UserDetailsService {
         }
 
         Account account = authenticationRepository.findAccountByEmail(loginDTO.getEmail());
-        AccountDTO accountDTO = modelMapper.map(account, AccountDTO.class);
+        AccountDTO accountResponse = modelMapper.map(account, AccountDTO.class);
         String token = tokenService.generateToken(account);
-        accountDTO.setToken(token);
-        return accountDTO;
+        accountResponse.setToken(token);
+        return accountResponse;
     }
 
     @Override
