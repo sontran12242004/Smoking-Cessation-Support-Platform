@@ -23,7 +23,7 @@ body,
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #f0f2f5;
+  background-color:rgb(29, 228, 52);
 }
 
 header {
@@ -91,10 +91,9 @@ main {
   flex-direction: column;
   align-items: center;
   padding: 40px;
-  background-image: url('https://via.placeholder.com/1500x500?text=Vibrant+Forest+Background');
+  background-image: url('/z6704234340468_d0d12baf257178fe87207c3dc9979725.jpg');
   background-size: cover;
   background-position: center;
-  color: #fff;
   text-align: center;
   position: relative;
 }
@@ -106,12 +105,10 @@ main::before {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(192,192,192,0.4);
   z-index: 1;
+  backdrop-filter: blur(8px);
 }
-  font-size: 42px;
-    margin-bottom: 15px;
-    color: #388E3C;
 
 .service-package-intro {
     z-index: 2;

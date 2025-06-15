@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import EditProfileModal from "../EditProfileModal";
 
 function StandardMemberHome() {
   const [smokedToday, setSmokedToday] = useState(null);
   const [feeling, setFeeling] = useState(null);
   const [showEditProfile, setShowEditProfile] = useState(false);
+  const navigate = useNavigate();
 
   const styles = `
     html,
@@ -47,9 +49,10 @@ function StandardMemberHome() {
 
     .header-left,
     .header-right {
+      margin-left: 20px;
       display: flex;
       align-items: center;
-      margin: 0 0 0 40px;
+      margin-right: 20px;
     }
 
     .profile-section {
@@ -149,10 +152,9 @@ function StandardMemberHome() {
     }
 
     .notification-icon {
-      font-size: 24px;
-      color: #FBC02D;
-      margin-right: 20px;
-      cursor: pointer;
+    font-size: 24px;
+    color: #f39c12;
+    cursor: pointer;
     }
 
     .logout-button {
@@ -751,7 +753,6 @@ function StandardMemberHome() {
         font-size: 16px;
       }
     }
-
   `;
   const handleDashboard = () => {
     window.location.href = "/standardmemberdashboard";
@@ -761,6 +762,9 @@ function StandardMemberHome() {
     window.location.href = "/dailycheckin";
   };
 
+  const handleNotificationClick = () => {
+    navigate('/notificationcenter');
+  };
 
   return (
     <div className="container">
@@ -792,28 +796,28 @@ function StandardMemberHome() {
         </div>
         <ul className="nav-links">
           <li>
-            <a  href="#" className="active">
+            <a href="/standardmemberhome" className="active">
               Home
             </a>
           </li>
           <li>
-            <a href="#">Dashboard</a>
+            <a href="/standardmemberdashboard">Dashboard</a>
           </li>
           <li>
             <a href="#">Achievement</a>
           </li>
           <li>
-            <a href="#">Coach</a>
+            <a href="/standardmembercoach">Coach</a>
           </li>
           <li>
-            <a href="#">Community</a>
+            <a href="/standardmembercommun">Community</a>
           </li>
           <li>
-            <a href="#">Feedback</a>
+            <a href="/feedback">Feedback</a>
           </li>
         </ul>
-        <div className="header-actions">
-          <span className="notification-icon">🔔</span>
+        <div className="header-right">
+          <i className="notification-icon" onClick={handleNotificationClick}>🔔</i>
           <button className="logout-button">Logout</button>
         </div>
       </header>
@@ -843,17 +847,15 @@ function StandardMemberHome() {
           <p className="check-in-question">Did you smoke today?</p>
           <div className="button-group">
             <button
-              className={`check-in-button slipped-up ${
-                smokedToday === "yes" ? "smoked" : ""
-              }`}
+              className={`check-in-button slipped-up ${smokedToday === "yes" ? "smoked" : ""
+                }`}
               onClick={() => setSmokedToday("yes")}
             >
               Yes, I slipped up
             </button>
             <button
-              className={`check-in-button stayed-strong ${
-                smokedToday === "no" ? "smoked" : ""
-              }`}
+              className={`check-in-button stayed-strong ${smokedToday === "no" ? "smoked" : ""
+                }`}
               onClick={() => setSmokedToday("no")}
             >
               No, I stayed strong!
@@ -865,17 +867,15 @@ function StandardMemberHome() {
           </p>
           <div className="button-group">
             <button
-              className={`check-in-button unbearable ${
-                feeling === "unbearable" ? "smoked" : ""
-              }`}
+              className={`check-in-button unbearable ${feeling === "unbearable" ? "smoked" : ""
+                }`}
               onClick={() => setFeeling("unbearable")}
             >
               I feel unbearable
             </button>
             <button
-              className={`check-in-button tolerable ${
-                feeling === "tolerable" ? "smoked" : ""
-              }`}
+              className={`check-in-button tolerable ${feeling === "tolerable" ? "smoked" : ""
+                }`}
               onClick={() => setFeeling("tolerable")}
             >
               I feel uncomfortable but still tolerable
@@ -920,7 +920,7 @@ function StandardMemberHome() {
               "I used the money I saved to buy a new bike!"
             </p>
           </div>
-          <a href="#" className="join-discussion-link">
+          <a href="/standardmembercommun" className="join-discussion-link">
             Join the discussion →
           </a>
         </div>
@@ -947,19 +947,19 @@ function StandardMemberHome() {
             <h4>Quick Links</h4>
             <ul>
               <li>
-                <a href="#">About Us</a>
+                <a href="/about">About Us</a>
               </li>
               <li>
-                <a href="#">Our Programs</a>
+                <a href="/ourprograms">Our Programs</a>
               </li>
               <li>
-                <a href="#">Success Stories</a>
+                <a href="/successstories">Success Stories</a>
               </li>
               <li>
-                <a href="#">Blog</a>
+                <a href="/blog">Blog</a>
               </li>
               <li>
-                <a href="#">Contact</a>
+                <a href="/contact">Contact</a>
               </li>
             </ul>
           </div>
@@ -967,19 +967,19 @@ function StandardMemberHome() {
             <h4>Support</h4>
             <ul>
               <li>
-                <a href="#">FAQ</a>
+                <a href="/faq">FAQ</a>
               </li>
               <li>
-                <a href="#">Help Center</a>
+                <a href="/helpcenter">Help Center</a>
               </li>
               <li>
-                <a href="#">Privacy Policy</a>
+                <a href="/privacypolicy">Privacy Policy</a>
               </li>
               <li>
-                <a href="#">Term Of Service</a>
+                <a href="/termsofservice">Terms of Service</a>
               </li>
               <li>
-                <a href="#">Cookie Policy</a>
+                <a href="/cookiepolicy">Cookie Policy</a>
               </li>
             </ul>
           </div>

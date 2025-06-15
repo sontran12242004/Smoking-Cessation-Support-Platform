@@ -1,7 +1,11 @@
-import React from 'react';
-
+import React from "react";
+import { useNavigate } from "react-router-dom";
 function HealthMetric() {
-    const styles = `
+  const navigate = useNavigate();
+  const handleNotificationClick = () => {
+    navigate("/premiumnotificationcenter");
+  };
+  const styles = `
     body, html, #root {
       background: #f0f2f5;
       justify-content: center;
@@ -378,208 +382,372 @@ function HealthMetric() {
     }
   `;
 
-    const metrics = [
-        {
-            icon: (
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="4" stroke="#43b649" strokeWidth="2" /><path d="M8 2v4M16 2v4" stroke="#43b649" strokeWidth="2" /><rect x="7" y="10" width="4" height="4" rx="1" fill="#43b649" /><rect x="13" y="10" width="4" height="4" rx="1" fill="#43b649" /></svg>
-            ),
-            value: '14',
-            label: 'Days Smoke-Free',
-            desc: '19 days until next milestone',
-        },
-        {
-            icon: (
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none"><path d="M12 21c4.97 0 9-4.03 9-9s-4.03-9-9-9-9 4.03-9 9 4.03 9 9 9z" stroke="#43b649" strokeWidth="2" /><path d="M8 15h8M12 7v8" stroke="#43b649" strokeWidth="2" /></svg>
-            ),
-            value: '$155',
-            label: 'Money Saved',
-            desc: 'Based on 10 cigarettes/day',
-        },
-        {
-            icon: (
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none"><path d="M12 21c4.97 0 9-4.03 9-9s-4.03-9-9-9-9 4.03-9 9 4.03 9 9 9z" stroke="#43b649" strokeWidth="2" /><path d="M12 7v6l4 2" stroke="#43b649" strokeWidth="2" /></svg>
-            ),
-            value: '38.5%',
-            label: 'Health Improved',
-            desc: 'Lung function recovery',
-        },
-        {
-            icon: (
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none"><path d="M12 21c4.97 0 9-4.03 9-9s-4.03-9-9-9-9 4.03-9 9 4.03 9 9 9z" stroke="#43b649" strokeWidth="2" /><path d="M12 8v5l3 3" stroke="#43b649" strokeWidth="2" /><path d="M8 12h8" stroke="#43b649" strokeWidth="2" /></svg>
-            ),
-            value: '↓24%',
-            label: 'Heart Attack Risk',
-            desc: 'Reduction in heart attack probability',
-        },
-        {
-            icon: (
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none"><ellipse cx="12" cy="12" rx="10" ry="10" stroke="#43b649" strokeWidth="2" /><ellipse cx="12" cy="12" rx="5" ry="8" stroke="#43b649" strokeWidth="2" /></svg>
-            ),
-            value: '↓31%',
-            label: 'Lung Cancer Risk',
-            desc: 'Decreased risk of lung cancer',
-        },
-        {
-            icon: (
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none"><path d="M12 21c4.97 0 9-4.03 9-9s-4.03-9-9-9-9 4.03-9 9 4.03 9 9 9z" stroke="#43b649" strokeWidth="2" /><path d="M12 8v5l3 3" stroke="#43b649" strokeWidth="2" /><path d="M8 12h8" stroke="#43b649" strokeWidth="2" /></svg>
-            ),
-            value: '↓27%',
-            label: 'Heart Disease Risk',
-            desc: 'Reduction in cardiovascular risk',
-        },
-        {
-            icon: (
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#43b649" strokeWidth="2" /><path d="M12 8v8" stroke="#43b649" strokeWidth="2" /><path d="M8 12h8" stroke="#43b649" strokeWidth="2" /></svg>
-            ),
-            value: '+22%',
-            label: 'Immune Function',
-            desc: 'Improved immunity and lung function',
-        },
-        {
-            icon: (
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none"><rect x="6" y="6" width="12" height="12" rx="6" stroke="#222" strokeWidth="2" /><path d="M9 15c.5-1 1.5-1 2-1s1.5 0 2 1" stroke="#222" strokeWidth="2" /></svg>
-            ),
-            value: '+19%',
-            label: 'Teeth Whitening',
-            desc: 'Reduction in tobacco staining',
-        },
-        {
-            icon: (
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none"><path d="M17 10c1.104 0 2 .896 2 2s-.896 2-2 2H7c-1.104 0-2-.896-2-2s.896-2 2-2h10z" stroke="#43b649" strokeWidth="2" /><path d="M9 14v2a2 2 0 002 2h2a2 2 0 002-2v-2" stroke="#222" strokeWidth="2" /></svg>
-            ),
-            value: '+38.5%',
-            label: 'Breath Freshness',
-            desc: 'Improvement in breath odor',
-        },
-        {
-            icon: (
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#43b649" strokeWidth="2" /><path d="M8 15c1.5-2 6.5-2 8 0" stroke="#43b649" strokeWidth="2" /><circle cx="12" cy="12" r="3" stroke="#43b649" strokeWidth="2" /></svg>
-            ),
-            value: '+45%',
-            label: 'Taste & Smell',
-            desc: 'Recovery of sensory perception',
-        },
-        {
-            icon: (
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none"><rect x="6" y="10" width="12" height="4" rx="2" stroke="#43b649" strokeWidth="2" /><line x1="9" y1="8" x2="9" y2="16" stroke="#43b649" strokeWidth="2" /><line x1="15" y1="8" x2="15" y2="16" stroke="#43b649" strokeWidth="2" /></svg>
-            ),
-            value: '↓83%',
-            label: 'CO Levels',
-            desc: 'Reduction in blood carbon monoxide',
-        },
-        {
-            icon: (
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#43b649" strokeWidth="2" /><text x="12" y="16" textAnchor="middle" fontSize="12" fill="#43b649">O₂</text></svg>
-            ),
-            value: '+12%',
-            label: 'Oxygen Levels',
-            desc: 'Increase in blood oxygen',
-        },
-    ];
+  const metrics = [
+    {
+      icon: (
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+          <rect
+            x="3"
+            y="4"
+            width="18"
+            height="18"
+            rx="4"
+            stroke="#43b649"
+            strokeWidth="2"
+          />
+          <path d="M8 2v4M16 2v4" stroke="#43b649" strokeWidth="2" />
+          <rect x="7" y="10" width="4" height="4" rx="1" fill="#43b649" />
+          <rect x="13" y="10" width="4" height="4" rx="1" fill="#43b649" />
+        </svg>
+      ),
+      value: "14",
+      label: "Days Smoke-Free",
+      desc: "19 days until next milestone",
+    },
+    {
+      icon: (
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M12 21c4.97 0 9-4.03 9-9s-4.03-9-9-9-9 4.03-9 9 4.03 9 9 9z"
+            stroke="#43b649"
+            strokeWidth="2"
+          />
+          <path d="M8 15h8M12 7v8" stroke="#43b649" strokeWidth="2" />
+        </svg>
+      ),
+      value: "$155",
+      label: "Money Saved",
+      desc: "Based on 10 cigarettes/day",
+    },
+    {
+      icon: (
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M12 21c4.97 0 9-4.03 9-9s-4.03-9-9-9-9 4.03-9 9 4.03 9 9 9z"
+            stroke="#43b649"
+            strokeWidth="2"
+          />
+          <path d="M12 7v6l4 2" stroke="#43b649" strokeWidth="2" />
+        </svg>
+      ),
+      value: "38.5%",
+      label: "Health Improved",
+      desc: "Lung function recovery",
+    },
+    {
+      icon: (
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M12 21c4.97 0 9-4.03 9-9s-4.03-9-9-9-9 4.03-9 9 4.03 9 9 9z"
+            stroke="#43b649"
+            strokeWidth="2"
+          />
+          <path d="M12 8v5l3 3" stroke="#43b649" strokeWidth="2" />
+          <path d="M8 12h8" stroke="#43b649" strokeWidth="2" />
+        </svg>
+      ),
+      value: "↓24%",
+      label: "Heart Attack Risk",
+      desc: "Reduction in heart attack probability",
+    },
+    {
+      icon: (
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+          <ellipse
+            cx="12"
+            cy="12"
+            rx="10"
+            ry="10"
+            stroke="#43b649"
+            strokeWidth="2"
+          />
+          <ellipse
+            cx="12"
+            cy="12"
+            rx="5"
+            ry="8"
+            stroke="#43b649"
+            strokeWidth="2"
+          />
+        </svg>
+      ),
+      value: "↓31%",
+      label: "Lung Cancer Risk",
+      desc: "Decreased risk of lung cancer",
+    },
+    {
+      icon: (
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M12 21c4.97 0 9-4.03 9-9s-4.03-9-9-9-9 4.03-9 9 4.03 9 9 9z"
+            stroke="#43b649"
+            strokeWidth="2"
+          />
+          <path d="M12 8v5l3 3" stroke="#43b649" strokeWidth="2" />
+          <path d="M8 12h8" stroke="#43b649" strokeWidth="2" />
+        </svg>
+      ),
+      value: "↓27%",
+      label: "Heart Disease Risk",
+      desc: "Reduction in cardiovascular risk",
+    },
+    {
+      icon: (
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="10" stroke="#43b649" strokeWidth="2" />
+          <path d="M12 8v8" stroke="#43b649" strokeWidth="2" />
+          <path d="M8 12h8" stroke="#43b649" strokeWidth="2" />
+        </svg>
+      ),
+      value: "+22%",
+      label: "Immune Function",
+      desc: "Improved immunity and lung function",
+    },
+    {
+      icon: (
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+          <rect
+            x="6"
+            y="6"
+            width="12"
+            height="12"
+            rx="6"
+            stroke="#222"
+            strokeWidth="2"
+          />
+          <path
+            d="M9 15c.5-1 1.5-1 2-1s1.5 0 2 1"
+            stroke="#222"
+            strokeWidth="2"
+          />
+        </svg>
+      ),
+      value: "+19%",
+      label: "Teeth Whitening",
+      desc: "Reduction in tobacco staining",
+    },
+    {
+      icon: (
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M17 10c1.104 0 2 .896 2 2s-.896 2-2 2H7c-1.104 0-2-.896-2-2s.896-2 2-2h10z"
+            stroke="#43b649"
+            strokeWidth="2"
+          />
+          <path
+            d="M9 14v2a2 2 0 002 2h2a2 2 0 002-2v-2"
+            stroke="#222"
+            strokeWidth="2"
+          />
+        </svg>
+      ),
+      value: "+38.5%",
+      label: "Breath Freshness",
+      desc: "Improvement in breath odor",
+    },
+    {
+      icon: (
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="10" stroke="#43b649" strokeWidth="2" />
+          <path d="M8 15c1.5-2 6.5-2 8 0" stroke="#43b649" strokeWidth="2" />
+          <circle cx="12" cy="12" r="3" stroke="#43b649" strokeWidth="2" />
+        </svg>
+      ),
+      value: "+45%",
+      label: "Taste & Smell",
+      desc: "Recovery of sensory perception",
+    },
+    {
+      icon: (
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+          <rect
+            x="6"
+            y="10"
+            width="12"
+            height="4"
+            rx="2"
+            stroke="#43b649"
+            strokeWidth="2"
+          />
+          <line x1="9" y1="8" x2="9" y2="16" stroke="#43b649" strokeWidth="2" />
+          <line
+            x1="15"
+            y1="8"
+            x2="15"
+            y2="16"
+            stroke="#43b649"
+            strokeWidth="2"
+          />
+        </svg>
+      ),
+      value: "↓83%",
+      label: "CO Levels",
+      desc: "Reduction in blood carbon monoxide",
+    },
+    {
+      icon: (
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="10" stroke="#43b649" strokeWidth="2" />
+          <text x="12" y="16" textAnchor="middle" fontSize="12" fill="#43b649">
+            O₂
+          </text>
+        </svg>
+      ),
+      value: "+12%",
+      label: "Oxygen Levels",
+      desc: "Increase in blood oxygen",
+    },
+  ];
 
-    const handleBack = () => {
-        window.location.href = '/premiummemberdashboard'; // Redirect to Premium Member Dashboard
-    };
+  const handleBack = () => {
+    window.location.href = "/premiummemberdashboard"; // Redirect to Premium Member Dashboard
+  };
 
-    return (
-        <>
-            <style>{styles}</style>
-            <div className="dashboard-bg">
-                <header>
-                    <div className="header-left">
-                        <div className="profile-section">
-                            <button className="profile-btn">
-                                <span className="profile-icon">👤</span> Premium Member
-                            </button>
-                        </div>
-                        <div className="logo-section">
-                            <span className="logo">LOGO</span>
-                            <div className="app-name">
-                                <h1>NicOff</h1>
-                                <p>Turn Off Nicotine, Turn On Life!</p>
-                            </div>
-                        </div>
-                    </div>
-                    <ul className="nav-links">
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#" className="active">Dashboard</a></li>
-                        <li><a href="#">Achievement</a></li>
-                        <li><a href="#">Coach</a></li>
-                        <li><a href="#">Community</a></li>
-                        <li><a href="#">Feedback</a></li>
-                    </ul>
-                    <div className="header-actions">
-                        <span className="dashboard-notification-icon">🔔</span>
-                        <button className="dashboard-logout-btn">Logout</button>
-                    </div>
-                </header>
-                <div className="dashboard-bg-overlay"></div>
-                <div className="dashboard-main">
-                    <div className="dashboard-title">Health Metrics <span className="highlight">Dashboard</span></div>
-                    <div className="dashboard-desc">"Your health progress at a glance!"</div>
-                    <div className="metrics-grid">
-                        {metrics.map((m, i) => (
-                            <div className="dashboard-card" key={i}>
-                                <div className="dashboard-card-icon">{m.icon}</div>
-                                <div className="dashboard-card-value">{m.value}</div>
-                                <div className="dashboard-card-label">{m.label}</div>
-                                <div className="dashboard-card-desc">{m.desc}</div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+  return (
+    <>
+      <style>{styles}</style>
+      <div className="dashboard-bg">
+        <header>
+          <div className="header-left">
+            <div className="profile-section">
+              <button className="profile-btn">
+                <span className="profile-icon">👤</span> Premium Member
+              </button>
             </div>
-            <button className="back-to-dashboard-btn" onClick={handleBack}>
-                ← Back to Dashboard
-            </button>
-            <footer className="welcome-footer">
-                <div className="footer-content">
-                    <div className="footer-section about-nic-off">
-                        <h3>NicOff</h3>
-                        <p>
-                            We're dedicated to helping you break<br />
-                            free from smoking addiction through<br />
-                            science-backed methods and<br />
-                            community support
-                        </p>
-                    </div>
-                    <div className="footer-section">
-                        <h3>Quick Links</h3>
-                        <ul>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Our Programs</a></li>
-                            <li><a href="#">Success Stories</a></li>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Contact</a></li>
-                        </ul>
-                    </div>
-                    <div className="footer-section">
-                        <h3>Support</h3>
-                        <ul>
-                            <li><a href="#">FAQ</a></li>
-                            <li><a href="#">Help Center</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
-                            <li><a href="#">Term Of Service</a></li>
-                            <li><a href="#">Cookie Policy</a></li>
-                        </ul>
-                    </div>
-                    <div className="footer-section newsletter">
-                        <h3>NewsLetter</h3>
-                        <input type="email" placeholder="Your Email Address..." />
-                        <button>Subscribe</button>
-                        <p>
-                            Get the latest tips and<br />
-                            motivation to stay smoke-free<br />
-                            delivered to your inbox
-                        </p>
-                    </div>
-                </div>
-                <div className="copyright">
-                    © 2025 NicOff. All rights reserved
-                </div>
-            </footer>
-        </>
-    );
+            <div className="logo-section">
+              <span className="logo">LOGO</span>
+              <div className="app-name">
+                <h1>NicOff</h1>
+                <p>Turn Off Nicotine, Turn On Life!</p>
+              </div>
+            </div>
+          </div>
+          <ul className="nav-links">
+            <li>
+              <a href="/premiummemberhome">Home</a>
+            </li>
+            <li>
+              <a href="/premiummemberdashboard" className="active">
+                Dashboard
+              </a>
+            </li>
+            <li>
+              <a href="#">Achievement</a>
+            </li>
+            <li>
+              <a href="/premiummembercoach">Coach</a>
+            </li>
+            <li>
+              <a href="/premiummembercommun">Community</a>
+            </li>
+            <li>
+              <a href="/feedbackpremium">Feedback</a>
+            </li>
+          </ul>
+          <div className="header-actions">
+            <span
+              className="dashboard-notification-icon"
+              onClick={handleNotificationClick}
+            >
+              🔔
+            </span>
+            <button className="dashboard-logout-btn">Logout</button>
+          </div>
+        </header>
+        <div className="dashboard-bg-overlay"></div>
+        <div className="dashboard-main">
+          <div className="dashboard-title">
+            Health Metrics <span className="highlight">Dashboard</span>
+          </div>
+          <div className="dashboard-desc">
+            "Your health progress at a glance!"
+          </div>
+          <div className="metrics-grid">
+            {metrics.map((m, i) => (
+              <div className="dashboard-card" key={i}>
+                <div className="dashboard-card-icon">{m.icon}</div>
+                <div className="dashboard-card-value">{m.value}</div>
+                <div className="dashboard-card-label">{m.label}</div>
+                <div className="dashboard-card-desc">{m.desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <button className="back-to-dashboard-btn" onClick={handleBack}>
+        ← Back to Dashboard
+      </button>
+      <footer className="welcome-footer">
+        <div className="footer-content">
+          <div className="footer-section about-nic-off">
+            <h3>NicOff</h3>
+            <p>
+              We're dedicated to helping you break
+              <br />
+              free from smoking addiction through
+              <br />
+              science-backed methods and
+              <br />
+              community support
+            </p>
+          </div>
+          <div className="footer-section">
+            <h3>Quick Links</h3>
+            <ul>
+              <li>
+                <a href="/about">About Us</a>
+              </li>
+              <li>
+                <a href="/ourprograms">Our Programs</a>
+              </li>
+              <li>
+                <a href="/successstories">Success Stories</a>
+              </li>
+              <li>
+                <a href="/blog">Blog</a>
+              </li>
+              <li>
+                <a href="/contact">Contact</a>
+              </li>
+            </ul>
+          </div>
+          <div className="footer-section">
+            <h3>Support</h3>
+            <ul>
+              <li>
+                <a href="/faq">FAQ</a>
+              </li>
+              <li>
+                <a href="/helpcenter">Help Center</a>
+              </li>
+              <li>
+                <a href="/privacypolicy">Privacy Policy</a>
+              </li>
+              <li>
+                <a href="/termsofservice">Term Of Service</a>
+              </li>
+              <li>
+                <a href="/cookiepolicy">Cookie Policy</a>
+              </li>
+            </ul>
+          </div>
+          <div className="footer-section newsletter">
+            <h3>NewsLetter</h3>
+            <input type="email" placeholder="Your Email Address..." />
+            <button>Subscribe</button>
+            <p>
+              Get the latest tips and
+              <br />
+              motivation to stay smoke-free
+              <br />
+              delivered to your inbox
+            </p>
+          </div>
+        </div>
+        <div className="copyright">© 2025 NicOff. All rights reserved</div>
+      </footer>
+    </>
+  );
 }
 
-export default HealthMetric; 
+export default HealthMetric;

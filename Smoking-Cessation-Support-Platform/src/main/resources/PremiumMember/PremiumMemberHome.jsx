@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import EditProfileModal from "../EditProfileModal";
+import { useNavigate } from 'react-router-dom';
 
 function StandardMemberHome() {
   const [smokedToday, setSmokedToday] = useState(null);
   const [feeling, setFeeling] = useState(null);
   const [showEditProfile, setShowEditProfile] = useState(false);
+  const navigate = useNavigate();
 
   const styles = `
     html,
@@ -761,6 +763,9 @@ function StandardMemberHome() {
     window.location.href = "/dailycheckin";
   };
 
+  const handleNotificationClick = () => {
+    navigate('/premiumnotificationcenter');
+  };
 
   return (
     <div className="container">
@@ -792,28 +797,28 @@ function StandardMemberHome() {
         </div>
         <ul className="nav-links">
           <li>
-            <a  href="#" className="active">
+            <a  href="/premiummemberhome" className="active">
               Home
             </a>
           </li>
           <li>
-            <a href="#">Dashboard</a>
+            <a href="/premiummemberdashboard">Dashboard</a>
           </li>
           <li>
             <a href="#">Achievement</a>
           </li>
           <li>
-            <a href="#">Coach</a>
+            <a href="/premiummembercoach">Coach</a>
           </li>
           <li>
-            <a href="#">Community</a>
+            <a href="/premiummembercommun">Community</a>
           </li>
           <li>
-            <a href="#">Feedback</a>
+            <a href="/feedbackpremium">Feedback</a>
           </li>
         </ul>
         <div className="header-actions">
-          <span className="notification-icon">🔔</span>
+          <span className="notification-icon" onClick={handleNotificationClick}>🔔</span>
           <button className="logout-button">Logout</button>
         </div>
       </header>
@@ -947,19 +952,19 @@ function StandardMemberHome() {
             <h4>Quick Links</h4>
             <ul>
               <li>
-                <a href="#">About Us</a>
+                <a href="/about">About Us</a>
               </li>
               <li>
-                <a href="#">Our Programs</a>
+                <a href="/ourprograms">Our Programs</a>
               </li>
               <li>
-                <a href="#">Success Stories</a>
+                <a href="/successstories">Success Stories</a>
               </li>
               <li>
-                <a href="#">Blog</a>
+                <a href="/blog">Blog</a>
               </li>
               <li>
-                <a href="#">Contact</a>
+                <a href="/contact">Contact</a>
               </li>
             </ul>
           </div>
@@ -967,19 +972,19 @@ function StandardMemberHome() {
             <h4>Support</h4>
             <ul>
               <li>
-                <a href="#">FAQ</a>
+                <a href="/faq">FAQ</a>
               </li>
               <li>
-                <a href="#">Help Center</a>
+                <a href="/helpcenter">Help Center</a>
               </li>
               <li>
-                <a href="#">Privacy Policy</a>
+                <a href="/privacypolicy">Privacy Policy</a>
               </li>
               <li>
-                <a href="#">Term Of Service</a>
+                <a href="/termsofservice">Term Of Service</a>
               </li>
               <li>
-                <a href="#">Cookie Policy</a>
+                <a href="/cookiepolicy">Cookie Policy</a>
               </li>
             </ul>
           </div>

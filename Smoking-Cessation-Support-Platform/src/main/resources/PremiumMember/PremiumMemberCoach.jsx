@@ -1,38 +1,38 @@
-import React, { useState } from 'react';
-import EditProfileModal from '../EditProfileModal';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import EditProfileModal from "../EditProfileModal";
+import { useNavigate } from "react-router-dom";
 
 function PremiumMemberCoach({
-    coach = {},
-    progress = {},
-    onBookAppointment = () => { },
-    onMessageCoach = () => { },
-    onMarkActivity = () => { },
+  coach = {},
+  progress = {},
+  onMessageCoach = () => {},
 }) {
-    // coach: { avatar, name, specialty, experience, nextSession: { date, time }, ... }
-    // progress: { motivationLevel, cravingsControl, completion, coachNote }
-    // activities: [{ icon, title, description, completed }]
+  // coach: { avatar, name, specialty, experience, nextSession: { date, time }, ... }
+  // progress: { motivationLevel, cravingsControl, completion, coachNote }
+  // activities: [{ icon, title, description, completed }]
 
-    const [showEditProfile, setShowEditProfile] = useState(false);
-    const [activities, setActivities] = useState([]);
-    const [form, setForm] = useState({ title: '', description: '' });
-    const navigate = useNavigate();
+  const [showEditProfile, setShowEditProfile] = useState(false);
+  const [activities, setActivities] = useState([]);
+  const [form, setForm] = useState({ title: "", description: "" });
+  const navigate = useNavigate();
 
-    const handleAddActivity = (e) => {
-        e.preventDefault();
-        if (!form.title.trim() || !form.description.trim()) return;
-        setActivities([
-            ...activities,
-            { ...form, completed: false }
-        ]);
-        setForm({ title: '', description: '' });
-    };
+  const handleAddActivity = (e) => {
+    e.preventDefault();
+    if (!form.title.trim() || !form.description.trim()) return;
+    setActivities([...activities, { ...form, completed: false }]);
+    setForm({ title: "", description: "" });
+  };
 
-    const handleMarkActivity = (idx) => {
-        setActivities(acts => acts.map((a, i) => i === idx ? { ...a, completed: true } : a));
-    };
+  const handleMarkActivity = (idx) => {
+    setActivities((acts) =>
+      acts.map((a, i) => (i === idx ? { ...a, completed: true } : a))
+    );
+  };
 
-    const styles = `
+  const handleNotificationClick = () => {
+    navigate("/premiumnotificationcenter");
+  };
+  const styles = `
     body, html, #root {
       background: #f0f2f5;
       margin: 0;
@@ -473,244 +473,334 @@ function PremiumMemberCoach({
     }
   `;
 
-    return (
-        <div className="pmc-bg">
-            <style>{styles}</style>
-            <EditProfileModal open={showEditProfile} onClose={() => setShowEditProfile(false)} onSave={() => setShowEditProfile(false)} />
-            <div className="pmc-header">
-                <div className="pmc-logo-section">
-                    <div className="profile-section">
-                        <button className="profile-btn" onClick={() => setShowEditProfile(true)}>
-                            <span className="profile-icon">👤</span> Premium Member
-                        </button>
-                    </div>
-                    <span className="pmc-logo">LOGO</span>
-                    <div className="pmc-app-name">
-                        <h1>NicOff</h1>
-                        <p>Turn Off Nicotine, Turn On Life!</p>
-                    </div>
-                </div>
-                <ul className="pmc-nav-links">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Dashboard</a></li>
-                    <li><a href="#">Achievement</a></li>
-                    <li><a href="#" className="active">Coach</a></li>
-                    <li><a href="#">Community</a></li>
-                    <li><a href="#">Feedback</a></li>
-                </ul>
-                <div className="pmc-header-actions">
-                    <span className="pmc-notification-icon">🔔</span>
-                    <button className="pmc-logout-btn">Logout</button>
-                </div>
-            </div>
-            <div className="pmc-main">
-                <div className="pmc-title">Your Personal Coach</div>
-                <div className="pmc-coach-section">
-                    {/* Coach Card */}
-                    <div className="pmc-coach-card">
-                        <div className="pmc-coach-info">
-                            <img className="pmc-coach-avatar" src={coach.avatar || ''} alt="Coach Avatar" />
-                            <div className="pmc-coach-details">
-                                <div className="pmc-coach-name">{coach.name || 'Coach Name'}</div>
-                                <div className="pmc-coach-specialty">{coach.specialty || 'Specialty'}</div>
-                                <div className="pmc-coach-exp">{coach.experience ? `${coach.experience} years experience` : ''}</div>
-                            </div>
-                        </div>
-                        <div className="pmc-next-session">
-                            <b>Next Session :</b><br />
-                            <div style={{
-                                background: '#61bb46',
-                                borderRadius: 12,
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                padding: '16px 18px',
-                                margin: '12px 0 10px 0',
-                                fontWeight: 500,
-                                color: '#fff',
-                                boxShadow: '0 2px 8px rgba(56,70,60,0.10)'
-                            }}>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                                    {coach.nextSession ? (
-                                        <>
-                                            <span style={{ fontWeight: 700, fontSize: 18 }}>{coach.nextSession.date}</span>
-                                            <span style={{ fontSize: 15 }}>{coach.nextSession.time}</span>
-                                        </>
-                                    ) : (
-                                        <span style={{ fontWeight: 500, fontSize: 16 }}>No appointment scheduled</span>
-                                    )}
-                                </div>
-                                <button
-                                    style={{
-                                        background: '#23660e',
-                                        color: '#fff',
-                                        border: 'none',
-                                        borderRadius: 8,
-                                        padding: '8px 22px',
-                                        fontWeight: 700,
-                                        fontSize: 16,
-                                        marginLeft: 18,
-                                        cursor: 'pointer',
-                                        boxShadow: '0 1px 4px rgba(56,70,60,0.10)'
-                                    }}
-                                    onClick={() => navigate('/premiumbookappointment')}
-                                >
-                                    Book An Appointment
-                                </button>
-                            </div>
-                            <button
-                                style={{
-                                    width: '100%',
-                                    background: '#61bb46',
-                                    color: '#fff',
-                                    border: 'none',
-                                    borderRadius: 12,
-                                    padding: '12px 0',
-                                    fontWeight: 700,
-                                    fontSize: 18,
-                                    marginTop: 10,
-                                    cursor: 'pointer',
-                                    boxShadow: '0 1px 4px rgba(56,70,60,0.10)'
-                                }}
-                                onClick={onMessageCoach}
-                            >
-                                Message Coach
-                            </button>
-                        </div>
-                    </div>
-                    {/* Progress Card */}
-                    <div className="pmc-progress-card">
-                        <div className="pmc-progress-title">Your Progress Report</div>
-                        <div className="pmc-progress-label">Motivation level</div>
-                        <div className="pmc-progress-bar">
-                            <div className="pmc-progress-bar-inner" style={{ width: progress.motivationLevel || '0%' }}></div>
-                        </div>
-                        <div className="pmc-progress-label">Cravings control</div>
-                        <div className="pmc-progress-bar">
-                            <div className="pmc-progress-bar-inner" style={{ width: progress.cravingsControl || '0%' }}></div>
-                        </div>
-                        <div className="pmc-progress-label">Program completion</div>
-                        <div className="pmc-progress-bar">
-                            <div className="pmc-progress-bar-inner" style={{ width: progress.completion || '0%' }}></div>
-                        </div>
-                        <div className="pmc-coach-note">
-                            <b>Coach's Note:</b> {progress.coachNote || 'No note yet.'}
-                        </div>
-                    </div>
-                </div>
-                {/* Activities */}
-                <div className="pmc-activities-title">Recommended Activities</div>
-                <form onSubmit={handleAddActivity} style={{ display: 'flex', gap: 12, marginBottom: 18, flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
-                    <input
-                        type="text"
-                        placeholder="Title"
-                        value={form.title}
-                        onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
-                        style={{ padding: 8, borderRadius: 6, border: '1px solid #ccc', width: 160 }}
-                        required
-                    />
-                    <input
-                        type="text"
-                        placeholder="Description"
-                        value={form.description}
-                        onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-                        style={{ padding: 8, borderRadius: 6, border: '1px solid #ccc', width: 260 }}
-                        required
-                    />
-                    <button type="submit" className="pmc-btn" style={{ minWidth: 120 }}>Add Activity</button>
-                </form>
-                <div className="pmc-activities-row">
-                    {activities.length === 0 && (
-                        <div style={{ color: '#888', fontStyle: 'italic', padding: 20 }}>No activities yet. Add your first activity!</div>
-                    )}
-                    {activities.map((act, idx) => (
-                        <div className="pmc-activity-card" key={idx} style={idx === 0 ? { boxShadow: '0 0 0 3px #2196f3' } : {}}>
-                            <div className="pmc-activity-title">{act.title}</div>
-                            <div className="pmc-activity-desc">{act.description}</div>
-                            <button
-                                className={`pmc-activity-btn${act.completed ? ' completed' : ''}`}
-                                onClick={() => handleMarkActivity(idx)}
-                                disabled={act.completed}
-                            >
-                                Mark as Complete
-                            </button>
-                        </div>
-                    ))}
-                </div>
-            </div>
-            {/* Footer */}
-            <footer>
-                <div className="footer-content">
-                    <div className="footer-column">
-                        <h4>NicOff</h4>
-                        <p>
-                            We're dedicated to helping you break free from smoking addiction
-                            through science-backed methods and community support
-                        </p>
-                    </div>
-                    <div className="footer-column">
-                        <h4>Quick Links</h4>
-                        <ul>
-                            <li>
-                                <a href="#">About Us</a>
-                            </li>
-                            <li>
-                                <a href="#">Our Programs</a>
-                            </li>
-                            <li>
-                                <a href="#">Success Stories</a>
-                            </li>
-                            <li>
-                                <a href="#">Blog</a>
-                            </li>
-                            <li>
-                                <a href="#">Contact</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div className="footer-column">
-                        <h4>Support</h4>
-                        <ul>
-                            <li>
-                                <a href="#">FAQ</a>
-                            </li>
-                            <li>
-                                <a href="#">Help Center</a>
-                            </li>
-                            <li>
-                                <a href="#">Privacy Policy</a>
-                            </li>
-                            <li>
-                                <a href="#">Term Of Service</a>
-                            </li>
-                            <li>
-                                <a href="#">Cookie Policy</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div className="footer-column">
-                        <h4>NewsLetter</h4>
-                        <div className="newsletter-form">
-                            <input
-                                type="email"
-                                placeholder="Your Email Address..."
-                                className="newsletter-input"
-                            />
-                            <button className="newsletter-button">Subscribe</button>
-                        </div>
-                        <p className="newsletter-description">
-                            Get the latest tips and motivation to stay smoke-free delivered to
-                            your inbox
-                        </p>
-                    </div>
-                </div>
-                <hr className="footer-divider" />
-                <div className="footer-bottom-text">
-                    © 2025 NicOff. All rights reserved
-                </div>
-            </footer>
+  return (
+    <div className="pmc-bg">
+      <style>{styles}</style>
+      <EditProfileModal
+        open={showEditProfile}
+        onClose={() => setShowEditProfile(false)}
+        onSave={() => setShowEditProfile(false)}
+      />
+      <div className="pmc-header">
+        <div className="pmc-logo-section">
+          <div className="profile-section">
+            <button
+              className="profile-btn"
+              onClick={() => setShowEditProfile(true)}
+            >
+              <span className="profile-icon">👤</span> Premium Member
+            </button>
+          </div>
+          <span className="pmc-logo">LOGO</span>
+          <div className="pmc-app-name">
+            <h1>NicOff</h1>
+            <p>Turn Off Nicotine, Turn On Life!</p>
+          </div>
         </div>
-    );
+        <ul className="pmc-nav-links">
+          <li>
+            <a href="/premiummemberhome">Home</a>
+          </li>
+          <li>
+            <a href="/premiummemberdashboard">Dashboard</a>
+          </li>
+          <li>
+            <a href="#">Achievement</a>
+          </li>
+          <li>
+            <a href="/premiummembercoach" className="active">
+              Coach
+            </a>
+          </li>
+          <li>
+            <a href="/premiummembercommun">Community</a>
+          </li>
+          <li>
+            <a href="/feedbackpremium">Feedback</a>
+          </li>
+        </ul>
+        <div className="pmc-header-actions">
+          <span
+            className="pmc-notification-icon"
+            onClick={handleNotificationClick}
+          >
+            🔔
+          </span>
+          <button className="pmc-logout-btn">Logout</button>
+        </div>
+      </div>
+      <div className="pmc-main">
+        <div className="pmc-title">Your Personal Coach</div>
+        <div className="pmc-coach-section">
+          {/* Coach Card */}
+          <div className="pmc-coach-card">
+            <div className="pmc-coach-info">
+              <img
+                className="pmc-coach-avatar"
+                src={coach.avatar || ""}
+                alt="Coach Avatar"
+              />
+              <div className="pmc-coach-details">
+                <div className="pmc-coach-name">
+                  {coach.name || "Coach Name"}
+                </div>
+                <div className="pmc-coach-specialty">
+                  {coach.specialty || "Specialty"}
+                </div>
+                <div className="pmc-coach-exp">
+                  {coach.experience
+                    ? `${coach.experience} years experience`
+                    : ""}
+                </div>
+              </div>
+            </div>
+            <div className="pmc-next-session">
+              <b>Next Session :</b>
+              <br />
+              <div
+                style={{
+                  background: "#61bb46",
+                  borderRadius: 12,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  padding: "16px 18px",
+                  margin: "12px 0 10px 0",
+                  fontWeight: 500,
+                  color: "#fff",
+                  boxShadow: "0 2px 8px rgba(56,70,60,0.10)",
+                }}
+              >
+                <div
+                  style={{ display: "flex", flexDirection: "column", gap: 2 }}
+                >
+                  {coach.nextSession ? (
+                    <>
+                      <span style={{ fontWeight: 700, fontSize: 18 }}>
+                        {coach.nextSession.date}
+                      </span>
+                      <span style={{ fontSize: 15 }}>
+                        {coach.nextSession.time}
+                      </span>
+                    </>
+                  ) : (
+                    <span style={{ fontWeight: 500, fontSize: 16 }}>
+                      No appointment scheduled
+                    </span>
+                  )}
+                </div>
+                <button
+                  style={{
+                    background: "#23660e",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: 8,
+                    padding: "8px 22px",
+                    fontWeight: 700,
+                    fontSize: 16,
+                    marginLeft: 18,
+                    cursor: "pointer",
+                    boxShadow: "0 1px 4px rgba(56,70,60,0.10)",
+                  }}
+                  onClick={() => navigate("/premiumbookappointment")}
+                >
+                  Book An Appointment
+                </button>
+              </div>
+              <button
+                style={{
+                  width: "100%",
+                  background: "#61bb46",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: 12,
+                  padding: "12px 0",
+                  fontWeight: 700,
+                  fontSize: 18,
+                  marginTop: 10,
+                  cursor: "pointer",
+                  boxShadow: "0 1px 4px rgba(56,70,60,0.10)",
+                }}
+                onClick={onMessageCoach}
+              >
+                Message Coach
+              </button>
+            </div>
+          </div>
+          {/* Progress Card */}
+          <div className="pmc-progress-card">
+            <div className="pmc-progress-title">Your Progress Report</div>
+            <div className="pmc-progress-label">Motivation level</div>
+            <div className="pmc-progress-bar">
+              <div
+                className="pmc-progress-bar-inner"
+                style={{ width: progress.motivationLevel || "0%" }}
+              ></div>
+            </div>
+            <div className="pmc-progress-label">Cravings control</div>
+            <div className="pmc-progress-bar">
+              <div
+                className="pmc-progress-bar-inner"
+                style={{ width: progress.cravingsControl || "0%" }}
+              ></div>
+            </div>
+            <div className="pmc-progress-label">Program completion</div>
+            <div className="pmc-progress-bar">
+              <div
+                className="pmc-progress-bar-inner"
+                style={{ width: progress.completion || "0%" }}
+              ></div>
+            </div>
+            <div className="pmc-coach-note">
+              <b>Coach's Note:</b> {progress.coachNote || "No note yet."}
+            </div>
+          </div>
+        </div>
+        {/* Activities */}
+        <div className="pmc-activities-title">Recommended Activities</div>
+        <form
+          onSubmit={handleAddActivity}
+          style={{
+            display: "flex",
+            gap: 12,
+            marginBottom: 18,
+            flexWrap: "wrap",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <input
+            type="text"
+            placeholder="Title"
+            value={form.title}
+            onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
+            style={{
+              padding: 8,
+              borderRadius: 6,
+              border: "1px solid #ccc",
+              width: 160,
+            }}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Description"
+            value={form.description}
+            onChange={(e) =>
+              setForm((f) => ({ ...f, description: e.target.value }))
+            }
+            style={{
+              padding: 8,
+              borderRadius: 6,
+              border: "1px solid #ccc",
+              width: 260,
+            }}
+            required
+          />
+          <button type="submit" className="pmc-btn" style={{ minWidth: 120 }}>
+            Add Activity
+          </button>
+        </form>
+        <div className="pmc-activities-row">
+          {activities.length === 0 && (
+            <div style={{ color: "#888", fontStyle: "italic", padding: 20 }}>
+              No activities yet. Add your first activity!
+            </div>
+          )}
+          {activities.map((act, idx) => (
+            <div
+              className="pmc-activity-card"
+              key={idx}
+              style={idx === 0 ? { boxShadow: "0 0 0 3px #2196f3" } : {}}
+            >
+              <div className="pmc-activity-title">{act.title}</div>
+              <div className="pmc-activity-desc">{act.description}</div>
+              <button
+                className={`pmc-activity-btn${
+                  act.completed ? " completed" : ""
+                }`}
+                onClick={() => handleMarkActivity(idx)}
+                disabled={act.completed}
+              >
+                Mark as Complete
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+      {/* Footer */}
+      <footer>
+        <div className="footer-content">
+          <div className="footer-column">
+            <h4>NicOff</h4>
+            <p>
+              We're dedicated to helping you break free from smoking addiction
+              through science-backed methods and community support
+            </p>
+          </div>
+          <div className="footer-column">
+            <h4>Quick Links</h4>
+            <ul>
+              <li>
+                <a href="/about">About Us</a>
+              </li>
+              <li>
+                <a href="/ourprograms">Our Programs</a>
+              </li>
+              <li>
+                <a href="/successstories">Success Stories</a>
+              </li>
+              <li>
+                <a href="/blog">Blog</a>
+              </li>
+              <li>
+                <a href="/contact">Contact</a>
+              </li>
+            </ul>
+          </div>
+          <div className="footer-column">
+            <h4>Support</h4>
+            <ul>
+              <li>
+                <a href="/faq">FAQ</a>
+              </li>
+              <li>
+                <a href="/helpcenter">Help Center</a>
+              </li>
+              <li>
+                <a href="/privacypolicy">Privacy Policy</a>
+              </li>
+              <li>
+                <a href="/termsofservice">Term Of Service</a>
+              </li>
+              <li>
+                <a href="/cookiepolicy">Cookie Policy</a>
+              </li>
+            </ul>
+          </div>
+          <div className="footer-column">
+            <h4>NewsLetter</h4>
+            <div className="newsletter-form">
+              <input
+                type="email"
+                placeholder="Your Email Address..."
+                className="newsletter-input"
+              />
+              <button className="newsletter-button">Subscribe</button>
+            </div>
+            <p className="newsletter-description">
+              Get the latest tips and motivation to stay smoke-free delivered to
+              your inbox
+            </p>
+          </div>
+        </div>
+        <hr className="footer-divider" />
+        <div className="footer-bottom-text">
+          © 2025 NicOff. All rights reserved
+        </div>
+      </footer>
+    </div>
+  );
 }
 
-export default PremiumMemberCoach; 
+export default PremiumMemberCoach;

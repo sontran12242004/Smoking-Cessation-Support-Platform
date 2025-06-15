@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import EditProfileModal from '../EditProfileModal';
-
+import { useNavigate } from 'react-router-dom';
 function StandardMember_Commun() {
     const [showEditProfile, setShowEditProfile] = useState(false);
+    const navigate = useNavigate();
+
+    const handleNotificationClick = () => {
+        navigate('/notificationcenter');
+    };
+
     const styles = `
     html, body, #root {
         width: 100%;
@@ -540,15 +546,7 @@ function StandardMember_Commun() {
         transform: translateY(-2px) scale(1.04);
     }
     `;
-    const [activeMenu, setActiveMenu] = useState('Dashboard');
-    const menuItems = [
-        { label: 'Home', href: '#' },
-        { label: 'Dashboard', href: '#' },
-        { label: 'Achievement', href: '#' },
-        { label: 'Coach', href: '#' },
-        { label: 'Community', href: '#' },
-        { label: 'Feedback', href: '#' },
-    ];
+
     const handleUpgrade = () => {
         window.location.href = "/upgradepackage1";
     };
@@ -572,7 +570,7 @@ function StandardMember_Commun() {
                     </div>
                 </div>
                 <ul className="nav-links">
-                    <li><a href="/">Home</a></li>
+                    <li><a href="/standardmemberhome">Home</a></li>
                     <li><a href="/standardmemberdashboard">Dashboard</a></li>
                     <li><a href="/achievement">Achievement</a></li>
                     <li><a href="/standardmembercoach">Coach</a></li>
@@ -580,7 +578,7 @@ function StandardMember_Commun() {
                     <li><a href="/feedback">Feedback</a></li>
                 </ul>
                 <div className="header-actions">
-                    <span className="notification-icon">🔔</span>
+                    <span className="notification-icon" onClick={handleNotificationClick}>🔔</span>
                     <button className="logout-button">Logout</button>
                 </div>
             </header>
@@ -605,21 +603,21 @@ function StandardMember_Commun() {
                     <div className="footer-column">
                         <h3>Quick Links</h3>
                         <ul>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Our Programs</a></li>
-                            <li><a href="#">Success Stories</a></li>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Contact</a></li>
+                            <li><a href="/about">About Us</a></li>
+                            <li><a href="/ourprograms">Our Programs</a></li>
+                            <li><a href="/successstories">Success Stories</a></li>
+                            <li><a href="/blog">Blog</a></li>
+                            <li><a href="/contact">Contact</a></li>
                         </ul>
                     </div>
                     <div className="footer-column">
                         <h3>Support</h3>
                         <ul>
-                            <li><a href="#">FAQ</a></li>
-                            <li><a href="#">Help Center</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
-                            <li><a href="#">Term Of Service</a></li>
-                            <li><a href="#">Cookie Policy</a></li>
+                            <li><a href="/faq">FAQ</a></li>
+                            <li><a href="/helpcenter">Help Center</a></li>
+                            <li><a href="/privacypolicy">Privacy Policy</a></li>
+                            <li><a href="/termsofservice">Term Of Service</a></li>
+                            <li><a href="/cookiepolicy">Cookie Policy</a></li>
                         </ul>
                     </div>
                     <div className="footer-column">

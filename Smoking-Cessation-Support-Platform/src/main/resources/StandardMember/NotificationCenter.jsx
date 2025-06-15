@@ -1,11 +1,20 @@
 import React, { useState } from 'react';
 import EditProfileModal from '../EditProfileModal';
-
+import { useNavigate } from 'react-router-dom';
 function NotificationCenter() {
     // Placeholder for notifications, to be replaced with database data
     const [notifications, setNotifications] = useState([]);
     const [allRead, setAllRead] = useState(false);
     const [showEditProfile, setShowEditProfile] = useState(false);
+    const navigate = useNavigate();
+
+    const handleNotificationClick = () => {
+        navigate('/notificationcenter');
+    };
+
+    const handleBackToHome = () => {
+        navigate('/standardmemberhome');
+    };
 
     const styles = `
     html, body, #root {
@@ -425,22 +434,22 @@ function NotificationCenter() {
                     </div>
                 </div>
                 <ul className="nav-links">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Dashboard</a></li>
+                    <li><a href="/standardmemberhome">Home</a></li>
+                    <li><a href="/standardmemberdashboard">Dashboard</a></li>
                     <li><a href="#">Achievement</a></li>
-                    <li><a href="#">Coach</a></li>
-                    <li><a href="#">Community</a></li>
-                    <li><a href="#">Feedback</a></li>
+                    <li><a href="/standardmembercoach">Coach</a></li>
+                    <li><a href="/standardmembercommun">Community</a></li>
+                    <li><a href="/feedback">Feedback</a></li>
                 </ul>
                 <div className="header-actions">
-                    <span className="notification-icon">🔔</span>
+                    <span className="notification-icon" onClick={handleNotificationClick}>🔔</span>
                     <button className="logout-button">Logout</button>
                 </div>
             </header>
             {/* Main Content */}
             <main className="main-content">
                 <div className="notification-center-wrapper">
-                    <button className="back-btn">← Back To Home</button>
+                    <button className="back-btn" onClick={handleBackToHome}>← Back To Home</button>
                     <div className="notification-title">Notification Center</div>
                     <div className="notification-list">
                         {notifications.length === 0 ? (
@@ -479,21 +488,21 @@ function NotificationCenter() {
                     <div className="footer-section">
                         <h3>Quick Links</h3>
                         <ul>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Our Programs</a></li>
-                            <li><a href="#">Success Stories</a></li>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Contact</a></li>
+                            <li><a href="/about">About Us</a></li>
+                            <li><a href="/ourprograms">Our Programs</a></li>
+                            <li><a href="/successstories">Success Stories</a></li>
+                            <li><a href="/blog">Blog</a></li>
+                            <li><a href="/contact">Contact</a></li>
                         </ul>
                     </div>
                     <div className="footer-section">
                         <h3>Support</h3>
                         <ul>
-                            <li><a href="#">FAQ</a></li>
-                            <li><a href="#">Help Center</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
-                            <li><a href="#">Term Of Service</a></li>
-                            <li><a href="#">Cookie Policy</a></li>
+                            <li><a href="/faq">FAQ</a></li>
+                            <li><a href="/helpcenter">Help Center</a></li>
+                            <li><a href="/privacypolicy">Privacy Policy</a></li>
+                            <li><a href="/termsofservice">Term Of Service</a></li>
+                            <li><a href="/cookiepolicy">Cookie Policy</a></li>
                         </ul>
                     </div>
                     <div className="footer-section newsletter">

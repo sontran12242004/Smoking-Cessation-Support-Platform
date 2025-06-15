@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import EditProfileModal from '../EditProfileModal';
-
+import { useNavigate } from 'react-router-dom';
 function Feedback() {
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [feedback, setFeedback] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
+  const navigate = useNavigate();
+
+  const handleNotificationClick = () => {
+    navigate('/notificationcenter');
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -466,7 +471,7 @@ function Feedback() {
           <li><a href="/feedback" className="active">Feedback</a></li>
         </ul>
         <div className="header-actions">
-          <span className="notification-icon">🔔</span>
+          <span className="notification-icon" onClick={handleNotificationClick}>🔔</span>
           <button className="logout-button">Logout</button>
         </div>
       </header>

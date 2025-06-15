@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 
 function UpgradePackage1() {
-    const [showPayment, setShowPayment] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
 
-    const handleUpgradeClick = () => {
-        setShowPayment(true);
-    };
+  const handleUpgradeClick = () => {
+    setShowPayment(true);
+  };
 
-    const handleClosePayment = () => {
-        setShowPayment(false);
-    };
+  const handleClosePayment = () => {
+    setShowPayment(false);
+  };
 
-    const styles = `
+  const styles = `
   html,
   body,
   #root {
@@ -128,7 +128,7 @@ function UpgradePackage1() {
     align-items: center;
     padding: 40px;
     background-color: #E6F0E6; /* Light green background */
-    background-image: url('https://via.placeholder.com/1500x500?text=Forest+Path+Background'); /* New background image */
+    background-image: url('/z6704234340468_d0d12baf257178fe87207c3dc9979725.jpg'); /* New background image */
     background-size: cover;
     background-position: center;
     color: #fff;
@@ -143,9 +143,9 @@ function UpgradePackage1() {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(230, 240, 230, 0.7); /* Slightly transparent overlay to lighten the image */
+    background-color: rgba(192,192,192,0.4);
     z-index: 1;
-    animation: pulse 4s infinite alternate ease-in-out; /* Subtle pulse animation */
+    backdrop-filter: blur(8px);
   }
   
   @keyframes pulse {
@@ -903,141 +903,141 @@ function UpgradePackage1() {
   }
   `;
 
-    return (
-        <div>
-            <style>{styles}</style>
-            {/* Header */}
-            <header>
-                <nav>
-                    <div className="logo-section">
-                        <span className="logo">LOGO</span>
-                        <div className="app-name">
-                            <h1>NicOff</h1>
-                            <p>Turn Off Nicotine, Turn On Life!</p>
-                        </div>
-                    </div>
-                    <ul className="nav-links">
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Dashboard</a></li>
-                        <li><a href="#">Achievement</a></li>
-                        <li><a href="#">Coach</a></li>
-                        <li><a href="#">Community</a></li>
-                        <li><a href="#">Feedback</a></li>
-                    </ul>
-                </nav>
-            </header>
+  return (
+    <div>
+      <style>{styles}</style>
+      {/* Header */}
+      <header>
+        <nav>
+          <div className="logo-section">
+            <span className="logo">LOGO</span>
+            <div className="app-name">
+              <h1>NicOff</h1>
+              <p>Turn Off Nicotine, Turn On Life!</p>
+            </div>
+          </div>
+          <ul className="nav-links">
+            <li><a href="/standardmemberhome">Home</a></li>
+            <li><a href="/standardmemberdashboard">Dashboard</a></li>
+            <li><a href="#">Achievement</a></li>
+            <li><a href="/standardmembercoach">Coach</a></li>
+            <li><a href="/standardmembercommunity">Community</a></li>
+            <li><a href="/standardmemberfeedback">Feedback</a></li>
+          </ul>
+        </nav>
+      </header>
 
-            {/* Main Content */}
-            <main>
-                <section className="upgrade-intro">
-                    <h2>Upgrade Your Account</h2>
-                    <p>Nicoff offers comprehensive support packages for your quitting smoking journey.</p>
-                </section>
+      {/* Main Content */}
+      <main>
+        <section className="upgrade-intro">
+          <h2>Upgrade Your Account</h2>
+          <p>Nicoff offers comprehensive support packages for your quitting smoking journey.</p>
+        </section>
 
-                <section className="packages-container">
-                    {/* Standard Package */}
-                    <div className="package-card">
-                        <span className="current-plan-badge">Current Plan</span>
-                        <h3>Standard Package</h3>
-                        <p className="price">$29</p>
-                        <p className="frequency">/month</p>
-                        <hr />
-                        <ul className="features">
-                            <li><i className="check-icon">✔️</i> Basic progress tracking</li>
-                            <li><i className="check-icon">✔️</i> Community Access</li>
-                            <li><i className="check-icon">✔️</i> Weekly tips</li>
-                        </ul>
-                        <button className="upgrade-button current-plan-button">Current Plan</button>
-                    </div>
+        <section className="packages-container">
+          {/* Standard Package */}
+          <div className="package-card">
+            <span className="current-plan-badge">Current Plan</span>
+            <h3>Standard Package</h3>
+            <p className="price">$29</p>
+            <p className="frequency">/month</p>
+            <hr />
+            <ul className="features">
+              <li><i className="check-icon">✔️</i> Basic progress tracking</li>
+              <li><i className="check-icon">✔️</i> Community Access</li>
+              <li><i className="check-icon">✔️</i> Weekly tips</li>
+            </ul>
+            <button className="upgrade-button current-plan-button">Current Plan</button>
+          </div>
 
-                    {/* Premium Package */}
-                    <div className="package-card popular">
-                        <span className="popular-badge">Popular</span>
-                        <h3>Premium Package</h3>
-                        <p className="price">$159</p>
-                        <p className="frequency">/6 month</p>
-                        <p className="save-text">Save 11% on Standard Package</p>
-                        <hr />
-                        <div className="upgrade-info-text">Upgrade from Standard: $119 (Save $40)</div>
-                        <ul className="features">
-                            <li><i className="check-icon">✔️</i> Premium progress tracking</li>
-                            <li><i className="check-icon">✔️</i> Community access</li>
-                            <li><i className="check-icon">✔️</i> Weekly tips</li>
-                            <li><i className="cross-icon">❌</i> Personal coach</li>
-                            <li><i className="cross-icon">❌</i> Advanced analytics</li>
-                            <li><i className="check-icon">✔️</i> Email reminders</li>
-                        </ul>
+          {/* Premium Package */}
+          <div className="package-card popular">
+            <span className="popular-badge">Popular</span>
+            <h3>Premium Package</h3>
+            <p className="price">$159</p>
+            <p className="frequency">/6 month</p>
+            <p className="save-text">Save 11% on Standard Package</p>
+            <hr />
+            <div className="upgrade-info-text">Upgrade from Standard: $119 (Save $40)</div>
+            <ul className="features">
+              <li><i className="check-icon">✔️</i> Premium progress tracking</li>
+              <li><i className="check-icon">✔️</i> Community access</li>
+              <li><i className="check-icon">✔️</i> Weekly tips</li>
+              <li><i className="cross-icon">❌</i> Personal coach</li>
+              <li><i className="cross-icon">❌</i> Advanced analytics</li>
+              <li><i className="check-icon">✔️</i> Email reminders</li>
+            </ul>
 
-                        <button className="upgrade-button" onClick={handleUpgradeClick}>Upgrade to Premium</button>
-                    </div>
+            <button className="upgrade-button" onClick={handleUpgradeClick}>Upgrade to Premium</button>
+          </div>
 
-                    {/* Elite Package */}
-                    <div className="package-card elite">
-                        <h3>Elite Package</h3>
-                        <p className="price">$299</p>
-                        <p className="frequency">/12 month</p>
-                        <p className="save-text">Save 17% on Premium Package</p>
-                        <hr />
-                        <div className="upgrade-box">
-                            Upgrade from Basic: <span>$259</span><span class="save">(Save $40)</span>
-                        </div>
-                        <div className="upgrade-box">
-                            Upgrade from Premium: <span>$69</span><span class="save">(Save $90)</span>
-                        </div>
-                        <ul className="features">
-                            <li><i className="check-icon">✔️</i> Pro progress tracking</li>
-                            <li><i className="check-icon">✔️</i> Community access</li>
-                            <li><i className="check-icon">✔️</i> Daily tips</li>
-                            <li><i className="check-icon">✔️</i> Book a consultation appointment</li>
-                            <li><i className="check-icon">✔️</i> Personal coach</li>
-                            <li><i className="check-icon">✔️</i> Advanced analytics</li>
-                            <li><i className="check-icon">✔️</i> Email reminders</li>
-                        </ul>
+          {/* Elite Package */}
+          <div className="package-card elite">
+            <h3>Elite Package</h3>
+            <p className="price">$299</p>
+            <p className="frequency">/12 month</p>
+            <p className="save-text">Save 17% on Premium Package</p>
+            <hr />
+            <div className="upgrade-box">
+              Upgrade from Basic: <span>$259</span><span class="save">(Save $40)</span>
+            </div>
+            <div className="upgrade-box">
+              Upgrade from Premium: <span>$69</span><span class="save">(Save $90)</span>
+            </div>
+            <ul className="features">
+              <li><i className="check-icon">✔️</i> Pro progress tracking</li>
+              <li><i className="check-icon">✔️</i> Community access</li>
+              <li><i className="check-icon">✔️</i> Daily tips</li>
+              <li><i className="check-icon">✔️</i> Book a consultation appointment</li>
+              <li><i className="check-icon">✔️</i> Personal coach</li>
+              <li><i className="check-icon">✔️</i> Advanced analytics</li>
+              <li><i className="check-icon">✔️</i> Email reminders</li>
+            </ul>
 
-                        <button className="upgrade-button" onClick={handleUpgradeClick}>Upgrade to Elite</button>
-                    </div>
-                </section>
-            </main>
-            {showPayment && (
-                <section className="payment-section">
-                    <div className="payment-card">
-                        <div className="payment-header">
-                            <i className="payment-icon">💲</i>
-                            <h2>Payment Information</h2>
-                        </div>
-                        <span className="close-button" onClick={handleClosePayment}>X</span>
-                        <div className="form-group">
-                            <label htmlFor="cardNumber">Card Number</label>
-                            <input type="text" id="cardNumber" placeholder="1234 5678 9012 ..." />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="nameOnCard">Name of Card</label>
-                            <input type="text" id="nameOnCard" placeholder="Jonh Smith ..." />
-                        </div>
-                        <div className="form-row">
-                            <div className="form-group half-width">
-                                <label htmlFor="expiryDate">Expired Date</label>
-                                <input type="text" id="expiryDate" placeholder="MM/YY ..." />
-                            </div>
-                            <div className="form-group half-width">
-                                <label htmlFor="cvv">CVV</label>
-                                <input type="text" id="cvv" placeholder="123 ..." />
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="selectPackage">Select Package</label>
-                            <select id="selectPackage">
-                                <option>-- Select Package --</option>
-                                <option>Premium Package</option>
-                                <option>Elite Package</option>
-                            </select>
-                        </div>
-                        <button className="complete-upgrade-button">Complete Upgrade</button>
-                    </div>
-                </section>
-            )}
-        </div>
-    );
+            <button className="upgrade-button" onClick={handleUpgradeClick}>Upgrade to Elite</button>
+          </div>
+        </section>
+      </main>
+      {showPayment && (
+        <section className="payment-section">
+          <div className="payment-card">
+            <div className="payment-header">
+              <i className="payment-icon">💲</i>
+              <h2>Payment Information</h2>
+            </div>
+            <span className="close-button" onClick={handleClosePayment}>X</span>
+            <div className="form-group">
+              <label htmlFor="cardNumber">Card Number</label>
+              <input type="text" id="cardNumber" placeholder="1234 5678 9012 ..." />
+            </div>
+            <div className="form-group">
+              <label htmlFor="nameOnCard">Name of Card</label>
+              <input type="text" id="nameOnCard" placeholder="Jonh Smith ..." />
+            </div>
+            <div className="form-row">
+              <div className="form-group half-width">
+                <label htmlFor="expiryDate">Expired Date</label>
+                <input type="text" id="expiryDate" placeholder="MM/YY ..." />
+              </div>
+              <div className="form-group half-width">
+                <label htmlFor="cvv">CVV</label>
+                <input type="text" id="cvv" placeholder="123 ..." />
+              </div>
+            </div>
+            <div className="form-group">
+              <label htmlFor="selectPackage">Select Package</label>
+              <select id="selectPackage">
+                <option>-- Select Package --</option>
+                <option>Premium Package</option>
+                <option>Elite Package</option>
+              </select>
+            </div>
+            <button className="complete-upgrade-button">Complete Upgrade</button>
+          </div>
+        </section>
+      )}
+    </div>
+  );
 }
 
 export default UpgradePackage1; 

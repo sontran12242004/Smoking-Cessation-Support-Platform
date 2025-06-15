@@ -3,7 +3,7 @@ import EditProfileModal from '../EditProfileModal';
 
 function NotificationCenter() {
     // Placeholder for notifications, to be replaced with database data
-    const [notifications, setNotifications] = useState([]);
+    const [notifications] = useState([]);
     const [allRead, setAllRead] = useState(false);
     const [showEditProfile, setShowEditProfile] = useState(false);
 
@@ -425,12 +425,12 @@ function NotificationCenter() {
                     </div>
                 </div>
                 <ul className="nav-links">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Dashboard</a></li>
-                    <li><a href="#">Achievement</a></li>
-                    <li><a href="#">Coach</a></li>
-                    <li><a href="#">Community</a></li>
-                    <li><a href="#">Feedback</a></li>
+                    <li><a href="/premiummemberhome">Home</a></li>
+                    <li><a href="/premiummemberdashboard">Dashboard</a></li>
+                    <li><a href="/achievement">Achievement</a></li>
+                    <li><a href="/premiummembercoach">Coach</a></li>
+                    <li><a href="/premiummembercommun">Community</a></li>
+                    <li><a href="/feedbackpremium">Feedback</a></li>
                 </ul>
                 <div className="header-actions">
                     <span className="notification-icon">🔔</span>
@@ -479,21 +479,21 @@ function NotificationCenter() {
                     <div className="footer-section">
                         <h3>Quick Links</h3>
                         <ul>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Our Programs</a></li>
-                            <li><a href="#">Success Stories</a></li>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Contact</a></li>
+                            <li><a href="/about">About Us</a></li>
+                            <li><a href="/ourprograms">Our Programs</a></li>
+                            <li><a href="/successstories">Success Stories</a></li>
+                            <li><a href="/blog">Blog</a></li>
+                            <li><a href="/contact">Contact</a></li>
                         </ul>
                     </div>
                     <div className="footer-section">
                         <h3>Support</h3>
                         <ul>
-                            <li><a href="#">FAQ</a></li>
-                            <li><a href="#">Help Center</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
-                            <li><a href="#">Term Of Service</a></li>
-                            <li><a href="#">Cookie Policy</a></li>
+                            <li><a href="/faq">FAQ</a></li>
+                            <li><a href="/helpcenter">Help Center</a></li>
+                            <li><a href="/privacypolicy">Privacy Policy</a></li>
+                            <li><a href="/termsofservice">Term Of Service</a></li>
+                            <li><a href="/cookiepolicy">Cookie Policy</a></li>
                         </ul>
                     </div>
                     <div className="footer-section newsletter">

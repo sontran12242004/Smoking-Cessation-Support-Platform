@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
-import EditProfileModal from '../EditProfileModal';
-
+import React, { useState } from "react";
+import EditProfileModal from "../EditProfileModal";
+import { useNavigate } from "react-router-dom";
 function StandardMemberDashboard({
-    daysSmokeFree = '--',
-    daysToNext = '--',
-    moneySaved = '--',
-    healthImproved = '--',
-    lungsCapacity = '--',
-    heartRate = '--',
+  daysSmokeFree = "--",
+  daysToNext = "--",
+  moneySaved = "--",
+  healthImproved = "--",
+  lungsCapacity = "--",
+  heartRate = "--",
 }) {
-    const [showEditProfile, setShowEditProfile] = useState(false);
-    const styles = `
+  const navigate = useNavigate();
+  const [showEditProfile, setShowEditProfile] = useState(false);
+  const styles = `
     body, html, #root {
       background: #f0f2f5;
       justify-content: center;
@@ -627,169 +628,240 @@ function StandardMemberDashboard({
     }
   `;
   const handleHealthMetric = () => {
-    window.location.href = '/metricmemberhealthmetric';
+    window.location.href = "/premiumhealthmetric";
   };
 
   const handlePackage = () => {
-    window.location.href = '/upgradepackage1';
+    window.location.href = "/upgradepackage2";
   };
-  
-    return (
-        <div className="dashboard-bg">
-            <style>{styles}</style>
-            <EditProfileModal open={showEditProfile} onClose={() => setShowEditProfile(false)} onSave={() => setShowEditProfile(false)} />
-            <header>
-                <div className="header-left">
-                    <div className="profile-section">
-                        <button className="profile-btn" onClick={() => setShowEditProfile(true)}>
-                            <span className="profile-icon">👤</span> Premium Member
-                        </button>
-                    </div>
-                    <div className="logo-section">
-                        <span className="logo">LOGO</span>
-                        <div className="app-name">
-                            <h1>NicOff</h1>
-                            <p>Turn Off Nicotine, Turn On Life!</p>
-                        </div>
-                    </div>
-                </div>
-                <ul className="nav-links">
-                    <li><a href="#" >Home</a></li>
-                    <li><a href="#" className="active">Dashboard</a></li>
-                    <li><a href="#">Achievement</a></li>
-                    <li><a href="#">Coach</a></li>
-                    <li><a href="#">Community</a></li>
-                    <li><a href="#">Feedback</a></li>
-                </ul>
-                <div className="header-actions">
-                    <span className="notification-icon">🔔</span>
-                    <button className="logout-button">Logout</button>
-                </div>
-            </header>
-            <div className="dashboard-main">
-                <div className="dashboard-welcome">
-                    <div className="dashboard-welcome-title">Welcome back, <span className="highlight">John!</span> 👋</div>
-                    <div className="dashboard-welcome-quote">"Every cigarette not smoked is a victory. Be proud of your progress!"</div>
-                </div>
-                <div className="dashboard-cards-row">
-                    <div className="dashboard-card">
-                        <span className="dashboard-card-icon">📅</span>
-                        <div className="dashboard-card-value">{daysSmokeFree}</div>
-                        <div className="dashboard-card-label">Days Smoke-Free</div>
-                        <div className="dashboard-card-desc">{daysToNext} days until next milestone</div>
-                    </div>
-                    <div className="dashboard-card">
-                        <span className="dashboard-card-icon">💵</span>
-                        <div className="dashboard-card-value">${moneySaved}</div>
-                        <div className="dashboard-card-label">Money Saved</div>
-                        <div className="dashboard-card-desc">Based on 10 cigarettes/day</div>
-                    </div>
-                    <div className="dashboard-card">
-                        <span className="dashboard-card-icon">💚</span>
-                        <div className="dashboard-card-value">{healthImproved}%</div>
-                        <div className="dashboard-card-label">Health Improved</div>
-                        <div className="dashboard-card-desc">Lung function recovery</div>
-                    </div>
-                </div>
-                <div className="dashboard-cards-row-small">
-                    <div className="dashboard-card-small">
-                        <span className="dashboard-card-small-icon">🫁</span>
-                        <div className="dashboard-card-small-content">
-                            <div className="dashboard-card-small-label">Lungs Capacity</div>
-                            <div className="dashboard-card-small-value">+{lungsCapacity}%</div>
-                            <div className="dashboard-card-small-desc">Your lung capacity has improved significantly since quitting.</div>
-                        </div>
-                    </div>
-                    <div className="dashboard-card-small">
-                        <span className="dashboard-card-small-icon">💓</span>
-                        <div className="dashboard-card-small-content">
-                            <div className="dashboard-card-small-label">Heart Rate</div>
-                            <div className="dashboard-card-small-value">{heartRate} bpm</div>
-                            <div className="dashboard-card-small-desc">Resting heart rate has decreased to healthier levels.</div>
-                        </div>
-                    </div>
-                </div>
-                <button className="dashboard-explore-btn" onClick={handleHealthMetric}>
-                  Explore more →
-                </button>
+  const handleNotificationClick = () => {
+    navigate("/premiumnotificationcenter");
+  };
+  return (
+    <div className="dashboard-bg">
+      <style>{styles}</style>
+      <EditProfileModal
+        open={showEditProfile}
+        onClose={() => setShowEditProfile(false)}
+        onSave={() => setShowEditProfile(false)}
+      />
+      <header>
+        <div className="header-left">
+          <div className="profile-section">
+            <button
+              className="profile-btn"
+              onClick={() => setShowEditProfile(true)}
+            >
+              <span className="profile-icon">👤</span> Premium Member
+            </button>
+          </div>
+          <div className="logo-section">
+            <span className="logo">LOGO</span>
+            <div className="app-name">
+              <h1>NicOff</h1>
+              <p>Turn Off Nicotine, Turn On Life!</p>
             </div>
-            {/* Analytics Section */}
-            <section className="analytics-section">
-                <h2 className="analytics-title">Analytics</h2>
-                <div className="analytics-cards-row">
-                    <div className="analytics-card">
-                        <h3 className="analytics-card-title">Health Improvement Rate</h3>
-                        <div className="analytics-card-content">
-                            <div className="analytics-sad-face">:(</div>
-                            <div className="analytics-locked-message">
-                                We're sorry, but this feature is not available for your account!
-                            </div>
-                            <div className="analytics-upgrade-text">Upgrade To See This Feature</div>
-                            <button className="analytics-upgrade-btn" onClick={handlePackage}>Upgrade</button>
-                        </div>
-                    </div>
-                    <div className="analytics-card">
-                        <h3 className="analytics-card-title">Success Rate</h3>
-                        <div className="analytics-card-content">
-                            <div className="analytics-sad-face">:(</div>
-                            <div className="analytics-locked-message">
-                                We're sorry, but this feature is not available for your account!
-                            </div>
-                            <div className="analytics-upgrade-text">Upgrade To See This Feature</div>
-                            <button className="analytics-upgrade-btn" onClick={handlePackage}>Upgrade</button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            {/* Footer */}
-            <footer className="welcome-footer">
-                <div className="footer-content">
-                    <div className="footer-section about-nic-off">
-                        <h3>NicOff</h3>
-                        <p>
-                            We're dedicated to helping you break<br />
-                            free from smoking addiction through<br />
-                            science-backed methods and<br />
-                            community support
-                        </p>
-                    </div>
-                    <div className="footer-section">
-                        <h3>Quick Links</h3>
-                        <ul>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Our Programs</a></li>
-                            <li><a href="#">Success Stories</a></li>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Contact</a></li>
-                        </ul>
-                    </div>
-                    <div className="footer-section">
-                        <h3>Support</h3>
-                        <ul>
-                            <li><a href="#">FAQ</a></li>
-                            <li><a href="#">Help Center</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
-                            <li><a href="#">Term Of Service</a></li>
-                            <li><a href="#">Cookie Policy</a></li>
-                        </ul>
-                    </div>
-                    <div className="footer-section newsletter">
-                        <h3>NewsLetter</h3>
-                        <input type="email" placeholder="Your Email Address..." />
-                        <button>Subscribe</button>
-                        <p>
-                            Get the latest tips and<br />
-                            motivation to stay smoke-free<br />
-                            delivered to your inbox
-                        </p>
-                    </div>
-                </div>
-                <div className="copyright">
-                    © 2025 NicOff. All rights reserved
-                </div>
-            </footer>
+          </div>
         </div>
-    );
+        <ul className="nav-links">
+          <li>
+            <a href="/premiummemberhome">Home</a>
+          </li>
+          <li>
+            <a href="/premiummemberdashboard" className="active">
+              Dashboard
+            </a>
+          </li>
+          <li>
+            <a href="#">Achievement</a>
+          </li>
+          <li>
+            <a href="/premiummembercoach">Coach</a>
+          </li>
+          <li>
+            <a href="/premiummembercommun">Community</a>
+          </li>
+          <li>
+            <a href="/feedbackpremium">Feedback</a>
+          </li>
+        </ul>
+        <div className="header-actions">
+          <span className="notification-icon" onClick={handleNotificationClick}>
+            🔔
+          </span>
+          <button className="logout-button">Logout</button>
+        </div>
+      </header>
+      <div className="dashboard-main">
+        <div className="dashboard-welcome">
+          <div className="dashboard-welcome-title">
+            Welcome back, <span className="highlight">John!</span> 👋
+          </div>
+          <div className="dashboard-welcome-quote">
+            "Every cigarette not smoked is a victory. Be proud of your
+            progress!"
+          </div>
+        </div>
+        <div className="dashboard-cards-row">
+          <div className="dashboard-card">
+            <span className="dashboard-card-icon">📅</span>
+            <div className="dashboard-card-value">{daysSmokeFree}</div>
+            <div className="dashboard-card-label">Days Smoke-Free</div>
+            <div className="dashboard-card-desc">
+              {daysToNext} days until next milestone
+            </div>
+          </div>
+          <div className="dashboard-card">
+            <span className="dashboard-card-icon">💵</span>
+            <div className="dashboard-card-value">${moneySaved}</div>
+            <div className="dashboard-card-label">Money Saved</div>
+            <div className="dashboard-card-desc">
+              Based on 10 cigarettes/day
+            </div>
+          </div>
+          <div className="dashboard-card">
+            <span className="dashboard-card-icon">💚</span>
+            <div className="dashboard-card-value">{healthImproved}%</div>
+            <div className="dashboard-card-label">Health Improved</div>
+            <div className="dashboard-card-desc">Lung function recovery</div>
+          </div>
+        </div>
+        <div className="dashboard-cards-row-small">
+          <div className="dashboard-card-small">
+            <span className="dashboard-card-small-icon">🫁</span>
+            <div className="dashboard-card-small-content">
+              <div className="dashboard-card-small-label">Lungs Capacity</div>
+              <div className="dashboard-card-small-value">
+                +{lungsCapacity}%
+              </div>
+              <div className="dashboard-card-small-desc">
+                Your lung capacity has improved significantly since quitting.
+              </div>
+            </div>
+          </div>
+          <div className="dashboard-card-small">
+            <span className="dashboard-card-small-icon">💓</span>
+            <div className="dashboard-card-small-content">
+              <div className="dashboard-card-small-label">Heart Rate</div>
+              <div className="dashboard-card-small-value">{heartRate} bpm</div>
+              <div className="dashboard-card-small-desc">
+                Resting heart rate has decreased to healthier levels.
+              </div>
+            </div>
+          </div>
+        </div>
+        <button className="dashboard-explore-btn" onClick={handleHealthMetric}>
+          Explore more →
+        </button>
+      </div>
+      {/* Analytics Section */}
+      <section className="analytics-section">
+        <h2 className="analytics-title">Analytics</h2>
+        <div className="analytics-cards-row">
+          <div className="analytics-card">
+            <h3 className="analytics-card-title">Health Improvement Rate</h3>
+            <div className="analytics-card-content">
+              <div className="analytics-sad-face">:(</div>
+              <div className="analytics-locked-message">
+                We're sorry, but this feature is not available for your account!
+              </div>
+              <div className="analytics-upgrade-text">
+                Upgrade To See This Feature
+              </div>
+              <button className="analytics-upgrade-btn" onClick={handlePackage}>
+                Upgrade
+              </button>
+            </div>
+          </div>
+          <div className="analytics-card">
+            <h3 className="analytics-card-title">Success Rate</h3>
+            <div className="analytics-card-content">
+              <div className="analytics-sad-face">:(</div>
+              <div className="analytics-locked-message">
+                We're sorry, but this feature is not available for your account!
+              </div>
+              <div className="analytics-upgrade-text">
+                Upgrade To See This Feature
+              </div>
+              <button className="analytics-upgrade-btn" onClick={handlePackage}>
+                Upgrade
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+      {/* Footer */}
+      <footer className="welcome-footer">
+        <div className="footer-content">
+          <div className="footer-section about-nic-off">
+            <h3>NicOff</h3>
+            <p>
+              We're dedicated to helping you break
+              <br />
+              free from smoking addiction through
+              <br />
+              science-backed methods and
+              <br />
+              community support
+            </p>
+          </div>
+          <div className="footer-section">
+            <h3>Quick Links</h3>
+            <ul>
+              <li>
+                <a href="/about">Our Programs</a>
+              </li>
+              <li>
+                <a href="/ourprograms">Our Programs</a>
+              </li>
+              <li>
+                <a href="/successstories">Success Stories</a>
+              </li>
+              <li>
+                <a href="/blog">Blog</a>
+              </li>
+              <li>
+                <a href="/contact">Contact</a>
+              </li>
+            </ul>
+          </div>
+          <div className="footer-section">
+            <h3>Support</h3>
+            <ul>
+              <li>
+                <a href="/faq">FAQ</a>
+              </li>
+              <li>
+                <a href="/helpcenter">Help Center</a>
+              </li>
+              <li>
+                <a href="/privacypolicy">Privacy Policy</a>
+              </li>
+              <li>
+                <a href="/termsofservice">Term Of Service</a>
+              </li>
+              <li>
+                <a href="/cookiepolicy">Cookie Policy</a>
+              </li>
+            </ul>
+          </div>
+          <div className="footer-section newsletter">
+            <h3>NewsLetter</h3>
+            <input type="email" placeholder="Your Email Address..." />
+            <button>Subscribe</button>
+            <p>
+              Get the latest tips and
+              <br />
+              motivation to stay smoke-free
+              <br />
+              delivered to your inbox
+            </p>
+          </div>
+        </div>
+        <div className="copyright">© 2025 NicOff. All rights reserved</div>
+      </footer>
+    </div>
+  );
 }
 
-export default StandardMemberDashboard; 
+export default StandardMemberDashboard;
