@@ -20,25 +20,6 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
-    @PostMapping("/login")
-    public ResponseEntity<AdminDTO> login(@RequestBody Admin admin) {
-        AdminDTO adminDTO = adminService.login(admin.getEmail(), admin.getPassword());
-        if (adminDTO != null) {
-            return ResponseEntity.ok(adminDTO);
-        }
-        return ResponseEntity.badRequest().build();
-    }
-
-
-    @GetMapping("/{email}")
-    public ResponseEntity<Admin> getAdminByEmail(@PathVariable String email) {
-        Admin admin = adminService.getAdminByEmail(email);
-        if (admin != null) {
-            return ResponseEntity.ok(admin);
-        }
-        return ResponseEntity.notFound().build();
-    }
-
     @GetMapping("/users")
     public ResponseEntity<List<Members>> getAllUsers() {
         return ResponseEntity.ok(adminService.getAllUsers());
