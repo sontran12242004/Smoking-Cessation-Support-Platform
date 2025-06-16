@@ -54,7 +54,7 @@ public class AdminService {
                 adminDTO.setFullName(admin.getFullName());
                 adminDTO.setPhone(admin.getPhone());
                 adminDTO.setRole(admin.getRole());
-                adminDTO.setToken(tokenService.generateToken(admin));
+//                adminDTO.setToken(tokenService.generateToken());
                 return adminDTO;
             }
         }
