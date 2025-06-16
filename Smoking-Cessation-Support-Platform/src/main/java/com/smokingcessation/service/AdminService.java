@@ -44,27 +44,6 @@ public class AdminService {
         this.authenticationRepository = authenticationRepository;
     }
 
-    public AdminDTO login(String email, String password) {
-        Optional<Admin> adminOptional = adminRepository.findByEmail(email);
-        if (adminOptional.isPresent()) {
-            Admin admin = adminOptional.get();
-            if (passwordEncoder.matches(password, admin.getPassword())) {
-                AdminDTO adminDTO = new AdminDTO();
-                adminDTO.setEmail(admin.getEmail());
-                adminDTO.setFullName(admin.getFullName());
-                adminDTO.setPhone(admin.getPhone());
-                adminDTO.setRole(admin.getRole());
-                adminDTO.setToken(tokenService.generateToken(admin));
-                return adminDTO;
-            }
-        }
-        return null;
-    }
-
-
-    public Admin getAdminByEmail(String email) {
-        return adminRepository.findByEmail(email).orElse(null);
-    }
 
     public List<Members> getAllUsers() {
         return membersRepository.findAll();
@@ -115,7 +94,6 @@ public class AdminService {
         existingMember.setName(updatedMember.getName());
         existingMember.setEmail(updatedMember.getEmail());
         existingMember.setPhone(updatedMember.getPhone());
-
         return membersRepository.save(existingMember);
     }
 
