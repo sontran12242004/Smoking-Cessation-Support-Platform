@@ -1,11 +1,55 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function LandingPage() {
+  const [showResources, setShowResources] = useState(false);
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
+
+  const handleFeatureClick = (e) => {
+    e.preventDefault();
+    setShowLoginPopup(true);
+  };
+
   return (
     <div className="landing-root">
       {/* Header */}
       <header className="welcome-header">
+        <div className="header-left">
+          <div className="resources-menu">
+            <button 
+              className="resources-btn"
+              onMouseEnter={() => setShowResources(true)}
+              onMouseLeave={() => setShowResources(false)}
+            >
+              Resources
+              <span className="dropdown-arrow">▼</span>
+            </button>
+            {showResources && (
+              <div 
+                className="resources-dropdown"
+                onMouseEnter={() => setShowResources(true)}
+                onMouseLeave={() => setShowResources(false)}
+              >
+                <Link to="/ebooks" className="resource-item">
+                  <span role="img" aria-label="book">📚</span>
+                  E-books
+                </Link>
+                <Link to="/videos" className="resource-item">
+                  <span role="img" aria-label="video">🎥</span>
+                  Video Guides
+                </Link>
+                <Link to="/infographics" className="resource-item">
+                  <span role="img" aria-label="chart">📊</span>
+                  Infographics
+                </Link>
+                <Link to="/tools" className="resource-item">
+                  <span role="img" aria-label="tools">🛠️</span>
+                  Support Tools
+                </Link>
+              </div>
+            )}
+          </div>
+        </div>
         <div className="header-center">
           <div className="logo-section">
             <div className="app-name">
@@ -22,14 +66,41 @@ export default function LandingPage() {
       {/* Navigation */}
       <nav className="welcome-nav">
         <ul>
-          <li><a href="/standardmemberhome">Home</a></li>
-          <li><a href="/standardmemberdashboard">Dashboard</a></li>
-          <li><a href="#">Achievement</a></li>
-          <li><a href="/standardmembercoach">Coach</a></li>
-          <li><a href="/standardmembercommun">Community</a></li>
-          <li><a href="/feedback">Feedback</a></li>
+          <li><a href="#" onClick={handleFeatureClick}>Home</a></li>
+          <li><a href="#" onClick={handleFeatureClick}>Dashboard</a></li>
+          <li><a href="#" onClick={handleFeatureClick}>Achievement</a></li>
+          <li><a href="#" onClick={handleFeatureClick}>Coach</a></li>
+          <li><a href="#" onClick={handleFeatureClick}>Community</a></li>
+          <li><a href="#" onClick={handleFeatureClick}>Feedback</a></li>
         </ul>
       </nav>
+
+      {/* Login Required Popup */}
+      {showLoginPopup && (
+        <div className="popup-overlay">
+          <div className="login-popup">
+            <div className="popup-content">
+              <h2>Login Required</h2>
+              <p>You need to login to access this feature</p>
+              <div className="popup-buttons">
+                <button 
+                  className="popup-login-btn"
+                  onClick={() => window.location.href = '/login'}
+                >
+                  Go to Login
+                </button>
+                <button 
+                  className="popup-close-btn"
+                  onClick={() => setShowLoginPopup(false)}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Main content */}
       <div className="landing-bg-split">
         <div className="landing-left">
@@ -352,29 +423,41 @@ export default function LandingPage() {
           flex-direction: column;
         }
         .welcome-header {
+          
           display: flex;
-          justify-content: center;
+          justify-content: space-between;
           align-items: center;
-          padding: 10px 40px;
-          background-color: #fff;
-          border-bottom: 1px solid #d0e8ef;
-          width: 100vw;
-          position: relative;
-          left: 50%;
-          right: 50%;
-          transform: translateX(-50%);
-          box-sizing: border-box;
+          padding: 1rem 2rem;
+          background:rgb(135, 222, 138);
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header-left {
+          display: flex;
+          align-items: center;
         }
         .header-center {
-          flex: 1;
-          display: flex;
-          justify-content: center;
-          align-items: center;
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+          text-align: center;
         }
         .header-right {
           display: flex;
           align-items: center;
-          gap: 16px;
+          gap: 1rem;
+        }
+        .logo-section {
+          text-align: center;
+        }
+        .app-name h1 {
+          margin: 0;
+          font-size: 2rem;
+          color: #333;
+        }
+        .app-name p {
+          margin: 0;
+          font-size: 0.9rem;
+          color: #666;
         }
         .login-btn, .signup-btn {
           display: inline-block;
@@ -407,29 +490,6 @@ export default function LandingPage() {
           background: #388E3C;
           color: #fff;
           box-shadow: 0 2px 8px #4caf5011;
-        }
-        .logo-section {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          width: 100%;
-        }
-        .app-name {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-        }
-        .app-name h1 {
-          margin: 0;
-          font-size: 24px;
-          color: #4CAF50;
-        }
-        .app-name p {
-          margin: 0;
-          font-size: 14px;
-          color: #666;
         }
         .profile-status {
           display: flex;
@@ -1393,6 +1453,161 @@ export default function LandingPage() {
       width: 100vw;
       margin-left: auto;
       margin-right: auto;
+    }
+    .resources-menu {
+      position: relative;
+      margin-right: 20px;
+    }
+
+    .resources-btn {
+      background: none;
+      border: none;
+      color: #333;
+      font-size: 16px;
+      padding: 8px 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: color 0.3s ease;
+    }
+
+    .resources-btn:hover {
+      color: #007bff;
+    }
+
+    .dropdown-arrow {
+      font-size: 12px;
+      transition: transform 0.3s ease;
+    }
+
+    .resources-btn:hover .dropdown-arrow {
+      transform: rotate(180deg);
+    }
+
+    .resources-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 8px 0;
+      min-width: 200px;
+      z-index: 1000;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .resource-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      color: #333;
+      text-decoration: none;
+      transition: background-color 0.2s ease;
+    }
+
+    .resource-item:hover {
+      background-color: #f5f5f5;
+      color: #007bff;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .login-popup {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      width: 90%;
+      max-width: 400px;
+      animation: slideIn 0.3s ease;
+    }
+
+    .popup-content {
+      text-align: center;
+    }
+
+    .popup-content h2 {
+      color: #333;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .popup-content p {
+      color: #666;
+      margin-bottom: 1.5rem;
+    }
+
+    .popup-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .popup-login-btn {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background-color 0.3s ease;
+    }
+
+    .popup-login-btn:hover {
+      background-color: #45a049;
+    }
+
+    .popup-close-btn {
+      background-color: #f5f5f5;
+      color: #333;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background-color 0.3s ease;
+    }
+
+    .popup-close-btn:hover {
+      background-color: #e0e0e0;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
         }
       `}</style>
