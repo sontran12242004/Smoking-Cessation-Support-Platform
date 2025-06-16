@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const BookAppointment = (props) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
   const [unavailableDates] = useState([
@@ -98,116 +99,261 @@ const BookAppointment = (props) => {
     return date.toLocaleDateString('en-US', options);
   };
 
+  const handleNotificationClick = () => {
+    navigate('/notification');
+  };
+
   return (
-    <div style={styles.container}>
-      {/* Header */}
-      <div style={styles.header}>
-        <div style={styles.headerLeft}>
-          <div style={styles.standardMember}>
-            <span style={styles.standardMemberIcon}></span> Standard Member
+    <div className="book-appointment-page">
+      <style>{`
+        .welcome-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 10px 40px;
+          background-color: #fff;
+          border-bottom: 1px solid #d0e8ef;
+        }
+        .header-left, .header-right {
+          display: flex;
+          align-items: center;
+          gap: 15px;
+        }
+        .profile-status {
+          display: flex;
+          align-items: center;
+          background: none;
+          padding: 0;
+          border-radius: 0;
+          font-size: 14px;
+        }
+        .profile-btn {
+          display: flex;
+          align-items: center;
+          background-color: #4CAF50;
+          color: #fff;
+          border: none;
+          border-radius: 999px;
+          padding: 8px 22px 8px 15px;
+          font-size: 16px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+          box-shadow: 0 2px 8px rgba(76,175,80,0.10);
+          outline: none;
+        }
+        .profile-btn:hover {
+          background-color: #388E3C;
+          transform: translateY(-2px) scale(1.04);
+          box-shadow: 0 4px 16px rgba(76,175,80,0.18);
+        }
+        .profile-icon {
+          color: #5B2A99;
+          font-size: 20px;
+          margin-right: 8px;
+        }
+        .header-center .logo-section {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+        }
+        .header-center .app-name {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        }
+        .header-center .app-name h1 {
+          margin: 0;
+          font-size: 24px;
+          color: #4CAF50;
+        }
+        .header-center .app-name p {
+          margin: 0;
+          font-size: 14px;
+          color: #666;
+        }
+        .notification-icon {
+          font-size: 24px;
+          color: #f39c12;
+          cursor: pointer;
+        }
+        .logout-button {
+          background-color: #4CAF50;
+          color: #fff;
+          border: none;
+          padding: 8px 15px;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 14px;
+          transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .logout-button:hover {
+          background-color: #45a049;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .welcome-nav {
+          background-color: #fff;
+          padding: 10px 0;
+          border-bottom: 1px solid #eee;
+        }
+        .welcome-nav ul {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          justify-content: center;
+          gap: 40px;
+        }
+        .welcome-nav a {
+          text-decoration: none;
+          color: #5EBB34;
+          font-weight: 400;
+          font-size: 16px;
+          padding: 5px 0;
+          position: relative;
+          transition: color 0.3s;
+        }
+        .welcome-nav a::after {
+          content: '';
+          display: block;
+          position: absolute;
+          left: 0;
+          bottom: -2px;
+          width: 100%;
+          height: 3px;
+          background: #5EBB34;
+          border-radius: 2px;
+          transform: scaleX(0);
+          transform-origin: left;
+          transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+          z-index: 1;
+        }
+        .welcome-nav a:hover::after, .welcome-nav a:focus::after, .welcome-nav a.active::after {
+          transform: scaleX(1);
+        }
+        .main-center {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          min-height: 60vh;
+        }
+      `}</style>
+      <header className="welcome-header">
+        <div className="header-left">
+          <div className="profile-status">
+            <button className="profile-btn">
+              <span className="profile-icon">👤</span> Premium Member
+            </button>
           </div>
         </div>
-        <div style={styles.headerCenter}>
-          <div style={styles.logoSection}>
-            <span style={styles.logoText}>LOGO</span>
-            <div style={styles.nicOffTitleSection}>
-              <h1 style={styles.nicOffTitle}>NicOff</h1>
-              <p style={styles.nicOffSubtitle}>Turn Off Nicotine, Turn On Life!</p>
+        <div className="header-center">
+          <div className="logo-section">
+            <div className="app-name">
+              <h1>NicOff</h1>
+              <p>Turn Off Nicotine, Turn On Life!</p>
             </div>
           </div>
         </div>
-        <div style={styles.headerRight}>
-          <ul style={styles.navLinks}>
-            <li><Link to="/premiummemberhome" style={styles.navLink}>Home</Link></li>
-            <li><Link to="/premiummemberdashboard" style={styles.navLink}>Dashboard</Link></li>
-            <li><Link to="/achievements" style={styles.navLink}>Achievement</Link></li>
-            <li><Link to="/premiummembercoach" style={styles.navLink}>Coach</Link></li>
-            <li><Link to="/premiummembercommun" style={styles.navLink}>Community</Link></li>
-            <li><Link to="/feedbackpremium" style={styles.navLink}>Feedback</Link></li>
-          </ul>
-          <span style={styles.notificationIcon}>&#128276;</span>
-          <button style={styles.logoutButton}>Logout</button>
+        <div className="header-right">
+          <span className="notification-icon" onClick={handleNotificationClick}>🔔</span>
+          <button className="logout-button">Logout</button>
         </div>
-      </div>
+      </header>
+      <nav className="welcome-nav">
+        <ul>
+          <li><Link to="/premiummemberhome">Home</Link></li>
+          <li><Link to="/premiummemberdashboard">Dashboard</Link></li>
+          <li><Link to="#">Achievement</Link></li>
+          <li><Link to="/premiummembercoach">Coach</Link></li>
+          <li><Link to="/premiummembercommun">Community</Link></li>
+          <li><Link to="/feedbackpremium">Feedback</Link></li>
+        </ul>
+      </nav>
+      <div className="main-center">
+        {/* Main Content */}
+        <div style={styles.mainContent}>
+          <Link to="/premiummembercoach" style={styles.backButton}>← Back To Coach</Link>
 
-      {/* Main Content */}
-      <div style={styles.mainContent}>
-        <Link to="/premiummembercoach" style={styles.backButton}>← Back To Coach</Link>
-
-        {/* Coach Profile Section */}
-        {coachData ? (
-          <div style={styles.coachProfileCard}>
-            <div style={styles.coachAvatar}>
-              <img src={coachData.avatar || 'https://via.placeholder.com/100'} alt="Coach Avatar" style={styles.avatarImage} />
+          {/* Coach Profile Section */}
+          {coachData ? (
+            <div style={styles.coachProfileCard}>
+              <div style={styles.coachAvatar}>
+                <img src={coachData.avatar || 'https://via.placeholder.com/100'} alt="Coach Avatar" style={styles.avatarImage} />
+              </div>
+              <div style={styles.coachInfo}>
+                <h2 style={styles.coachName}>{coachData.name}</h2>
+                <p style={styles.coachSpecialization}>{coachData.specialty}{coachData.experience ? ` - ${coachData.experience} years experience` : ''}</p>
+                <p style={styles.coachBio}>{coachData.bio || coachData.description}</p>
+              </div>
             </div>
-            <div style={styles.coachInfo}>
-              <h2 style={styles.coachName}>{coachData.name}</h2>
-              <p style={styles.coachSpecialization}>{coachData.specialty}{coachData.experience ? ` - ${coachData.experience} years experience` : ''}</p>
-              <p style={styles.coachBio}>{coachData.bio || coachData.description}</p>
+          ) : (
+            <div style={{ color: '#C62828', fontWeight: 'bold', margin: '30px 0' }}>No coach data provided.</div>
+          )}
+
+          {/* Calendar and Time Slots Section */}
+          <div style={styles.scheduleContainer}>
+            {/* Calendar */}
+            <div style={styles.calendarCard}>
+              <h3 style={styles.calendarTitle}>Select a Date</h3>
+              <div style={styles.calendarNav}>
+                <button onClick={() => handleMonthChange(-1)} style={styles.calendarNavButton}>&lt;</button>
+                <span style={styles.calendarMonthYear}>{selectedDate.toLocaleString('en-US', { month: 'long', year: 'numeric' })}</span>
+                <button onClick={() => handleMonthChange(1)} style={styles.calendarNavButton}>&gt;</button>
+              </div>
+              <table style={styles.calendarTable}>
+                <thead>
+                  <tr style={styles.calendarHeaderRow}>
+                    <th style={styles.calendarHeaderCell}>Sun</th>
+                    <th style={styles.calendarHeaderCell}>Mon</th>
+                    <th style={styles.calendarHeaderCell}>Tue</th>
+                    <th style={styles.calendarHeaderCell}>Wed</th>
+                    <th style={styles.calendarHeaderCell}>Thu</th>
+                    <th style={styles.calendarHeaderCell}>Fri</th>
+                    <th style={styles.calendarHeaderCell}>Sat</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {renderCalendar()}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Available Time Slots */}
+            <div style={styles.timeSlotsCard}>
+              <h3 style={styles.timeSlotsTitle}>Available Time Slots</h3>
+              <p style={styles.selectedDateText}>{formatSelectedDate(selectedDate)}</p>
+              <div style={styles.slotsContainer}>
+                {dummyTimeSlots.map((slot, index) => (
+                  <button
+                    key={index}
+                    style={slot.available ? (selectedTimeSlot === slot.time ? styles.timeSlotButtonActive : styles.timeSlotButton) : styles.timeSlotButtonDisabled}
+                    onClick={() => slot.available && setSelectedTimeSlot(slot.time)}
+                    disabled={!slot.available}
+                  >
+                    {slot.time}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
-        ) : (
-          <div style={{ color: '#C62828', fontWeight: 'bold', margin: '30px 0' }}>No coach data provided.</div>
-        )}
 
-        {/* Calendar and Time Slots Section */}
-        <div style={styles.scheduleContainer}>
-          {/* Calendar */}
-          <div style={styles.calendarCard}>
-            <h3 style={styles.calendarTitle}>Select a Date</h3>
-            <div style={styles.calendarNav}>
-              <button onClick={() => handleMonthChange(-1)} style={styles.calendarNavButton}>&lt;</button>
-              <span style={styles.calendarMonthYear}>{selectedDate.toLocaleString('en-US', { month: 'long', year: 'numeric' })}</span>
-              <button onClick={() => handleMonthChange(1)} style={styles.calendarNavButton}>&gt;</button>
+          {/* Session Summary dưới scheduleContainer */}
+          {selectedTimeSlot && (
+            <div style={styles.sessionSummaryCard}>
+              <h3 style={styles.sessionSummaryTitle}>Session Summary</h3>
+              <p style={styles.summaryDetail}>Date: {formatSelectedDate(selectedDate)}</p>
+              <p style={styles.summaryDetail}>Time: {selectedTimeSlot}</p>
+              <p style={styles.summaryDetail}>Duration: 45 minutes</p>
+              <p style={styles.summaryDetail}>Type: Video Consultation</p>
+              <button style={styles.confirmButton}>Confirm</button>
             </div>
-            <table style={styles.calendarTable}>
-              <thead>
-                <tr style={styles.calendarHeaderRow}>
-                  <th style={styles.calendarHeaderCell}>Sun</th>
-                  <th style={styles.calendarHeaderCell}>Mon</th>
-                  <th style={styles.calendarHeaderCell}>Tue</th>
-                  <th style={styles.calendarHeaderCell}>Wed</th>
-                  <th style={styles.calendarHeaderCell}>Thu</th>
-                  <th style={styles.calendarHeaderCell}>Fri</th>
-                  <th style={styles.calendarHeaderCell}>Sat</th>
-                </tr>
-              </thead>
-              <tbody>
-                {renderCalendar()}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Available Time Slots */}
-          <div style={styles.timeSlotsCard}>
-            <h3 style={styles.timeSlotsTitle}>Available Time Slots</h3>
-            <p style={styles.selectedDateText}>{formatSelectedDate(selectedDate)}</p>
-            <div style={styles.slotsContainer}>
-              {dummyTimeSlots.map((slot, index) => (
-                <button
-                  key={index}
-                  style={slot.available ? (selectedTimeSlot === slot.time ? styles.timeSlotButtonActive : styles.timeSlotButton) : styles.timeSlotButtonDisabled}
-                  onClick={() => slot.available && setSelectedTimeSlot(slot.time)}
-                  disabled={!slot.available}
-                >
-                  {slot.time}
-                </button>
-              ))}
-            </div>
-          </div>
+          )}
         </div>
-
-        {/* Session Summary dưới scheduleContainer */}
-        {selectedTimeSlot && (
-          <div style={styles.sessionSummaryCard}>
-            <h3 style={styles.sessionSummaryTitle}>Session Summary</h3>
-            <p style={styles.summaryDetail}>Date: {formatSelectedDate(selectedDate)}</p>
-            <p style={styles.summaryDetail}>Time: {selectedTimeSlot}</p>
-            <p style={styles.summaryDetail}>Duration: 45 minutes</p>
-            <p style={styles.summaryDetail}>Type: Video Consultation</p>
-            <button style={styles.confirmButton}>Confirm</button>
-          </div>
-        )}
       </div>
 
       {/* Footer */}

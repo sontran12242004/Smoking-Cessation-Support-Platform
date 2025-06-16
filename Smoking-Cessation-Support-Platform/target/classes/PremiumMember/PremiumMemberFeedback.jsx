@@ -1,19 +1,21 @@
-import React, { useState } from 'react';
-import EditProfileModal from '../EditProfileModal';
-
+import React, { useState } from "react";
+import EditProfileModal from "../EditProfileModal";
+import { useNavigate } from "react-router-dom";
 function Feedback() {
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
-  const [feedback, setFeedback] = useState('');
+  const [feedback, setFeedback] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
-
+  const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
     setSubmitted(true);
     // TODO: Gửi feedback lên server tại đây nếu cần
   };
-
+  const handleNotificationClick = () => {
+    navigate("/premiumnotificationcenter");
+  };
   const styles = `
     html, body, #root {
       width: 100%;
@@ -31,12 +33,18 @@ function Feedback() {
       min-height: 100vh;
     }
     header {
-      background-color: #e0f2f7;
-      padding: 15px 40px;
-      border-bottom: 1px solid #d0e8ef;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 10px 40px;
+      background-color: #fff;
+      border-bottom: 1px solid #d0e8ef;
+      width: 100vw;
+      position: relative;
+      left: 50%;
+      right: 50%;
+      transform: translateX(-50%);
+      box-sizing: border-box;
     }
     .header-left, .header-right {
       display: flex;
@@ -76,45 +84,82 @@ function Feedback() {
       font-size: 20px;
       margin-right: 8px;
     }
-    .logo-section {
+    .header-center {
+      flex: 1;
       display: flex;
+      justify-content: center;
       align-items: center;
-      margin-right: 30px;
     }
-    .logo {
-      font-size: 24px;
-      font-weight: bold;
-      color: #333;
-      margin-right: 10px;
+    .header-center .logo-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
     }
-    .app-name h1 {
+    .header-center .app-name {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .header-center .app-name h1 {
       margin: 0;
       font-size: 24px;
       color: #4CAF50;
     }
-    .app-name p {
+    .header-center .app-name p {
       margin: 0;
       font-size: 14px;
       color: #666;
     }
-    .nav-links {
+    .welcome-nav {
+      background-color: #fff;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+      width: 100vw;
+      position: relative;
+      left: 50%;
+      right: 50%;
+      transform: translateX(-50%);
+      box-sizing: border-box;
+    }
+    .welcome-nav ul {
       list-style: none;
       margin: 0;
       padding: 0;
       display: flex;
+      justify-content: center;
+      gap: 40px;
     }
-    .nav-links li {
-      margin-left: 30px;
-    }
-    .nav-links a {
+    .welcome-nav a {
       text-decoration: none;
-      color: #555;
-      font-weight: bold;
-      transition: color 0.3s ease, transform 0.2s ease;
-    }
-    .nav-links a.active, .nav-links a:hover {
       color: #4CAF50;
-      transform: translateY(-2px);
+      font-weight: 500;
+      font-size: 16px;
+      padding: 5px 0;
+      position: relative;
+      transition: color 0.3s;
+      opacity: 1;
+    }
+    .welcome-nav a::after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 100%;
+      height: 3px;
+      background: #4CAF50;
+      border-radius: 2px;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+      z-index: 1;
+    }
+    .welcome-nav a:hover::after, .welcome-nav a:focus::after, .welcome-nav a.active::after {
+      transform: scaleX(1);
     }
     .header-actions {
       display: flex;
@@ -441,69 +486,100 @@ function Feedback() {
   return (
     <div className="container">
       <style>{styles}</style>
-      <EditProfileModal open={showEditProfile} onClose={() => setShowEditProfile(false)} onSave={() => setShowEditProfile(false)} />
+      <EditProfileModal
+        open={showEditProfile}
+        onClose={() => setShowEditProfile(false)}
+        onSave={() => setShowEditProfile(false)}
+      />
       <header>
         <div className="header-left">
           <div className="profile-section">
-            <button className="profile-btn" onClick={() => setShowEditProfile(true)}>
+            <button
+              className="profile-btn"
+              onClick={() => setShowEditProfile(true)}
+            >
               <span className="profile-icon">👤</span> Premium Member
             </button>
           </div>
-          <div className="logo-section">
-            <span className="logo">LOGO</span>
-            <div className="app-name">
-              <h1>NicOff</h1>
-              <p>Turn Off Nicotine, Turn On Life!</p>
-            </div>
+        </div>
+        <div className="header-center">
+          <div className="app-name">
+            <h1>NicOff</h1>
+            <p>Turn Off Nicotine, Turn On Life!</p>
           </div>
         </div>
-        <ul className="nav-links">
-          <li><a href="/">Home</a></li>
-          <li><a href="/standardmemberdashboard">Dashboard</a></li>
-          <li><a href="/achievement">Achievement</a></li>
-          <li><a href="/standardmembercoach">Coach</a></li>
-          <li><a href="/standardmembercommun">Community</a></li>
-          <li><a href="/feedback" className="active">Feedback</a></li>
-        </ul>
-        <div className="header-actions">
-          <span className="notification-icon">🔔</span>
+        <div className="header-right">
+          <span className="notification-icon" onClick={handleNotificationClick}>
+            🔔  
+          </span>
           <button className="logout-button">Logout</button>
         </div>
       </header>
+      <nav className="welcome-nav">
+        <ul>
+          <li>
+            <a href="/premiummemberhome">Home</a>
+          </li>
+          <li>
+            <a href="/premiummemberdashboard">Dashboard</a>
+          </li>
+          <li>
+            <a href="#">Achievement</a>
+          </li>
+          <li>
+            <a href="/premiummembercoach">Coach</a>
+          </li>
+          <li>
+            <a href="/premiummembercommun">Community</a>
+          </li>
+          <li>
+            <a href="/feedbackpremium" className="active">Feedback</a>
+          </li>
+        </ul>
+      </nav>
       <div className="feedback-bg">
         <div className="feedback-card">
           <div className="feedback-title">Share Your Feedback</div>
           <div className="feedback-desc">
-            We value your opinion! Please let us know about your experience with NicOff. Your feedback helps us improve our service.
+            We value your opinion! Please let us know about your experience with
+            NicOff. Your feedback helps us improve our service.
           </div>
-          <div className="feedback-question">How would you rate your overall experience?</div>
+          <div className="feedback-question">
+            How would you rate your overall experience?
+          </div>
           <div className="star-rating">
-            {[1,2,3,4,5].map((star) => (
+            {[1, 2, 3, 4, 5].map((star) => (
               <span
                 key={star}
-                className={`star${(hover || rating) >= star ? ' filled' : ''}`}
+                className={`star${(hover || rating) >= star ? " filled" : ""}`}
                 onMouseEnter={() => setHover(star)}
                 onMouseLeave={() => setHover(0)}
                 onClick={() => setRating(star)}
                 role="button"
-                aria-label={`Rate ${star} star${star > 1 ? 's' : ''}`}
+                aria-label={`Rate ${star} star${star > 1 ? "s" : ""}`}
               >
                 ★
               </span>
             ))}
           </div>
           <form onSubmit={handleSubmit}>
-            <label className="feedback-label" htmlFor="feedback-text">Your feedback (optional):</label>
+            <label className="feedback-label" htmlFor="feedback-text">
+              Your feedback (optional):
+            </label>
             <textarea
               id="feedback-text"
               className="feedback-textarea"
               placeholder="What did you like about NicOff? What we could improve?"
               value={feedback}
-              onChange={e => setFeedback(e.target.value)}
+              onChange={(e) => setFeedback(e.target.value)}
             />
-            <button className="send-btn" type="submit">Send Feedback</button>
+            <button className="send-btn" type="submit">
+              Send Feedback
+            </button>
           </form>
-          {submitted && <div className="feedback-success">Thank you for your feedback!</div>}
+          {submitted && (
+            <div className="feedback-success">Thank you for your feedback!</div>
+          )}
         </div>
       </div>
       {/* Footer */}
@@ -520,19 +596,19 @@ function Feedback() {
             <h4>Quick Links</h4>
             <ul>
               <li>
-                <a href="#">About Us</a>
+                <a href="/about">About Us</a>
               </li>
               <li>
-                <a href="#">Our Programs</a>
+                <a href="/ourprograms">Our Programs</a>
               </li>
               <li>
-                <a href="#">Success Stories</a>
+                <a href="/successstories">Success Stories</a>
               </li>
               <li>
-                <a href="#">Blog</a>
+                <a href="/blog">Blog</a>
               </li>
               <li>
-                <a href="#">Contact</a>
+                <a href="/contact">Contact</a>
               </li>
             </ul>
           </div>
@@ -540,19 +616,19 @@ function Feedback() {
             <h4>Support</h4>
             <ul>
               <li>
-                <a href="#">FAQ</a>
+                <a href="/faq">FAQ</a>
               </li>
               <li>
-                <a href="#">Help Center</a>
+                <a href="/helpcenter">Help Center</a>
               </li>
               <li>
-                <a href="#">Privacy Policy</a>
+                <a href="/privacypolicy">Privacy Policy</a>
               </li>
               <li>
-                <a href="#">Term Of Service</a>
+                <a href="/termsofservice">Term Of Service</a>
               </li>
               <li>
-                <a href="#">Cookie Policy</a>
+                <a href="/cookiepolicy">Cookie Policy</a>
               </li>
             </ul>
           </div>
@@ -581,4 +657,4 @@ function Feedback() {
   );
 }
 
-export default Feedback; 
+export default Feedback;

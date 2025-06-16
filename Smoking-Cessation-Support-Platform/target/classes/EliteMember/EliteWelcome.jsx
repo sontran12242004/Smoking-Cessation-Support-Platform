@@ -1,19 +1,10 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import journeyPath from '/z6704234340468_d0d12baf257178fe87207c3dc9979725.jpg';
 
 function WelcomePage() {
-  const navigate = useNavigate();
-
-  const handleExploreClick = () => {
-    navigate('/standardmemberhome');
-  };
-
-  const handleNotificationClick = () => {
-    navigate('/notificationcenter');
-  };
-
   const styles = `
+/* react-app/src/components/WelcomePage.css */
+
 html,
 body,
 #root {
@@ -190,7 +181,7 @@ body,
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: url(${journeyPath});
+    background-image: url('/journey_path.jpg');
     background-size: cover;
     background-position: center;
     color: #fff;
@@ -257,10 +248,108 @@ body,
   text-align: center;
 }
 
+.features-section h2 {
+  font-size: 32px;
+  color: #333;
+  margin-bottom: 40px;
+}
+
+.features-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.feature-card {
+  animation: fadeIn 1.5s ease-out;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  max-width: 280px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.feature-icon {
+  font-size: 48px;
+  color: #4CAF50;
+  margin-bottom: 20px;
+}
+
+.feature-card h3 {
+  font-size: 22px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.feature-card p {
+  font-size: 16px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.testimonials-section {
+  background-color: #f0f2f5;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.testimonials-section h2 {
+  font-size: 32px;
+  color: #333;
+  margin-bottom: 40px;
+}
+
+.testimonials-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.testimonial-card {
+  animation: fadeIn 1.5s ease-out;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  max-width: 350px;
+  text-align: left;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.testimonial-text {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 20px;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+.testimonial-author {
+  font-size: 16px;
+  color: #4CAF50;
+  font-weight: bold;
+  text-align: right;
+}
+
+
 .welcome-footer {
     background-color: #333;
     color: #fff;
-    padding: 40px;
+    padding: 16px 40px 40px 40px;
     text-align: center;
 }
 
@@ -343,6 +432,163 @@ body,
     font-size: 14px;
     color: #aaa;
 }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .welcome-header,
+  .welcome-nav ul {
+    padding: 10px 20px;
+    gap: 20px;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .footer-section {
+    min-width: unset;
+    width: 90%;
+  }
+
+  .newsletter input[type="email"] {
+    width: 80%;
+  }
+}
+
+@media (max-width: 768px) {
+  .welcome-header {
+    flex-direction: column;
+    text-align: center;
+    padding: 15px;
+  }
+
+  .header-left,
+  .header-right {
+    margin-top: 10px;
+    justify-content: center;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 15px;
+  }
+
+  .welcome-nav ul {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .welcome-main {
+    padding: 20px;
+  }
+
+  .welcome-message-card {
+    padding: 30px;
+    max-width: 90%;
+  }
+
+  .welcome-message-card h2 {
+    font-size: 28px;
+  }
+
+  .welcome-message-card .bold-message {
+    font-size: 20px;
+  }
+
+  .features-container,
+  .testimonials-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .feature-card,
+  .testimonial-card {
+    max-width: 90%;
+  }
+
+  .welcome-footer {
+    padding: 30px 20px;
+  }
+
+  .footer-section h3 {
+    text-align: center;
+  }
+
+  .footer-section ul,
+  .footer-section p {
+    text-align: center;
+  }
+
+  .newsletter input[type="email"] {
+    width: 90%;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-status,
+  .logout-button {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  .header-center .app-name h1 {
+    font-size: 20px;
+  }
+
+  .header-center .app-name p {
+    font-size: 12px;
+  }
+
+  .welcome-nav a {
+    font-size: 14px;
+  }
+
+  .explore-button {
+    font-size: 16px;
+    padding: 12px 25px;
+  }
+
+  .testimonials-section h2,
+  .features-section h2,
+  
+
+
+  .testimonial-text,
+  .feature-card p {
+    font-size: 14px;
+  }
+
+  .testimonial-author,
+  .feature-card h3 {
+    font-size: 18px;
+  }
+
+  .footer-section h3 {
+    font-size: 18px;
+  }
+
+  .footer-section p,
+  .footer-section ul,
+  .newsletter input,
+  .newsletter button,
+  .copyright {
+    font-size: 12px;
+  }
+}
 `;
 
   return (
@@ -353,7 +599,7 @@ body,
         <div className="header-left">
           <div className="profile-status">
             <button className="profile-btn" onClick={() => {}}>
-              <span className="profile-icon">👤</span> Standard Member
+              <span className="profile-icon">👤</span> Elite Member
             </button>
           </div>
         </div>
@@ -366,19 +612,19 @@ body,
           </div>
         </div>
         <div className="header-right">
-          <i className="notification-icon" onClick={handleNotificationClick}>🔔</i>
+          <i className="notification-icon">🔔</i>
           <button className="logout-button">Logout</button>
         </div>
       </header>
 
       <nav className="welcome-nav">
         <ul>
-          <li><a href="/standardmemberhome">Home</a></li>
-          <li><a href="/standardmemberdashboard">Dashboard</a></li>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Dashboard</a></li>
           <li><a href="#">Achievement</a></li>
-          <li><a href="/standardmembercoach">Coach</a></li>
-          <li><a href="/standardmembercommun">Community</a></li>
-          <li><a href="/feedback">Feedback</a></li>
+          <li><a href="#">Coach</a></li>
+          <li><a href="#">Community</a></li>
+          <li><a href="#">Feedback</a></li>
         </ul>
       </nav>
 
@@ -418,9 +664,7 @@ body,
             <em>in turning off nicotine and turning on life.</em>
           </p>
           <p className="quote">"Every journey begins with a single step - you've just taken yours!"</p>
-          <button className="explore-button" onClick={handleExploreClick}>
-            Explore NicOff Now
-          </button>
+          <button className="explore-button">Explore NicOff Now ➔</button>
         </section>
       </main>
 
@@ -439,21 +683,21 @@ body,
           <div className="footer-section">
             <h3>Quick Links</h3>
             <ul>
-              <li><a href="/about">About Us</a></li>
-              <li><a href="/ourprograms">Our Programs</a></li>
-              <li><a href="/successstories">Success Stories</a></li>
-              <li><a href="/blog">Blog</a></li>
-              <li><a href="/contact">Contact</a></li>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Our Programs</a></li>
+              <li><a href="#">Success Stories</a></li>
+              <li><a href="#">Blog</a></li>
+              <li><a href="#">Contact</a></li>
             </ul>
           </div>
           <div className="footer-section">
             <h3>Support</h3>
             <ul>
-              <li><a href="/faq">FAQ</a></li>
-              <li><a href="/helpcenter">Help Center</a></li>
-              <li><a href="/privacypolicy">Privacy Policy</a></li>
-              <li><a href="/termsofservice">Terms of Service</a></li>
-              <li><a href="/cookiepolicy">Cookie Policy</a></li>
+              <li><a href="#">FAQ</a></li>
+              <li><a href="#">Help Center</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Term Of Service</a></li>
+              <li><a href="#">Cookie Policy</a></li>
             </ul>
           </div>
           <div className="footer-section newsletter">
@@ -475,4 +719,4 @@ body,
   );
 }
 
-export default WelcomePage;
+export default WelcomePage; 

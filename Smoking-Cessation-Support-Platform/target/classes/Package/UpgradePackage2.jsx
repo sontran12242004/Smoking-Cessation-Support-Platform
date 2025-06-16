@@ -127,6 +127,7 @@ function UpgradePackage2() {
     flex-direction: column;
     align-items: center;
     padding: 40px;
+    background-image: url('/z6704234340468_d0d12baf257178fe87207c3dc9979725.jpg');
     background-color: #E6F0E6; /* Light green background */
     background-size: cover;
     background-position: center;
@@ -142,9 +143,9 @@ function UpgradePackage2() {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(230, 240, 230, 0.7); /* Slightly transparent overlay to lighten the image */
+    background-color: rgba(192,192,192,0.4);
     z-index: 1;
-    animation: pulse 4s infinite alternate ease-in-out;
+    backdrop-filter: blur(8px);
   }
   
   @keyframes pulse {
@@ -303,19 +304,9 @@ function UpgradePackage2() {
     }
   }
 
-  .upgrade-button.current-plan-button {
-    background-color: #f0f0f0; /* Light grey for current plan button */
-    color: #555; /* Darker text */
-    cursor: default;
-    box-shadow: none;
-    animation: none; /* Remove glow for current plan button */
-  }
+  
 
-  .upgrade-button.current-plan-button:hover {
-    background-color: #f0f0f0; /* No hover effect */
-    transform: none;
-    box-shadow: none;
-  }
+  
   
   .upgrade-button:hover {
     background-color: #388E3C;
@@ -896,12 +887,12 @@ function UpgradePackage2() {
                         </div>
                     </div>
                     <ul className="nav-links">
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Dashboard</a></li>
+                        <li><a href="/premiummemberhome">Home</a></li>
+                        <li><a href="/premiummemberdashboard" className="active">Dashboard</a></li>
                         <li><a href="#">Achievement</a></li>
-                        <li><a href="#">Coach</a></li>
-                        <li><a href="#">Community</a></li>
-                        <li><a href="#">Feedback</a></li>
+                        <li><a href="/premiummembercoach">Coach</a></li>
+                        <li><a href="/premiummembercommun">Community</a></li>
+                        <li><a href="/feedbackpremium">Feedback</a></li>
                     </ul>
                 </nav>
             </header>
@@ -926,7 +917,6 @@ function UpgradePackage2() {
                             <li><i className="check-icon">✔️</i> Community Access</li>
                             <li><i className="check-icon">✔️</i> Weekly tips</li>
                         </ul>
-                        <button className="upgrade-button current-plan-button">Current Plan</button>
                     </div>
 
                     {/* Premium Package */}

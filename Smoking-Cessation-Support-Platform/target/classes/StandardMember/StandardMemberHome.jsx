@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import EditProfileModal from "../EditProfileModal";
 
 function StandardMemberHome() {
   const [smokedToday, setSmokedToday] = useState(null);
   const [feeling, setFeeling] = useState(null);
   const [showEditProfile, setShowEditProfile] = useState(false);
+  const navigate = useNavigate();
 
   const styles = `
     html,
@@ -28,34 +30,28 @@ function StandardMemberHome() {
     }
 
     /* Header Styles */
-    header {
-      width: 100vw;
-      max-width: 100vw;
-      background-color: #e0f2f7;
-      padding: 15px 0;
-      border-bottom: 1px solid #d0e8ef;
+    .welcome-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin: 0;
-      box-sizing: border-box;
-      position: relative;
-      left: 50%;
-      right: 50%;
-      transform: translateX(-50%);
+      padding: 10px 40px;
+      background-color: #fff;
+      border-bottom: 1px solid #d0e8ef;
     }
 
     .header-left,
     .header-right {
       display: flex;
       align-items: center;
-      margin: 0 0 0 40px;
+      gap: 15px;
     }
-
-    .profile-section {
+    .main-menu-item.active, .main-menu-item:hover {
+        color: #43b649;
+        border-bottom: 2.5px solid #43b649;
+    }
+    .profile-status {
       display: flex;
       align-items: center;
-      margin-right: 20px;
       background: none;
       padding: 0;
       border-radius: 0;
@@ -90,80 +86,113 @@ function StandardMemberHome() {
       margin-right: 8px;
     }
 
-    .logo-section {
+    .header-center {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      margin-right: 30px;
+      justify-content: center;
     }
 
-    .logo {
+    .header-center .logo-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .header-center .app-name {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .header-center .logo {
       font-size: 24px;
       font-weight: bold;
       color: #333;
       margin-right: 10px;
     }
 
-    .app-name h1 {
+    .header-center .app-name h1 {
       margin: 0;
       font-size: 24px;
       color: #4CAF50;
     }
 
-    .app-name p {
+    .header-center .app-name p {
       margin: 0;
       font-size: 14px;
       color: #666;
     }
 
-    .nav-links {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex: 1;
-      justify-content: center;
-      min-width: 0;
-    }
-
-    .nav-links li {
-      margin-left: 30px;
-    }
-
-    .nav-links a {
-      text-decoration: none;
-      color: #555;
-      font-weight: bold;
-      transition: color 0.3s ease, transform 0.2s ease;
-    }
-
-    .nav-links a.active,
-    .nav-links a:hover {
-      color: #4CAF50;
-      transform: translateY(-2px);
-    }
-
-    .header-actions {
-      display: flex;
-      align-items: center;
-      margin-right: 40px;
-    }
-
     .notification-icon {
       font-size: 24px;
-      color: #FBC02D;
-      margin-right: 20px;
+      color: #f39c12;
       cursor: pointer;
     }
 
     .logout-button {
       background-color: #4CAF50;
-      color: white;
+      color: #fff;
       border: none;
       padding: 8px 15px;
       border-radius: 5px;
       cursor: pointer;
       font-size: 14px;
-      font-weight: bold;
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .logout-button:hover {
+      background-color: #45a049;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .welcome-nav {
+      background-color: #fff;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .welcome-nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+    }
+
+    .welcome-nav a {
+      text-decoration: none;
+      color: #5EBB34;
+      font-weight: 400;
+      font-size: 16px;
+      padding: 5px 0;
+      position: relative;
+      transition: color 0.3s;
+    }
+
+    .welcome-nav a::after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 100%;
+      height: 3px;
+      background: #5EBB34;
+      border-radius: 2px;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+      z-index: 1;
+    }
+
+    .welcome-nav a:hover::after, .welcome-nav a:focus::after, .welcome-nav a.active::after {
+      transform: scaleX(1);
     }
 
     /* Main Content Styles */
@@ -674,7 +703,7 @@ function StandardMemberHome() {
         flex-direction: column;
         margin-bottom: 15px;
       }
-      .profile-section {
+      .profile-status {
         margin-right: 0;
         margin-bottom: 10px;
       }
@@ -751,7 +780,6 @@ function StandardMemberHome() {
         font-size: 16px;
       }
     }
-
   `;
   const handleDashboard = () => {
     window.location.href = "/standardmemberdashboard";
@@ -761,6 +789,13 @@ function StandardMemberHome() {
     window.location.href = "/dailycheckin";
   };
 
+  const handleNotificationClick = () => {
+    navigate('/notificationcenter');
+  };
+
+  const handleLogout = () => {
+    // Implement logout functionality
+  };
 
   return (
     <div className="container">
@@ -772,51 +807,39 @@ function StandardMemberHome() {
       />
 
       {/* Header */}
-      <header>
+      <header className="welcome-header">
         <div className="header-left">
-          <div className="profile-section">
-            <button
-              className="profile-btn"
-              onClick={() => setShowEditProfile(true)}
-            >
+          <div className="profile-status">
+            <button className="profile-btn" onClick={() => setShowEditProfile(true)}>
               <span className="profile-icon">👤</span> Standard Member
             </button>
           </div>
+        </div>
+        <div className="header-center">
           <div className="logo-section">
-            <span className="logo">LOGO</span>
             <div className="app-name">
               <h1>NicOff</h1>
               <p>Turn Off Nicotine, Turn On Life!</p>
             </div>
           </div>
         </div>
-        <ul className="nav-links">
-          <li>
-            <a  href="#" className="active">
-              Home
-            </a>
-          </li>
-          <li>
-            <a href="#">Dashboard</a>
-          </li>
-          <li>
-            <a href="#">Achievement</a>
-          </li>
-          <li>
-            <a href="#">Coach</a>
-          </li>
-          <li>
-            <a href="#">Community</a>
-          </li>
-          <li>
-            <a href="#">Feedback</a>
-          </li>
-        </ul>
-        <div className="header-actions">
-          <span className="notification-icon">🔔</span>
-          <button className="logout-button">Logout</button>
+        <div className="header-right">
+          <i className="notification-icon" onClick={handleNotificationClick}>🔔</i>
+          <button className="logout-button" onClick={handleLogout}>Logout</button>
         </div>
       </header>
+
+      {/* Navigation */}
+      <nav className="welcome-nav">
+        <ul>
+          <li><a href="/standardmemberhome" className="active">Home</a></li>
+          <li><a href="/standardmemberdashboard">Dashboard</a></li>
+          <li><a href="#">Achievement</a></li>
+          <li><a href="/standardmembercoach">Coach</a></li>
+          <li><a href="/standardmembercommun">Community</a></li>
+          <li><a href="/feedback">Feedback</a></li>
+        </ul>
+      </nav>
 
       {/* Main Content */}
       <main className="main-content">
@@ -843,17 +866,15 @@ function StandardMemberHome() {
           <p className="check-in-question">Did you smoke today?</p>
           <div className="button-group">
             <button
-              className={`check-in-button slipped-up ${
-                smokedToday === "yes" ? "smoked" : ""
-              }`}
+              className={`check-in-button slipped-up ${smokedToday === "yes" ? "smoked" : ""
+                }`}
               onClick={() => setSmokedToday("yes")}
             >
               Yes, I slipped up
             </button>
             <button
-              className={`check-in-button stayed-strong ${
-                smokedToday === "no" ? "smoked" : ""
-              }`}
+              className={`check-in-button stayed-strong ${smokedToday === "no" ? "smoked" : ""
+                }`}
               onClick={() => setSmokedToday("no")}
             >
               No, I stayed strong!
@@ -865,17 +886,15 @@ function StandardMemberHome() {
           </p>
           <div className="button-group">
             <button
-              className={`check-in-button unbearable ${
-                feeling === "unbearable" ? "smoked" : ""
-              }`}
+              className={`check-in-button unbearable ${feeling === "unbearable" ? "smoked" : ""
+                }`}
               onClick={() => setFeeling("unbearable")}
             >
               I feel unbearable
             </button>
             <button
-              className={`check-in-button tolerable ${
-                feeling === "tolerable" ? "smoked" : ""
-              }`}
+              className={`check-in-button tolerable ${feeling === "tolerable" ? "smoked" : ""
+                }`}
               onClick={() => setFeeling("tolerable")}
             >
               I feel uncomfortable but still tolerable
@@ -920,7 +939,7 @@ function StandardMemberHome() {
               "I used the money I saved to buy a new bike!"
             </p>
           </div>
-          <a href="#" className="join-discussion-link">
+          <a href="/standardmembercommun" className="join-discussion-link">
             Join the discussion →
           </a>
         </div>
@@ -947,19 +966,19 @@ function StandardMemberHome() {
             <h4>Quick Links</h4>
             <ul>
               <li>
-                <a href="#">About Us</a>
+                <a href="/about">About Us</a>
               </li>
               <li>
-                <a href="#">Our Programs</a>
+                <a href="/ourprograms">Our Programs</a>
               </li>
               <li>
-                <a href="#">Success Stories</a>
+                <a href="/successstories">Success Stories</a>
               </li>
               <li>
-                <a href="#">Blog</a>
+                <a href="/blog">Blog</a>
               </li>
               <li>
-                <a href="#">Contact</a>
+                <a href="/contact">Contact</a>
               </li>
             </ul>
           </div>
@@ -967,19 +986,19 @@ function StandardMemberHome() {
             <h4>Support</h4>
             <ul>
               <li>
-                <a href="#">FAQ</a>
+                <a href="/faq">FAQ</a>
               </li>
               <li>
-                <a href="#">Help Center</a>
+                <a href="/helpcenter">Help Center</a>
               </li>
               <li>
-                <a href="#">Privacy Policy</a>
+                <a href="/privacypolicy">Privacy Policy</a>
               </li>
               <li>
-                <a href="#">Term Of Service</a>
+                <a href="/termsofservice">Terms of Service</a>
               </li>
               <li>
-                <a href="#">Cookie Policy</a>
+                <a href="/cookiepolicy">Cookie Policy</a>
               </li>
             </ul>
           </div>

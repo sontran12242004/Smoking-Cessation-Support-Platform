@@ -376,6 +376,118 @@ function HealthMetric() {
       transform: translateY(-2px) scale(1.04);
       box-shadow: 0 4px 16px rgba(76,175,80,0.18);
     }
+    .welcome-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 40px;
+      background-color: #fff;
+      border-bottom: 1px solid #d0e8ef;
+    }
+    .header-left,
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .profile-status {
+      display: flex;
+      align-items: center;
+      background: none;
+      padding: 0;
+      border-radius: 0;
+      font-size: 14px;
+    }
+    .header-center .logo-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+    .header-center .app-name {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .header-center .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+      margin-right: 10px;
+    }
+    .header-center .app-name h1 {
+      margin: 0;
+      font-size: 24px;
+      color: #4CAF50;
+    }
+    .header-center .app-name p {
+      margin: 0;
+      font-size: 14px;
+      color: #666;
+    }
+    .notification-icon {
+      font-size: 24px;
+      color: #f39c12;
+      cursor: pointer;
+    }
+    .logout-button {
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .logout-button:hover {
+      background-color: #45a049;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .welcome-nav {
+      background-color: #fff;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .welcome-nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+    }
+    .welcome-nav a {
+      text-decoration: none;
+      color: #4CAF50;
+      font-weight: 500;
+      font-size: 16px;
+      padding: 5px 0;
+      position: relative;
+      transition: color 0.3s;
+      opacity: 1;
+    }
+    .welcome-nav a::after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 100%;
+      height: 3px;
+      background: #4CAF50;
+      border-radius: 2px;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+      z-index: 1;
+    }
+    .welcome-nav a:hover::after, .welcome-nav a:focus::after, .welcome-nav a.active::after {
+      transform: scaleX(1);
+    }
   `;
 
     const metrics = [
@@ -485,34 +597,37 @@ function HealthMetric() {
         <>
             <style>{styles}</style>
             <div className="dashboard-bg">
-                <header>
+                <header className="welcome-header">
                     <div className="header-left">
-                        <div className="profile-section">
+                        <div className="profile-status">
                             <button className="profile-btn">
                                 <span className="profile-icon">👤</span> Standard Member
                             </button>
                         </div>
+                    </div>
+                    <div className="header-center">
                         <div className="logo-section">
-                            <span className="logo">LOGO</span>
                             <div className="app-name">
                                 <h1>NicOff</h1>
                                 <p>Turn Off Nicotine, Turn On Life!</p>
                             </div>
                         </div>
                     </div>
-                    <ul className="nav-links">
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#" className="active">Dashboard</a></li>
-                        <li><a href="#">Achievement</a></li>
-                        <li><a href="#">Coach</a></li>
-                        <li><a href="#">Community</a></li>
-                        <li><a href="#">Feedback</a></li>
-                    </ul>
-                    <div className="header-actions">
-                        <span className="dashboard-notification-icon">🔔</span>
-                        <button className="dashboard-logout-btn">Logout</button>
+                    <div className="header-right">
+                        <span className="notification-icon">🔔</span>
+                        <button className="logout-button">Logout</button>
                     </div>
                 </header>
+                <nav className="welcome-nav">
+                    <ul>
+                        <li><a href="/standardmemberhome">Home</a></li>
+                        <li><a href="/standardmemberdashboard">Dashboard</a></li>
+                        <li><a href="#">Achievement</a></li>
+                        <li><a href="/standardmembercoach">Coach</a></li>
+                        <li><a href="/standardmembercommun">Community</a></li>
+                        <li><a href="/feedback">Feedback</a></li>
+                    </ul>
+                </nav>
                 <div className="dashboard-bg-overlay"></div>
                 <div className="dashboard-main">
                     <div className="dashboard-title">Health Metrics <span className="highlight">Dashboard</span></div>

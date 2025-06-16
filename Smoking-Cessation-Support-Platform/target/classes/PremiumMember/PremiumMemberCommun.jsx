@@ -1,83 +1,94 @@
-import React, { useState } from 'react';
-import EditProfileModal from '../EditProfileModal';
-
+import React, { useState } from "react";
+import EditProfileModal from "../EditProfileModal";
+import { useNavigate } from "react-router-dom";
 function PremiumMemberCommun() {
-    const [showEditProfile, setShowEditProfile] = useState(false);
-    const [showNewDiscussion, setShowNewDiscussion] = useState(false);
-    const [newDiscussion, setNewDiscussion] = useState('');
-    // Dữ liệu mẫu cho thảo luận
-    const discussions = [
+  const [showEditProfile, setShowEditProfile] = useState(false);
+  const navigate = useNavigate();
+  // Dữ liệu mẫu cho thảo luận
+  const discussions = [
+    {
+      id: 1,
+      user: {
+        name: "JaneLegend",
+        badge: "Most Liked Discussion",
+        initials: "JL",
+        info: "3 months smoke-free",
+      },
+      content:
+        "After 10 years of smoking, I finally quit cold turkey! The first week was hell but using the breathing techniques from the Nicoff app saved me during cravings. Anyone else trying this method?",
+      likes: 248,
+      replies: 37,
+      children: [],
+      share: true,
+    },
+    {
+      id: 2,
+      user: { name: "MikeSmoker", initials: "MS", info: "1 week smoke-free" },
+      content:
+        "How do you deal with smoking triggers at parties? All my friends smoke and it's so hard to resist when I'm drinking.",
+      likes: 56,
+      replies: 12,
+      children: [
         {
-            id: 1,
-            user: { name: 'JaneLegend', badge: 'Most Liked Discussion', initials: 'JL', info: '3 months smoke-free' },
-            content: 'After 10 years of smoking, I finally quit cold turkey! The first week was hell but using the breathing techniques from the Nicoff app saved me during cravings. Anyone else trying this method?',
-            likes: 248,
-            replies: 37,
-            children: [],
-            share: true,
+          id: 21,
+          user: {
+            name: "QuittingTom",
+            initials: "QT",
+            info: "2 months smoke-free",
+          },
+          content:
+            "I bring nicotine gum and excuse myself when they smoke. After 15 minutes the craving passes! You got this 💪",
+          likes: 23,
         },
-        {
-            id: 2,
-            user: { name: 'MikeSmoker', initials: 'MS', info: '1 week smoke-free' },
-            content: "How do you deal with smoking triggers at parties? All my friends smoke and it's so hard to resist when I'm drinking.",
-            likes: 56,
-            replies: 12,
-            children: [
-                {
-                    id: 21,
-                    user: { name: 'QuittingTom', initials: 'QT', info: '2 months smoke-free' },
-                    content: 'I bring nicotine gum and excuse myself when they smoke. After 15 minutes the craving passes! You got this 💪',
-                    likes: 23,
-                },
-            ],
-            share: true,
-        },
-        {
-            id: 3,
-            user: { name: 'NewbieFred', initials: 'NF', info: 'New member' },
-            content: 'Day 3 and the headaches are killing me. Is this normal? How long until withdrawal symptoms stop?',
-            likes: 38,
-            replies: 8,
-            children: [],
-            share: false,
-        },
-    ];
+      ],
+      share: true,
+    },
+    {
+      id: 3,
+      user: { name: "NewbieFred", initials: "NF", info: "New member" },
+      content:
+        "Day 3 and the headaches are killing me. Is this normal? How long until withdrawal symptoms stop?",
+      likes: 38,
+      replies: 8,
+      children: [],
+      share: false,
+    },
+  ];
 
-    const styles = `
+  const styles = `
     html, body, #root {
       width: 100%;
-      height: 200vh;
+      height: 100%;
       margin: 0;
-      font-family: Arial, sans-serif;
     }
     body {
+      font-family: Arial, sans-serif;
       margin: 0;
       background-color: #f0f2f5;
     }
-    .pmc-header {
-      width: 100vw;
-      background-color: #e0f2f7;
-      padding: 15px 0;
-      border-bottom: 1px solid #d0e8ef;
+    .welcome-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin: 0;
-      box-sizing: border-box;
+      padding: 10px 40px;
+      background-color: #fff;
+      border-bottom: 1px solid #d0e8ef;
+      width: 100vw;
       position: relative;
       left: 50%;
       right: 50%;
       transform: translateX(-50%);
+      box-sizing: border-box;
     }
-    .pmc-logo-section {
+    .header-left,
+    .header-right {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 15px;
     }
     .profile-section {
       display: flex;
       align-items: center;
-      margin-right: 18px;
     }
     .profile-btn {
       display: flex;
@@ -102,68 +113,98 @@ function PremiumMemberCommun() {
     .profile-icon {
       color: #5B2A99;
       font-size: 20px;
-      margin-right: 10px;
+      margin-right: 8px;
     }
-    .pmc-logo {
-      font-size: 24px;
-      font-weight: bold;
-      color: #333;
-      margin-right: 10px;
+    .header-center .logo-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
     }
-    .pmc-app-name h1 {
+    .header-center .app-name {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .header-center .app-name h1 {
       margin: 0;
       font-size: 24px;
       color: #4CAF50;
     }
-    .pmc-app-name p {
+    .header-center .app-name p {
       margin: 0;
       font-size: 14px;
       color: #666;
     }
-    .pmc-nav-links {
-      list-style: none;
-      display: flex;
-      gap: 32px;
-      margin: 0 0 0 40px;
-      padding: 0;
-    }
-    .pmc-nav-links li a {
-      text-decoration: none;
-      color: #388E3C;
-      font-weight: bold;
-      font-size: 17px;
-      padding-bottom: 4px;
-      border-bottom: 2.5px solid transparent;
-      transition: color 0.2s, border 0.2s;
-    }
-    .pmc-nav-links li a.active, .pmc-nav-links li a:hover {
-      color: #4CAF50;
-      border-bottom: 2.5px solid #4CAF50;
-    }
-    .pmc-header-actions {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-    }
-    .pmc-notification-icon {
-      font-size: 26px;
-      color: #FBC02D;
+    .notification-icon {
+      font-size: 24px;
+      color: #f39c12;
       cursor: pointer;
-      margin-right: 10px;
     }
-    .pmc-logout-btn {
-      background: #4CAF50;
+    .logout-button {
+      background-color: #4CAF50;
       color: #fff;
       border: none;
-      border-radius: 8px;
-      padding: 8px 22px;
-      font-size: 16px;
-      font-weight: bold;
+      padding: 8px 15px;
+      border-radius: 5px;
       cursor: pointer;
-      transition: background 0.2s;
+      font-size: 14px;
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
     }
-    .pmc-logout-btn:hover {
-      background: #388E3C;
+    .logout-button:hover {
+      background-color: #45a049;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .welcome-nav {
+      background-color: #fff;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+      width: 100vw;
+      position: relative;
+      left: 50%;
+      right: 50%;
+      transform: translateX(-50%);
+      box-sizing: border-box;
+    }
+    .welcome-nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+    }
+    .welcome-nav a {
+      text-decoration: none;
+      color: #4CAF50;
+      font-weight: 500;
+      font-size: 16px;
+      padding: 5px 0;
+      position: relative;
+      transition: color 0.3s;
+      opacity: 1;
+    }
+    .welcome-nav a::after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 100%;
+      height: 3px;
+      background: #4CAF50;
+      border-radius: 2px;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+      z-index: 1;
+    }
+    .welcome-nav a:hover::after, .welcome-nav a:focus::after, .welcome-nav a.active::after {
+      transform: scaleX(1);
     }
     .community-bg {
       min-height: 100vh;
@@ -564,149 +605,203 @@ function PremiumMemberCommun() {
     }
   `;
 
-    return (
-        <div className="community-bg">
-            <style>{styles}</style>
-            <EditProfileModal open={showEditProfile} onClose={() => setShowEditProfile(false)} onSave={() => setShowEditProfile(false)} />
-            <div className="pmc-header">
-                <div className="pmc-logo-section">
-                    <div className="profile-section">
-                        <button className="profile-btn" onClick={() => setShowEditProfile(true)}>
-                            <span className="profile-icon">👤</span> Premium Member
-                        </button>
-                    </div>
-                    <span className="pmc-logo">LOGO</span>
-                    <div className="pmc-app-name">
-                        <h1>NicOff</h1>
-                        <p>Turn Off Nicotine, Turn On Life!</p>
-                    </div>
-                </div>
-                <ul className="pmc-nav-links">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Dashboard</a></li>
-                    <li><a href="#">Achievement</a></li>
-                    <li><a href="#">Coach</a></li>
-                    <li><a href="#" className="active">Community</a></li>
-                    <li><a href="#">Feedback</a></li>
-                </ul>
-                <div className="pmc-header-actions">
-                    <span className="pmc-notification-icon">🔔</span>
-                    <button className="pmc-logout-btn">Logout</button>
-                </div>
-            </div>
-            <div className="community-card">
-                <div className="community-title">Community Discussions</div>
-                
-                <div className="discussion-list">
-                    {discussions.map(disc => (
-                        <div className="discussion-item" key={disc.id}>
-                            {disc.user.badge && <span className="discussion-badge"><span className="badge-icon">⭐</span> Most Liked Discussion</span>}
-                            <div className="discussion-user">
-                                <span className="discussion-avatar">{disc.user.initials}</span>
-                                <div className="discussion-user-info">
-                                    <span className="discussion-username">{disc.user.name}</span>
-                                    <span className="discussion-userdesc">{disc.user.info}</span>
-                                </div>
-                            </div>
-                            <div className="discussion-content">{disc.content}</div>
-                            <div className="discussion-actions">
-                                <span><span className="icon">👍</span>{disc.likes}</span>
-                                <span><span className="icon">💬</span>{disc.replies} replies</span>
-                                {disc.share && <span><span className="icon">🔗</span>Share</span>}
-                            </div>
-                            {disc.children && disc.children.map(reply => (
-                                <div className="discussion-reply" key={reply.id}>
-                                    <div className="discussion-user">
-                                        <span className="discussion-avatar">{reply.user.initials}</span>
-                                        <div className="discussion-user-info">
-                                            <span className="discussion-username">{reply.user.name}</span>
-                                            <span className="discussion-userdesc">{reply.user.info}</span>
-                                        </div>
-                                    </div>
-                                    <div className="discussion-content">{reply.content}</div>
-                                    <div className="discussion-actions">
-                                        <span><span className="icon">👍</span>{reply.likes}</span>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    ))}
-                </div>
-                <button className="view-all-btn">View All Discussions (124)</button>
-            </div>
-            {/* Footer */}
-            <footer>
-                <div className="footer-content">
-                    <div className="footer-column">
-                        <h4>NicOff</h4>
-                        <p>
-                            We're dedicated to helping you break free from smoking addiction
-                            through science-backed methods and community support
-                        </p>
-                    </div>
-                    <div className="footer-column">
-                        <h4>Quick Links</h4>
-                        <ul>
-                            <li>
-                                <a href="#">About Us</a>
-                            </li>
-                            <li>
-                                <a href="#">Our Programs</a>
-                            </li>
-                            <li>
-                                <a href="#">Success Stories</a>
-                            </li>
-                            <li>
-                                <a href="#">Blog</a>
-                            </li>
-                            <li>
-                                <a href="#">Contact</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div className="footer-column">
-                        <h4>Support</h4>
-                        <ul>
-                            <li>
-                                <a href="#">FAQ</a>
-                            </li>
-                            <li>
-                                <a href="#">Help Center</a>
-                            </li>
-                            <li>
-                                <a href="#">Privacy Policy</a>
-                            </li>
-                            <li>
-                                <a href="#">Term Of Service</a>
-                            </li>
-                            <li>
-                                <a href="#">Cookie Policy</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div className="footer-column">
-                        <h4>NewsLetter</h4>
-                        <div className="newsletter-form">
-                            <input
-                                type="email"
-                                placeholder="Your Email Address..."
-                                className="newsletter-input"
-                            />
-                            <button className="newsletter-button">Subscribe</button>
-                        </div>
-                        <p className="newsletter-description">
-                            Get the latest tips and motivation to stay smoke-free delivered to
-                            your inbox
-                        </p>
-                    </div>
-                </div>
-                <hr className="footer-divider" />
-                <div className="footer-bottom-text">
-                    © 2025 NicOff. All rights reserved
-                </div>
-            </footer>
+  const handleNotificationClick = () => {
+    navigate("/premiumnotificationcenter");
+  };
+  return (
+    <div className="community-bg">
+      <style>{styles}</style>
+      <EditProfileModal
+        open={showEditProfile}
+        onClose={() => setShowEditProfile(false)}
+        onSave={() => setShowEditProfile(false)}
+      />
+      <div className="welcome-header">
+        <div className="header-left">
+          <div className="profile-section">
+            <button
+              className="profile-btn"
+              onClick={() => setShowEditProfile(true)}
+            >
+              <span className="profile-icon">👤</span> Premium Member
+            </button>
+          </div>
         </div>
-    );
+        <div className="header-center">
+          <div className="logo-section">
+            <div className="app-name">
+              <h1>NicOff</h1>
+              <p>Turn Off Nicotine, Turn On Life!</p>
+            </div>
+          </div>
+        </div>
+        <div className="header-right">
+          <span className="notification-icon" onClick={handleNotificationClick}>
+            🔔
+          </span>
+          <button className="logout-button">Logout</button>
+        </div>
+      </div>
+      <nav className="welcome-nav">
+        <ul>
+          <li>
+            <a href="/premiummemberhome">Home</a>
+          </li>
+          <li>
+            <a href="/premiummemberdashboard">Dashboard</a>
+          </li>
+          <li>
+            <a href="#">Achievement</a>
+          </li>
+          <li>
+            <a href="/premiummembercoach">Coach</a>
+          </li>
+          <li>
+            <a href="/premiummembercommun" className="active">Community</a>
+          </li>
+          <li>
+            <a href="/feedbackpremium">Feedback</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div className="community-card">
+        <div className="community-title">Community Discussions</div>
+
+        <div className="discussion-list">
+          {discussions.map((disc) => (
+            <div className="discussion-item" key={disc.id}>
+              {disc.user.badge && (
+                <span className="discussion-badge">
+                  <span className="badge-icon">⭐</span> Most Liked Discussion
+                </span>
+              )}
+              <div className="discussion-user">
+                <span className="discussion-avatar">{disc.user.initials}</span>
+                <div className="discussion-user-info">
+                  <span className="discussion-username">{disc.user.name}</span>
+                  <span className="discussion-userdesc">{disc.user.info}</span>
+                </div>
+              </div>
+              <div className="discussion-content">{disc.content}</div>
+              <div className="discussion-actions">
+                <span>
+                  <span className="icon">👍</span>
+                  {disc.likes}
+                </span>
+                <span>
+                  <span className="icon">💬</span>
+                  {disc.replies} replies
+                </span>
+                {disc.share && (
+                  <span>
+                    <span className="icon">🔗</span>Share
+                  </span>
+                )}
+              </div>
+              {disc.children &&
+                disc.children.map((reply) => (
+                  <div className="discussion-reply" key={reply.id}>
+                    <div className="discussion-user">
+                      <span className="discussion-avatar">
+                        {reply.user.initials}
+                      </span>
+                      <div className="discussion-user-info">
+                        <span className="discussion-username">
+                          {reply.user.name}
+                        </span>
+                        <span className="discussion-userdesc">
+                          {reply.user.info}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="discussion-content">{reply.content}</div>
+                    <div className="discussion-actions">
+                      <span>
+                        <span className="icon">👍</span>
+                        {reply.likes}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          ))}
+        </div>
+        <button className="view-all-btn">View All Discussions (124)</button>
+      </div>
+      {/* Footer */}
+      <footer>
+        <div className="footer-content">
+          <div className="footer-column">
+            <h4>NicOff</h4>
+            <p>
+              We're dedicated to helping you break free from smoking addiction
+              through science-backed methods and community support
+            </p>
+          </div>
+          <div className="footer-column">
+            <h4>Quick Links</h4>
+            <ul>
+              <li>
+                <a href="/about">About Us</a>
+              </li>
+              <li>
+                <a href="/ourprograms">Our Programs</a>
+              </li>
+              <li>
+                <a href="/successstories">Success Stories</a>
+              </li>
+              <li>
+                <a href="/blog">Blog</a>
+              </li>
+              <li>
+                <a href="/contact">Contact</a>
+              </li>
+            </ul>
+          </div>
+          <div className="footer-column">
+            <h4>Support</h4>
+            <ul>
+              <li>
+                <a href="/faq">FAQ</a>
+              </li>
+              <li>
+                <a href="/helpcenter">Help Center</a>
+              </li>
+              <li>
+                <a href="/privacypolicy">Privacy Policy</a>
+              </li>
+              <li>
+                <a href="/termsofservice">Term Of Service</a>
+              </li>
+              <li>
+                <a href="/cookiepolicy">Cookie Policy</a>
+              </li>
+            </ul>
+          </div>
+          <div className="footer-column">
+            <h4>NewsLetter</h4>
+            <div className="newsletter-form">
+              <input
+                type="email"
+                placeholder="Your Email Address..."
+                className="newsletter-input"
+              />
+              <button className="newsletter-button">Subscribe</button>
+            </div>
+            <p className="newsletter-description">
+              Get the latest tips and motivation to stay smoke-free delivered to
+              your inbox
+            </p>
+          </div>
+        </div>
+        <hr className="footer-divider" />
+        <div className="footer-bottom-text">
+          © 2025 NicOff. All rights reserved
+        </div>
+      </footer>
+    </div>
+  );
 }
 
-export default PremiumMemberCommun; 
+export default PremiumMemberCommun;

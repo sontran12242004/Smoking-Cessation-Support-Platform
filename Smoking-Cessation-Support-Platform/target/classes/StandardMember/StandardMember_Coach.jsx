@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import EditProfileModal from '../EditProfileModal';
-
-function StandardMember_Coach() {
+import { useNavigate } from 'react-router-dom';
+function StandardMember_Commun() {
     const [showEditProfile, setShowEditProfile] = useState(false);
+    const navigate = useNavigate();
+
+    const handleNotificationClick = () => {
+        navigate('/notificationcenter');
+    };
+
     const styles = `
     html, body, #root {
         width: 100%;
@@ -426,6 +432,274 @@ function StandardMember_Coach() {
             font-size: 12px;
         }
     }
+
+    header {
+        background-color: #e0f2f7;
+        padding: 15px 40px;
+        border-bottom: 1px solid #d0e8ef;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .header-left, .header-right {
+        display: flex;
+        align-items: center;
+    }
+    .profile-section {
+        display: flex;
+        align-items: center;
+        margin-right: 20px;
+        background: none;
+        padding: 0;
+        border-radius: 0;
+        font-size: 14px;
+    }
+    .profile-btn {
+        display: flex;
+        align-items: center;
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        border-radius: 999px;
+        padding: 8px 22px 8px 15px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+        box-shadow: 0 2px 8px rgba(76,175,80,0.10);
+        outline: none;
+    }
+    .profile-btn:hover {
+        background-color: #388E3C;
+        transform: translateY(-2px) scale(1.04);
+        box-shadow: 0 4px 16px rgba(76,175,80,0.18);
+    }
+    .profile-icon {
+        color: #5B2A99;
+        font-size: 20px;
+        margin-right: 8px;
+    }
+    .logo-section {
+        display: flex;
+        align-items: center;
+        margin-right: 30px;
+    }
+    .logo {
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+        margin-right: 10px;
+    }
+    .app-name h1 {
+        margin: 0;
+        font-size: 24px;
+        color: #4CAF50;
+    }
+    .app-name p {
+        margin: 0;
+        font-size: 14px;
+        color: #666;
+    }
+    .nav-links {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+    }
+    .nav-links li {
+        margin-left: 30px;
+    }
+    .nav-links a {
+        text-decoration: none;
+        color: #555;
+        font-weight: bold;
+        transition: color 0.3s ease, transform 0.2s ease;
+    }
+    .nav-links a.active, .nav-links a:hover {
+        color: #4CAF50;
+        transform: translateY(-2px);
+    }
+    .header-actions {
+        color: #4CAF50;
+        display: flex;
+        align-items: center;
+    }
+    .notification-icon {
+        font-size: 24px;
+        color: #FBC02D;
+        margin-right: 20px;
+        cursor: pointer;
+    }
+    .logout-button {
+        background-color: #222;
+        color: white;
+        border: none;
+        padding: 12px 32px;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: bold;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+        transition: background 0.2s, transform 0.15s;
+    }
+    .logout-button:hover {
+        background: #111;
+        transform: translateY(-2px) scale(1.04);
+    }
+    .welcome-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 40px;
+        background-color: #fff;
+        border-bottom: 1px solid #d0e8ef;
+    }
+
+    .header-left,
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .profile-status {
+        display: flex;
+        align-items: center;
+        background: none;
+        padding: 0;
+        border-radius: 0;
+        font-size: 14px;
+    }
+
+    .profile-btn {
+        display: flex;
+        align-items: center;
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        border-radius: 999px;
+        padding: 8px 22px 8px 15px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+        box-shadow: 0 2px 8px rgba(76,175,80,0.10);
+        outline: none;
+    }
+
+    .profile-btn:hover {
+        background-color: #388E3C;
+        transform: translateY(-2px) scale(1.04);
+        box-shadow: 0 4px 16px rgba(76,175,80,0.18);
+    }
+
+    .profile-icon {
+        color: #5B2A99;
+        font-size: 20px;
+        margin-right: 8px;
+    }
+
+    .header-center .logo-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .header-center .app-name {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .header-center .logo {
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+        margin-right: 10px;
+    }
+
+    .header-center .app-name h1 {
+        margin: 0;
+        font-size: 24px;
+        color: #4CAF50;
+    }
+
+    .header-center .app-name p {
+        margin: 0;
+        font-size: 14px;
+        color: #666;
+    }
+
+    .notification-icon {
+        font-size: 24px;
+        color: #f39c12;
+        cursor: pointer;
+    }
+
+    .logout-button {
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .logout-button:hover {
+        background-color: #45a049;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .welcome-nav {
+        background-color: #fff;
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .welcome-nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+    }
+
+    .welcome-nav a {
+        text-decoration: none;
+        color: #5EBB34;
+        font-weight: 400;
+        font-size: 16px;
+        padding: 5px 0;
+        position: relative;
+        transition: color 0.3s;
+    }
+
+    .welcome-nav a::after {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 0;
+        bottom: -2px;
+        width: 100%;
+        height: 3px;
+        background: #5EBB34;
+        border-radius: 2px;
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+        z-index: 1;
+    }
+
+    .welcome-nav a:hover::after, .welcome-nav a:focus::after, .welcome-nav a.active::after {
+        transform: scaleX(1);
+    }
     `;
     const [activeMenu, setActiveMenu] = useState('Dashboard');
     const menuItems = [
@@ -443,36 +717,37 @@ function StandardMember_Coach() {
         <div>
             <style>{styles}</style>
             <EditProfileModal open={showEditProfile} onClose={() => setShowEditProfile(false)} onSave={() => setShowEditProfile(false)} />
-            <div className="main-header">
+            <header className="welcome-header">
                 <div className="header-left">
-                    <button className="member-btn" onClick={() => setShowEditProfile(true)}>
-                        <span className="user-icon">&#128100;</span> Standard Member
-                    </button>
-                    <div className="logo-section">
-                        <span className="logo">LOGO</span>
-                        <span className="nicoff-title">NicOff</span>
-                        <span className="nicoff-slogan">Turn Off Nicotine, Turn On Life!</span>
+                    <div className="profile-status">
+                        <button className="profile-btn" onClick={() => setShowEditProfile(true)}>
+                            <span className="profile-icon">👤</span> Standard Member
+                        </button>
                     </div>
                 </div>
-                <div className="main-menu">
-                    {menuItems.map(item => (
-                        <a
-                            key={item.label}
-                            href={item.href}
-                            className={`main-menu-item${activeMenu === item.label ? ' active' : ''}`}
-                            onClick={() => setActiveMenu(item.label)}
-                        >
-                            {item.label}
-                        </a>
-                    ))}
+                <div className="header-center">
+                    <div className="logo-section">
+                        <div className="app-name">
+                            <h1>NicOff</h1>
+                            <p>Turn Off Nicotine, Turn On Life!</p>
+                        </div>
+                    </div>
                 </div>
                 <div className="header-right">
-                    <span className="bell-icon">&#128276;</span>
-                    <button className="logout-btn">
-                        Logout
-                    </button>
+                    <span className="notification-icon" onClick={handleNotificationClick}>🔔</span>
+                    <button className="logout-button">Logout</button>
                 </div>
-            </div>
+            </header>
+            <nav className="welcome-nav">
+                <ul>
+                    <li><a href="/standardmemberhome">Home</a></li>
+                    <li><a href="/standardmemberdashboard">Dashboard</a></li>
+                    <li><a href="#">Achievement</a></li>
+                    <li><a href="/standardmembercoach" className="active">Coach</a></li>
+                    <li><a href="/standardmembercommun">Community</a></li>
+                    <li><a href="/feedback">Feedback</a></li>
+                </ul>
+            </nav>
             <main>
                 <div className="content-card">
                     <div className="sad-face">:(</div>
@@ -494,21 +769,21 @@ function StandardMember_Coach() {
                     <div className="footer-column">
                         <h3>Quick Links</h3>
                         <ul>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Our Programs</a></li>
-                            <li><a href="#">Success Stories</a></li>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Contact</a></li>
+                            <li><a href="/about">About Us</a></li>
+                            <li><a href="/ourprograms">Our Programs</a></li>
+                            <li><a href="/successstories">Success Stories</a></li>
+                            <li><a href="/blog">Blog</a></li>
+                            <li><a href="/contact">Contact</a></li>
                         </ul>
                     </div>
                     <div className="footer-column">
                         <h3>Support</h3>
                         <ul>
-                            <li><a href="#">FAQ</a></li>
-                            <li><a href="#">Help Center</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
-                            <li><a href="#">Term Of Service</a></li>
-                            <li><a href="#">Cookie Policy</a></li>
+                            <li><a href="/faq">FAQ</a></li>
+                            <li><a href="/helpcenter">Help Center</a></li>
+                            <li><a href="/privacypolicy">Privacy Policy</a></li>
+                            <li><a href="/termsofservice">Term Of Service</a></li>
+                            <li><a href="/cookiepolicy">Cookie Policy</a></li>
                         </ul>
                     </div>
                     <div className="footer-column">
@@ -526,4 +801,4 @@ function StandardMember_Coach() {
     );
 }
 
-export default StandardMember_Coach; 
+export default StandardMember_Commun; 
