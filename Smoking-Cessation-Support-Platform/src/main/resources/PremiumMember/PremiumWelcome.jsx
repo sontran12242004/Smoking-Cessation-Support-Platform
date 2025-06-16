@@ -23,11 +23,11 @@ body,
 
 .welcome-header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 40px;
-    background-color: #fff;
-    border-bottom: 1px solid #d0e8ef;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 40px;
+      background-color: #fff;
+      border-bottom: 1px solid #d0e8ef;
 }
 
 .header-left,
@@ -89,12 +89,7 @@ body,
     justify-content: center;
 }
 
-.header-center .logo {
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-    margin-right: 10px;
-}
+
 
 .header-center .app-name h1 {
     margin: 0;
@@ -502,6 +497,7 @@ body,
   return (
     <div className="welcome-page-container">
       <style>{styles}</style>
+      
       {/* Header */}
       <header className="welcome-header">
         <div className="header-left">

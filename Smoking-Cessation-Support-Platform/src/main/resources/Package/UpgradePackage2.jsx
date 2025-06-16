@@ -887,12 +887,12 @@ function UpgradePackage2() {
                         </div>
                     </div>
                     <ul className="nav-links">
-                        <li><a href="/standardmemberhome">Home</a></li>
-                        <li><a href="/standardmemberdashboard">Dashboard</a></li>
+                        <li><a href="/premiummemberhome">Home</a></li>
+                        <li><a href="/premiummemberdashboard" className="active">Dashboard</a></li>
                         <li><a href="#">Achievement</a></li>
-                        <li><a href="/standardmembercoach">Coach</a></li>
-                        <li><a href="/standardmembercommunity">Community</a></li>
-                        <li><a href="/standardmemberfeedback">Feedback</a></li>
+                        <li><a href="/premiummembercoach">Coach</a></li>
+                        <li><a href="/premiummembercommun">Community</a></li>
+                        <li><a href="/feedbackpremium">Feedback</a></li>
                     </ul>
                 </nav>
             </header>

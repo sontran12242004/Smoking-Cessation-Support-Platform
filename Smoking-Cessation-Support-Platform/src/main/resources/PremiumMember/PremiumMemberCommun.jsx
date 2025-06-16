@@ -58,38 +58,37 @@ function PremiumMemberCommun() {
   const styles = `
     html, body, #root {
       width: 100%;
-      height: 200vh;
+      height: 100%;
       margin: 0;
-      font-family: Arial, sans-serif;
     }
     body {
+      font-family: Arial, sans-serif;
       margin: 0;
       background-color: #f0f2f5;
     }
-    .pmc-header {
-      width: 100vw;
-      background-color: #e0f2f7;
-      padding: 15px 0;
-      border-bottom: 1px solid #d0e8ef;
+    .welcome-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin: 0;
-      box-sizing: border-box;
+      padding: 10px 40px;
+      background-color: #fff;
+      border-bottom: 1px solid #d0e8ef;
+      width: 100vw;
       position: relative;
       left: 50%;
       right: 50%;
       transform: translateX(-50%);
+      box-sizing: border-box;
     }
-    .pmc-logo-section {
+    .header-left,
+    .header-right {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 15px;
     }
     .profile-section {
       display: flex;
       align-items: center;
-      margin-right: 18px;
     }
     .profile-btn {
       display: flex;
@@ -114,68 +113,98 @@ function PremiumMemberCommun() {
     .profile-icon {
       color: #5B2A99;
       font-size: 20px;
-      margin-right: 10px;
+      margin-right: 8px;
     }
-    .pmc-logo {
-      font-size: 24px;
-      font-weight: bold;
-      color: #333;
-      margin-right: 10px;
+    .header-center .logo-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
     }
-    .pmc-app-name h1 {
+    .header-center .app-name {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .header-center .app-name h1 {
       margin: 0;
       font-size: 24px;
       color: #4CAF50;
     }
-    .pmc-app-name p {
+    .header-center .app-name p {
       margin: 0;
       font-size: 14px;
       color: #666;
     }
-    .pmc-nav-links {
-      list-style: none;
-      display: flex;
-      gap: 32px;
-      margin: 0 0 0 40px;
-      padding: 0;
-    }
-    .pmc-nav-links li a {
-      text-decoration: none;
-      color: #388E3C;
-      font-weight: bold;
-      font-size: 17px;
-      padding-bottom: 4px;
-      border-bottom: 2.5px solid transparent;
-      transition: color 0.2s, border 0.2s;
-    }
-    .pmc-nav-links li a.active, .pmc-nav-links li a:hover {
-      color: #4CAF50;
-      border-bottom: 2.5px solid #4CAF50;
-    }
-    .pmc-header-actions {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-    }
-    .pmc-notification-icon {
-      font-size: 26px;
-      color: #FBC02D;
+    .notification-icon {
+      font-size: 24px;
+      color: #f39c12;
       cursor: pointer;
-      margin-right: 10px;
     }
-    .pmc-logout-btn {
-      background: #4CAF50;
+    .logout-button {
+      background-color: #4CAF50;
       color: #fff;
       border: none;
-      border-radius: 8px;
-      padding: 8px 22px;
-      font-size: 16px;
-      font-weight: bold;
+      padding: 8px 15px;
+      border-radius: 5px;
       cursor: pointer;
-      transition: background 0.2s;
+      font-size: 14px;
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
     }
-    .pmc-logout-btn:hover {
-      background: #388E3C;
+    .logout-button:hover {
+      background-color: #45a049;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .welcome-nav {
+      background-color: #fff;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+      width: 100vw;
+      position: relative;
+      left: 50%;
+      right: 50%;
+      transform: translateX(-50%);
+      box-sizing: border-box;
+    }
+    .welcome-nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+    }
+    .welcome-nav a {
+      text-decoration: none;
+      color: #4CAF50;
+      font-weight: 500;
+      font-size: 16px;
+      padding: 5px 0;
+      position: relative;
+      transition: color 0.3s;
+      opacity: 1;
+    }
+    .welcome-nav a::after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 100%;
+      height: 3px;
+      background: #4CAF50;
+      border-radius: 2px;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+      z-index: 1;
+    }
+    .welcome-nav a:hover::after, .welcome-nav a:focus::after, .welcome-nav a.active::after {
+      transform: scaleX(1);
     }
     .community-bg {
       min-height: 100vh;
@@ -577,7 +606,7 @@ function PremiumMemberCommun() {
   `;
 
   const handleNotificationClick = () => {
-    navigate("/premiummembernotifications");
+    navigate("/premiumnotificationcenter");
   };
   return (
     <div className="community-bg">
@@ -587,8 +616,8 @@ function PremiumMemberCommun() {
         onClose={() => setShowEditProfile(false)}
         onSave={() => setShowEditProfile(false)}
       />
-      <div className="pmc-header">
-        <div className="pmc-logo-section">
+      <div className="welcome-header">
+        <div className="header-left">
           <div className="profile-section">
             <button
               className="profile-btn"
@@ -597,13 +626,24 @@ function PremiumMemberCommun() {
               <span className="profile-icon">👤</span> Premium Member
             </button>
           </div>
-          <span className="pmc-logo">LOGO</span>
-          <div className="pmc-app-name">
-            <h1>NicOff</h1>
-            <p>Turn Off Nicotine, Turn On Life!</p>
+        </div>
+        <div className="header-center">
+          <div className="logo-section">
+            <div className="app-name">
+              <h1>NicOff</h1>
+              <p>Turn Off Nicotine, Turn On Life!</p>
+            </div>
           </div>
         </div>
-        <ul className="pmc-nav-links">
+        <div className="header-right">
+          <span className="notification-icon" onClick={handleNotificationClick}>
+            🔔
+          </span>
+          <button className="logout-button">Logout</button>
+        </div>
+      </div>
+      <nav className="welcome-nav">
+        <ul>
           <li>
             <a href="/premiummemberhome">Home</a>
           </li>
@@ -617,24 +657,14 @@ function PremiumMemberCommun() {
             <a href="/premiummembercoach">Coach</a>
           </li>
           <li>
-            <a href="/premiummembercommun" className="active">
-              Community
-            </a>
+            <a href="/premiummembercommun" className="active">Community</a>
           </li>
           <li>
             <a href="/feedbackpremium">Feedback</a>
           </li>
         </ul>
-        <div className="pmc-header-actions">
-          <span
-            className="pmc-notification-icon"
-            onClick={handleNotificationClick}
-          >
-            🔔
-          </span>
-          s<button className="pmc-logout-btn">Logout</button>
-        </div>
-      </div>
+      </nav>
+
       <div className="community-card">
         <div className="community-title">Community Discussions</div>
 

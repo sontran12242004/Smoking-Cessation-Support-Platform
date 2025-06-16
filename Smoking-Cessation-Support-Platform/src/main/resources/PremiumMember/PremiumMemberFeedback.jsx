@@ -33,12 +33,18 @@ function Feedback() {
       min-height: 100vh;
     }
     header {
-      background-color: #e0f2f7;
-      padding: 15px 40px;
-      border-bottom: 1px solid #d0e8ef;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 10px 40px;
+      background-color: #fff;
+      border-bottom: 1px solid #d0e8ef;
+      width: 100vw;
+      position: relative;
+      left: 50%;
+      right: 50%;
+      transform: translateX(-50%);
+      box-sizing: border-box;
     }
     .header-left, .header-right {
       display: flex;
@@ -78,45 +84,82 @@ function Feedback() {
       font-size: 20px;
       margin-right: 8px;
     }
-    .logo-section {
+    .header-center {
+      flex: 1;
       display: flex;
+      justify-content: center;
       align-items: center;
-      margin-right: 30px;
     }
-    .logo {
-      font-size: 24px;
-      font-weight: bold;
-      color: #333;
-      margin-right: 10px;
+    .header-center .logo-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
     }
-    .app-name h1 {
+    .header-center .app-name {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .header-center .app-name h1 {
       margin: 0;
       font-size: 24px;
       color: #4CAF50;
     }
-    .app-name p {
+    .header-center .app-name p {
       margin: 0;
       font-size: 14px;
       color: #666;
     }
-    .nav-links {
+    .welcome-nav {
+      background-color: #fff;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+      width: 100vw;
+      position: relative;
+      left: 50%;
+      right: 50%;
+      transform: translateX(-50%);
+      box-sizing: border-box;
+    }
+    .welcome-nav ul {
       list-style: none;
       margin: 0;
       padding: 0;
       display: flex;
+      justify-content: center;
+      gap: 40px;
     }
-    .nav-links li {
-      margin-left: 30px;
-    }
-    .nav-links a {
+    .welcome-nav a {
       text-decoration: none;
-      color: #555;
-      font-weight: bold;
-      transition: color 0.3s ease, transform 0.2s ease;
-    }
-    .nav-links a.active, .nav-links a:hover {
       color: #4CAF50;
-      transform: translateY(-2px);
+      font-weight: 500;
+      font-size: 16px;
+      padding: 5px 0;
+      position: relative;
+      transition: color 0.3s;
+      opacity: 1;
+    }
+    .welcome-nav a::after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 100%;
+      height: 3px;
+      background: #4CAF50;
+      border-radius: 2px;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+      z-index: 1;
+    }
+    .welcome-nav a:hover::after, .welcome-nav a:focus::after, .welcome-nav a.active::after {
+      transform: scaleX(1);
     }
     .header-actions {
       display: flex;
@@ -458,15 +501,22 @@ function Feedback() {
               <span className="profile-icon">👤</span> Premium Member
             </button>
           </div>
-          <div className="logo-section">
-            <span className="logo">LOGO</span>
-            <div className="app-name">
-              <h1>NicOff</h1>
-              <p>Turn Off Nicotine, Turn On Life!</p>
-            </div>
+        </div>
+        <div className="header-center">
+          <div className="app-name">
+            <h1>NicOff</h1>
+            <p>Turn Off Nicotine, Turn On Life!</p>
           </div>
         </div>
-        <ul className="nav-links">
+        <div className="header-right">
+          <span className="notification-icon" onClick={handleNotificationClick}>
+            🔔  
+          </span>
+          <button className="logout-button">Logout</button>
+        </div>
+      </header>
+      <nav className="welcome-nav">
+        <ul>
           <li>
             <a href="/premiummemberhome">Home</a>
           </li>
@@ -483,16 +533,10 @@ function Feedback() {
             <a href="/premiummembercommun">Community</a>
           </li>
           <li>
-            <a href="/feedbackpremium" className="active">
-              Feedback
-            </a>
+            <a href="/feedbackpremium" className="active">Feedback</a>
           </li>
         </ul>
-        <div className="header-actions">
-          <span className="notification-icon" onClick={handleNotificationClick}></span>
-          <button className="logout-button">Logout</button>
-        </div>
-      </header>
+      </nav>
       <div className="feedback-bg">
         <div className="feedback-card">
           <div className="feedback-title">Share Your Feedback</div>

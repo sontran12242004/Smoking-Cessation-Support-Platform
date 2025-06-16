@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+
 function HealthMetric() {
   const navigate = useNavigate();
   const handleNotificationClick = () => {
@@ -86,7 +87,7 @@ function HealthMetric() {
     .dashboard-app-name p {
       margin: 0;
       font-size: 14px;
-      color: #666;
+      color: #fff;
     }
     .dashboard-nav-links {
       list-style: none;
@@ -615,7 +616,6 @@ function HealthMetric() {
               </button>
             </div>
             <div className="logo-section">
-              <span className="logo">LOGO</span>
               <div className="app-name">
                 <h1>NicOff</h1>
                 <p>Turn Off Nicotine, Turn On Life!</p>

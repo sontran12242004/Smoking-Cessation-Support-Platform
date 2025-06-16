@@ -5,25 +5,30 @@ export default function LandingPage() {
   return (
     <div className="landing-root">
       {/* Header */}
-      <div className="landing-header">
-        <div className="landing-logo-group">
-          <div className="landing-logo">LOGO</div>
-          <div>
-            <div className="landing-title">NicOff</div>
-            <div className="landing-slogan">Turn Off Nicotine, Turn On Life!</div>
+      <header className="welcome-header">
+        <div className="header-center">
+          <div className="logo-section">
+            <div className="app-name">
+              <h1>NicOff</h1>
+              <p>Turn Off Nicotine, Turn On Life!</p>
+            </div>
           </div>
         </div>
-        <div>
-          <button className="landing-btn login">Login</button>
-          <button className="landing-btn signup">Sign up</button>
+        <div className="header-right">
+          <a href="/login" className="login-btn">Login</a>
+          <a href="/signup" className="signup-btn">Sign Up</a>
         </div>
-      </div>
-      {/* Nav */}
-      <nav className="landing-nav">
-        <a href="#" className="active">Home</a>
-        <a href="#">Dashboard</a>
-        <a href="#">Achievement</a>
-        <a href="#">Community</a>
+      </header>
+      {/* Navigation */}
+      <nav className="welcome-nav">
+        <ul>
+          <li><a href="/standardmemberhome">Home</a></li>
+          <li><a href="/standardmemberdashboard">Dashboard</a></li>
+          <li><a href="#">Achievement</a></li>
+          <li><a href="/standardmembercoach">Coach</a></li>
+          <li><a href="/standardmembercommun">Community</a></li>
+          <li><a href="/feedback">Feedback</a></li>
+        </ul>
       </nav>
       {/* Main content */}
       <div className="landing-bg-split">
@@ -346,77 +351,179 @@ export default function LandingPage() {
           display: flex;
           flex-direction: column;
         }
-        .landing-header {
-          width: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 18px 4vw 14px 4vw;
-          background: #eaf5e2;
-          border-bottom: 2px solid #7bb661;
-          box-sizing: border-box;
-          z-index: 2;
-        }
-        .landing-logo-group {
-          display: flex;
-          align-items: center;
-        }
-        .landing-logo {
-          font-weight: bold;
-          font-size: 26px;
-          margin-right: 18px;
-        }
-        .landing-title {
-          color: #5eae3a;
-          font-weight: bold;
-          font-size: 26px;
-        }
-        .landing-slogan {
-          font-size: 15px;
-          color: #6b8e23;
-          font-style: italic;
-        }
-        .landing-btn {
-          margin-right: 12px;
-          padding: 9px 28px;
-          border-radius: 12px;
-          border: none;
-          font-weight: bold;
-          font-size: 17px;
-          box-shadow: 0 1px 2px #ccc;
-          cursor: pointer;
-          transition: background 0.2s;
-        }
-        .landing-btn.login {
-          background: #fff;
-          color: #3a5d23;
-        }
-        .landing-btn.signup {
-          background: #5eae3a;
-          color: #fff;
-          margin-right: 0;
-        }
-        .landing-nav {
-          width: 100vw;
-          background: #7bb661;
+        .welcome-header {
           display: flex;
           justify-content: center;
-          gap: 36px;
-          padding: 10px 0;
-          z-index: 2;
+          align-items: center;
+          padding: 10px 40px;
+          background-color: #fff;
+          border-bottom: 1px solid #d0e8ef;
+          width: 100vw;
+          position: relative;
+          left: 50%;
+          right: 50%;
+          transform: translateX(-50%);
+          box-sizing: border-box;
         }
-        .landing-nav a {
-          color: #fff;
-          padding: 7px 28px;
-          border-radius: 4px;
-          font-weight: bold;
+        .header-center {
+          flex: 1;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        .header-right {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+        }
+        .login-btn, .signup-btn {
+          display: inline-block;
+          padding: 8px 22px;
+          font-size: 16px;
+          font-weight: 500;
+          border-radius: 999px;
+          border: none;
+          outline: none;
+          cursor: pointer;
           text-decoration: none;
-          font-size: 19px;
-          transition: background 0.2s;
+          transition: background 0.2s, color 0.2s, box-shadow 0.2s;
         }
-        .landing-nav a.active, .landing-nav a:hover {
-          background: #a6d785;
+        .login-btn {
+          background: #fff;
+          color: #4CAF50;
+          border: 2px solid #4CAF50;
+        }
+        .login-btn:hover {
+          background: #4CAF50;
           color: #fff;
+          box-shadow: 0 2px 8px #4caf5011;
+        }
+        .signup-btn {
+          background: #4CAF50;
+          color: #fff;
+          border: 2px solid #4CAF50;
+        }
+        .signup-btn:hover {
+          background: #388E3C;
+          color: #fff;
+          box-shadow: 0 2px 8px #4caf5011;
+        }
+        .logo-section {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+        }
+        .app-name {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        }
+        .app-name h1 {
+          margin: 0;
+          font-size: 24px;
+          color: #4CAF50;
+        }
+        .app-name p {
+          margin: 0;
+          font-size: 14px;
+          color: #666;
+        }
+        .profile-status {
+          display: flex;
+          align-items: center;
+          background: none;
+          padding: 0;
+          border-radius: 0;
+          font-size: 14px;
+        }
+        .profile-btn {
+          display: flex;
+          align-items: center;
+          background-color: #4CAF50;
+          color: #fff;
+          border: none;
+          border-radius: 999px;
+          padding: 8px 22px 8px 15px;
+          font-size: 16px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+          box-shadow: 0 2px 8px rgba(76,175,80,0.10);
+          outline: none;
+        }
+        .profile-btn:hover {
+          background-color: #388E3C;
+          transform: translateY(-2px) scale(1.04);
+          box-shadow: 0 4px 16px rgba(76,175,80,0.18);
+        }
+        .profile-icon {
+          color: #5B2A99;
+          font-size: 20px;
+          margin-right: 8px;
+        }
+        .notification-icon {
+          font-size: 24px;
+          color: #f39c12;
+          cursor: pointer;
+        }
+        .logout-button {
+          background-color: #4CAF50;
+          color: #fff;
+          border: none;
+          padding: 8px 15px;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 14px;
+          transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .logout-button:hover {
+          background-color: #45a049;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .welcome-nav {
+          background-color: #fff;
+          padding: 10px 0;
+          border-bottom: 1px solid #eee;
+        }
+        .welcome-nav ul {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          justify-content: center;
+          gap: 40px;
+        }
+        .welcome-nav a {
+          text-decoration: none;
+          color: #4CAF50;
+          font-weight: 500;
+          font-size: 16px;
+          padding: 5px 0;
+          position: relative;
+          transition: color 0.3s;
+          opacity: 1;
+        }
+        .welcome-nav a::after {
+          content: '';
+          display: block;
+          position: absolute;
+          left: 0;
+          bottom: -2px;
+          width: 100%;
+          height: 3px;
+          background: #4CAF50;
+          border-radius: 2px;
+          transform: scaleX(0);
+          transform-origin: left;
+          transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+          z-index: 1;
+        }
+        .welcome-nav a:hover::after, .welcome-nav a:focus::after, .welcome-nav a.active::after {
+          transform: scaleX(1);
         }
         .landing-bg-split {
           flex: 1;
@@ -601,7 +708,7 @@ export default function LandingPage() {
           }
         }
         @media (max-width: 700px) {
-          .landing-header, .landing-nav {
+          .landing-header, .welcome-nav {
             padding-left: 2vw;
             padding-right: 2vw;
           }

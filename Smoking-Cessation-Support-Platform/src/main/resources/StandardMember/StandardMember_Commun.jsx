@@ -520,6 +520,7 @@ function StandardMember_Commun() {
         transform: translateY(-2px);
     }
     .header-actions {
+        color: #4CAF50;
         display: flex;
         align-items: center;
     }
@@ -545,8 +546,170 @@ function StandardMember_Commun() {
         background: #111;
         transform: translateY(-2px) scale(1.04);
     }
-    `;
+    .welcome-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 40px;
+        background-color: #fff;
+        border-bottom: 1px solid #d0e8ef;
+    }
 
+    .header-left,
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .profile-status {
+        display: flex;
+        align-items: center;
+        background: none;
+        padding: 0;
+        border-radius: 0;
+        font-size: 14px;
+    }
+
+    .profile-btn {
+        display: flex;
+        align-items: center;
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        border-radius: 999px;
+        padding: 8px 22px 8px 15px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+        box-shadow: 0 2px 8px rgba(76,175,80,0.10);
+        outline: none;
+    }
+
+    .profile-btn:hover {
+        background-color: #388E3C;
+        transform: translateY(-2px) scale(1.04);
+        box-shadow: 0 4px 16px rgba(76,175,80,0.18);
+    }
+
+    .profile-icon {
+        color: #5B2A99;
+        font-size: 20px;
+        margin-right: 8px;
+    }
+
+    .header-center .logo-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .header-center .app-name {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .header-center .logo {
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+        margin-right: 10px;
+    }
+
+    .header-center .app-name h1 {
+        margin: 0;
+        font-size: 24px;
+        color: #4CAF50;
+    }
+
+    .header-center .app-name p {
+        margin: 0;
+        font-size: 14px;
+        color: #666;
+    }
+
+    .notification-icon {
+        font-size: 24px;
+        color: #f39c12;
+        cursor: pointer;
+    }
+
+    .logout-button {
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .logout-button:hover {
+        background-color: #45a049;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .welcome-nav {
+        background-color: #fff;
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .welcome-nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+    }
+
+    .welcome-nav a {
+        text-decoration: none;
+        color: #5EBB34;
+        font-weight: 400;
+        font-size: 16px;
+        padding: 5px 0;
+        position: relative;
+        transition: color 0.3s;
+    }
+
+    .welcome-nav a::after {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 0;
+        bottom: -2px;
+        width: 100%;
+        height: 3px;
+        background: #5EBB34;
+        border-radius: 2px;
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+        z-index: 1;
+    }
+
+    .welcome-nav a:hover::after, .welcome-nav a:focus::after, .welcome-nav a.active::after {
+        transform: scaleX(1);
+    }
+    `;
+    const [activeMenu, setActiveMenu] = useState('Dashboard');
+    const menuItems = [
+        { label: 'Home', href: '#' },
+        { label: 'Dashboard', href: '#' },
+        { label: 'Achievement', href: '#' },
+        { label: 'Coach', href: '#' },
+        { label: 'Community', href: '#' },
+        { label: 'Feedback', href: '#' },
+    ];
     const handleUpgrade = () => {
         window.location.href = "/upgradepackage1";
     };
@@ -554,34 +717,37 @@ function StandardMember_Commun() {
         <div>
             <style>{styles}</style>
             <EditProfileModal open={showEditProfile} onClose={() => setShowEditProfile(false)} onSave={() => setShowEditProfile(false)} />
-            <header>
+            <header className="welcome-header">
                 <div className="header-left">
-                    <div className="profile-section">
+                    <div className="profile-status">
                         <button className="profile-btn" onClick={() => setShowEditProfile(true)}>
                             <span className="profile-icon">👤</span> Standard Member
                         </button>
                     </div>
+                </div>
+                <div className="header-center">
                     <div className="logo-section">
-                        <span className="logo">LOGO</span>
                         <div className="app-name">
                             <h1>NicOff</h1>
                             <p>Turn Off Nicotine, Turn On Life!</p>
                         </div>
                     </div>
                 </div>
-                <ul className="nav-links">
-                    <li><a href="/standardmemberhome">Home</a></li>
-                    <li><a href="/standardmemberdashboard">Dashboard</a></li>
-                    <li><a href="/achievement">Achievement</a></li>
-                    <li><a href="/standardmembercoach">Coach</a></li>
-                    <li><a href="/standardmembercommun" className="active">Community</a></li>
-                    <li><a href="/feedback">Feedback</a></li>
-                </ul>
-                <div className="header-actions">
+                <div className="header-right">
                     <span className="notification-icon" onClick={handleNotificationClick}>🔔</span>
                     <button className="logout-button">Logout</button>
                 </div>
             </header>
+            <nav className="welcome-nav">
+                <ul>
+                    <li><a href="/standardmemberhome">Home</a></li>
+                    <li><a href="/standardmemberdashboard">Dashboard</a></li>
+                    <li><a href="#">Achievement</a></li>
+                    <li><a href="/standardmembercoach">Coach</a></li>
+                    <li><a href="/standardmembercommun" className="active">Community</a></li>
+                    <li><a href="/feedback">Feedback</a></li>
+                </ul>
+            </nav>
             <main>
                 <div className="content-card">
                     <div className="sad-face">:(</div>
