@@ -28,7 +28,7 @@ public class SubscriptionService {
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy subscription"));
     }
 
-    public List<Subscription> getSubscriptionsByMemberId(Integer memberId) {
+    public List<Subscription> getSubscriptionsByMemberId(Long memberId) {
         return subscriptionRepository.findByMember_MemberID(memberId);
     }
 

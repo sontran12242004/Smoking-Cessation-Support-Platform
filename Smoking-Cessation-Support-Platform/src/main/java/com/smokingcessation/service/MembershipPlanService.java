@@ -19,16 +19,15 @@ public class MembershipPlanService {
     // Khởi tạo dữ liệu mặc định
     @PostConstruct
     public void initDefaultPlans() {
-        addPlanIfNotExists(1, "Standard Package - Basic Program (4 weeks)", 28, new BigDecimal("499000"));
-        addPlanIfNotExists(2, "Premium Package - Accelerated Program (6 months)", 180, new BigDecimal("1999000"));
-        addPlanIfNotExists(3, "Elite Package - Mastery Program (1 year)", 365, new BigDecimal("4999000"));
+        addPlanIfNotExists("Standard Package - Basic Program (4 weeks)", 28, new BigDecimal("499000"));
+        addPlanIfNotExists("Premium Package - Accelerated Program (6 months)", 180, new BigDecimal("1999000"));
+        addPlanIfNotExists("Elite Package - Mastery Program (1 year)", 365, new BigDecimal("4999000"));
     }
 
-    private void addPlanIfNotExists(int id, String name, int duration, BigDecimal price) {
-        Optional<MembershipPlan> existing = membershipPlanRepository.findById(id);
+    private void addPlanIfNotExists(String name, int duration, BigDecimal price) {
+        Optional<MembershipPlan> existing = membershipPlanRepository.findByName(name);
         if (existing.isEmpty()) {
             MembershipPlan plan = new MembershipPlan();
-            plan.setPlanID(id);
             plan.setName(name);
             plan.setDuration(duration);
             plan.setPrice(price);

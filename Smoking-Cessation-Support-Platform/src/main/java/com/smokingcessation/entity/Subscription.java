@@ -16,7 +16,7 @@ public class Subscription {
 
     @ManyToOne
     @JoinColumn(name = "memberID", nullable = false)
-    private Members members;
+    private Members member;
 
     @ManyToOne
     @JoinColumn(name = "planID", nullable = false)

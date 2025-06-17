@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface SubscriptionRepository extends JpaRepository<Subscription, Integer> {
     List<Subscription> findByIsActiveTrue();
-    List<Subscription> findByMember_MemberID(Integer memberId);
+    List<Subscription> findByMember_MemberID(Long memberID);
 }

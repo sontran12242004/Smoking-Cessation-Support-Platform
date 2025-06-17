@@ -30,7 +30,7 @@ public class SubscriptionController {
     }
 
     @GetMapping("/member/{memberId}")
-    public ResponseEntity<List<Subscription>> getByMemberId(@PathVariable Integer memberId) {
+    public ResponseEntity<List<Subscription>> getByMemberId(@PathVariable Long memberId) {
         return ResponseEntity.ok(subscriptionService.getSubscriptionsByMemberId(memberId));
     }
 
