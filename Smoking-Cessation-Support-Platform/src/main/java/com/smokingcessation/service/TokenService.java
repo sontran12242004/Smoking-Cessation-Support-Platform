@@ -6,6 +6,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -16,12 +17,10 @@ import java.util.function.Function;
 @Service
 public class TokenService {
 
-    private final AuthenticationRepository authenticationRepository;
-    private final String SECRET_KEY = "4bb6d1dfbafb64a681139d1586b6f1160d18159afd57c8c79136d7490630407c";
+    @Autowired
+    AuthenticationRepository authenticationRepository;
 
-    public TokenService(AuthenticationRepository authenticationRepository) {
-        this.authenticationRepository = authenticationRepository;
-    }
+    private final String SECRET_KEY = "4bb6d1dfbafb64a681139d1586b6f1160d18159afd57c8c79136d7490630407c";
 
     private SecretKey getSigninKey(){
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
@@ -30,38 +29,47 @@ public class TokenService {
 
     public String generateToken(Account account) {
         String token =
-                Jwts.builder()
-                        .subject(account.getEmail())
-                        .issuedAt(new Date(System.currentTimeMillis()))
+                // create object of JWT
+                Jwts.builder().
+                        //subject of token
+                                subject(account.getEmail()).
+                        // time Create Token
+                                issuedAt(new Date(System.currentTimeMillis()))
+                        // Time exprire of Token
                         .expiration(new Date(System.currentTimeMillis()+24*60*60*1000))
+                        //
                         .signWith(getSigninKey())
                         .compact();
         return token;
     }
 
+    // form token to Claim Object
     public Claims extractAllClaims(String token) {
-        return  Jwts.parser()
-                .verifyWith(getSigninKey())
+        return  Jwts.parser().
+                verifyWith(getSigninKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
     }
 
-    public Account extractAccount(String token) {
-        String email = extractClaim(token, Claims::getSubject);
+    // get userName form CLAIM
+    public Account extractAccount (String token){
+        String email = extractClaim(token,Claims::getSubject);
         return authenticationRepository.findAccountByEmail(email);
     }
+
 
     public boolean isTokenExpired(String token){
         return extractExpiration(token).before(new Date());
     }
-
+    // get Expiration form CLAIM
     public Date extractExpiration(String token){
-        return extractClaim(token, Claims::getExpiration);
+        return extractClaim(token,Claims::getExpiration);
     }
 
+    // from claim and extract specific data type.
     public <T> T extractClaim(String token, Function<Claims,T> resolver){
         Claims claims = extractAllClaims(token);
-        return resolver.apply(claims);
+        return  resolver.apply(claims);
     }
 }

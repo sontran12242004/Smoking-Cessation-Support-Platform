@@ -23,12 +23,11 @@ public class AuthenticationController {
         Account newAccount = authenticationService.register(account);
         return ResponseEntity.ok(newAccount);
     }
-
     @PostMapping("/api/login")
     public ResponseEntity login(@RequestBody LoginDTO loginDTO){
 
-        AccountDTO accountDTO = authenticationService.login(loginDTO);
+        AccountDTO account = authenticationService.login(loginDTO);
 
-        return ResponseEntity.ok(accountDTO);
+        return ResponseEntity.ok(account);
     }
 }

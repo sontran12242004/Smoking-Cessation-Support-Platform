@@ -105,4 +105,3 @@ public class Filter extends OncePerRequestFilter {
         return authHeader.substring(7);
     }
 }
-

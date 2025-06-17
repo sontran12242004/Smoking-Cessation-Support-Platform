@@ -50,20 +50,20 @@ public class AuthenticationService implements UserDetailsService {
         return newAccount;
     }
 
-    public AccountDTO login(LoginDTO loginDTO){
+        public AccountDTO login(LoginDTO loginRequest){
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    loginDTO.getEmail(),
-                    loginDTO.getPassword()
+                    loginRequest.getEmail(),
+                    loginRequest.getPassword()
             ));
         }catch (Exception e){
-            // sai thông tin đăng nhập
+            // sai thông tin đăng nhậpw
             System.out.println("Thông tin đăng nhập ko chính xác");
 
             throw new AuthenticationException("Invalid username or password");
         }
 
-        Account account = authenticationRepository.findAccountByEmail(loginDTO.getEmail());
+        Account account = authenticationRepository.findAccountByEmail(loginRequest.getEmail());
         AccountDTO accountResponse = modelMapper.map(account, AccountDTO.class);
         String token = tokenService.generateToken(account);
         accountResponse.setToken(token);
