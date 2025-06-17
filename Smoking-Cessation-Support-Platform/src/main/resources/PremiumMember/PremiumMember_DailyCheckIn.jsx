@@ -421,12 +421,12 @@ function DailyCheckIn() {
           </div>
         </div>
         <ul className="nav-links">
-          <li><a href="#">Home</a></li>
-          <li><a href="#" className="active">Dashboard</a></li>
-          <li><a href="#">Achievement</a></li>
-          <li><a href="#">Coach</a></li>
-          <li><a href="#">Community</a></li>
-          <li><a href="#">Feedback</a></li>
+          <li><a href="/premiummemberhome">Home</a></li>
+          <li><a href="/premiummemberdashboard">Dashboard</a></li>
+          <li><a href="/premiumachievement">Achievement</a></li>
+          <li><a href="/premiummembercoach">Coach</a></li>
+          <li><a href="/premiummembercommun">Community</a></li>
+          <li><a href="/feedbackpremium">Feedback</a></li>
         </ul>
         <div className="header-actions">
           <span className="notification-icon">🔔</span>

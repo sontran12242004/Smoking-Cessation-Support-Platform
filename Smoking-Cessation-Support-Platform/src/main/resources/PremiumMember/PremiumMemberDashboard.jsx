@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import EditProfileModal from "../EditProfileModal";
 import { useNavigate } from "react-router-dom";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+
 function StandardMemberDashboard({
   daysSmokeFree = "--",
   daysToNext = "--",
@@ -767,13 +769,27 @@ function StandardMemberDashboard({
   const handleHealthMetric = () => {
     window.location.href = "/premiumhealthmetric";
   };
-
-  const handlePackage = () => {
-    window.location.href = "/upgradepackage2";
-  };
+  
   const handleNotificationClick = () => {
     navigate("/premiumnotificationcenter");
   };
+  // Mock data for charts
+  const healthImprovementData = [
+    { month: 'Jan', value: 20 },
+    { month: 'Feb', value: 35 },
+    { month: 'Mar', value: 50 },
+    { month: 'Apr', value: 65 },
+    { month: 'May', value: 80 },
+    { month: 'Jun', value: 90 },
+  ];
+  const successRateData = [
+    { month: 'Jan', value: 10 },
+    { month: 'Feb', value: 25 },
+    { month: 'Mar', value: 40 },
+    { month: 'Apr', value: 55 },
+    { month: 'May', value: 70 },
+    { month: 'Jun', value: 85 },
+  ];
   return (
     <div className="dashboard-bg">
       <style>{styles}</style>
@@ -817,7 +833,7 @@ function StandardMemberDashboard({
             </a>
           </li>
           <li>
-            <a href="#">Achievement</a>
+            <a href="/premiumachievement">Achievement</a>
           </li>
           <li>
             <a href="/premiummembercoach">Coach</a>
@@ -898,32 +914,30 @@ function StandardMemberDashboard({
         <div className="analytics-cards-row">
           <div className="analytics-card">
             <h3 className="analytics-card-title">Health Improvement Rate</h3>
-            <div className="analytics-card-content">
-              <div className="analytics-sad-face">:(</div>
-              <div className="analytics-locked-message">
-                We're sorry, but this feature is not available for your account!
-              </div>
-              <div className="analytics-upgrade-text">
-                Upgrade To See This Feature
-              </div>
-              <button className="analytics-upgrade-btn" onClick={handlePackage}>
-                Upgrade
-              </button>
+            <div className="analytics-card-content" style={{ width: '100%', height: 220 }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={healthImprovementData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="month" />
+                  <YAxis />
+                  <Tooltip />
+                  <Line type="monotone" dataKey="value" stroke="#4CAF50" strokeWidth={3} />
+                </LineChart>
+              </ResponsiveContainer>
             </div>
           </div>
           <div className="analytics-card">
             <h3 className="analytics-card-title">Success Rate</h3>
-            <div className="analytics-card-content">
-              <div className="analytics-sad-face">:(</div>
-              <div className="analytics-locked-message">
-                We're sorry, but this feature is not available for your account!
-              </div>
-              <div className="analytics-upgrade-text">
-                Upgrade To See This Feature
-              </div>
-              <button className="analytics-upgrade-btn" onClick={handlePackage}>
-                Upgrade
-              </button>
+            <div className="analytics-card-content" style={{ width: '100%', height: 220 }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={successRateData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="month" />
+                  <YAxis />
+                  <Tooltip />
+                  <Line type="monotone" dataKey="value" stroke="#388E3C" strokeWidth={3} />
+                </LineChart>
+              </ResponsiveContainer>
             </div>
           </div>
         </div>

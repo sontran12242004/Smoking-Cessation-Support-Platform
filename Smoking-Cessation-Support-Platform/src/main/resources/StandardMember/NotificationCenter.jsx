@@ -3,7 +3,7 @@ import EditProfileModal from '../EditProfileModal';
 import { useNavigate } from 'react-router-dom';
 function NotificationCenter() {
     // Placeholder for notifications, to be replaced with database data
-    const [notifications, setNotifications] = useState([]);
+    const [notifications] = useState([]);
     const [allRead, setAllRead] = useState(false);
     const [showEditProfile, setShowEditProfile] = useState(false);
     const navigate = useNavigate();
@@ -474,7 +474,7 @@ function NotificationCenter() {
                 <ul>
                     <li><a href="/standardmemberhome">Home</a></li>
                     <li><a href="/standardmemberdashboard">Dashboard</a></li>
-                    <li><a href="#">Achievement</a></li>
+                    <li><a href="/standardachievement">Achievement</a></li>
                     <li><a href="/standardmembercoach">Coach</a></li>
                     <li><a href="/standardmembercommun">Community</a></li>
                     <li><a href="/feedback">Feedback</a></li>

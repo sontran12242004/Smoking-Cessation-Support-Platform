@@ -777,7 +777,7 @@ function StandardMemberHome() {
   };
 
   const handleDiary = () => {
-    window.location.href = "/dailycheckin";
+    window.location.href = "/premiummemberdailycheckin";
   };
 
   const handleNotificationClick = () => {
@@ -819,9 +819,9 @@ function StandardMemberHome() {
       {/* Navigation */}
       <nav className="welcome-nav">
         <ul>
-          <li><a href="/premiummemberhome">Home</a></li>
+          <li><a href="/premiummemberhome" className="active">Dashboard</a></li>
           <li><a href="/premiummemberdashboard">Dashboard</a></li>
-          <li><a href="#">Achievement</a></li>
+          <li><a href="/premiumachievement">Achievement</a></li>
           <li><a href="/premiummembercoach">Coach</a></li>
           <li><a href="/premiummembercommun">Community</a></li>
           <li><a href="/feedbackpremium">Feedback</a></li>

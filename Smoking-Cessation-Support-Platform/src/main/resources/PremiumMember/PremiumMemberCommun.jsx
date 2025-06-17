@@ -651,7 +651,7 @@ function PremiumMemberCommun() {
             <a href="/premiummemberdashboard">Dashboard</a>
           </li>
           <li>
-            <a href="#">Achievement</a>
+            <a href="/premiumachievement">Achievement</a>
           </li>
           <li>
             <a href="/premiummembercoach">Coach</a>

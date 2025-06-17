@@ -701,15 +701,7 @@ function StandardMember_Commun() {
         transform: scaleX(1);
     }
     `;
-    const [activeMenu, setActiveMenu] = useState('Dashboard');
-    const menuItems = [
-        { label: 'Home', href: '#' },
-        { label: 'Dashboard', href: '#' },
-        { label: 'Achievement', href: '#' },
-        { label: 'Coach', href: '#' },
-        { label: 'Community', href: '#' },
-        { label: 'Feedback', href: '#' },
-    ];
+    
     const handleUpgrade = () => {
         window.location.href = "/upgradepackage1";
     };
@@ -742,7 +734,7 @@ function StandardMember_Commun() {
                 <ul>
                     <li><a href="/standardmemberhome">Home</a></li>
                     <li><a href="/standardmemberdashboard">Dashboard</a></li>
-                    <li><a href="#">Achievement</a></li>
+                    <li><a href="/standardachievement">Achievement</a></li>
                     <li><a href="/standardmembercoach" className="active">Coach</a></li>
                     <li><a href="/standardmembercommun">Community</a></li>
                     <li><a href="/feedback">Feedback</a></li>

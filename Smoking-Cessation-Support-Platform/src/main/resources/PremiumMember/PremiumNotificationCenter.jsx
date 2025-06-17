@@ -427,7 +427,7 @@ function NotificationCenter() {
                 <ul className="nav-links">
                     <li><a href="/premiummemberhome">Home</a></li>
                     <li><a href="/premiummemberdashboard">Dashboard</a></li>
-                    <li><a href="/achievement">Achievement</a></li>
+                    <li><a href="/premiumachievement">Achievement</a></li>
                     <li><a href="/premiummembercoach">Coach</a></li>
                     <li><a href="/premiummembercommun">Community</a></li>
                     <li><a href="/feedbackpremium">Feedback</a></li>
