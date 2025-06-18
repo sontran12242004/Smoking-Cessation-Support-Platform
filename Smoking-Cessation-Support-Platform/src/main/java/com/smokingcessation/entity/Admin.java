@@ -1,19 +1,16 @@
 package com.smokingcessation.entity;
 
-import com.smokingcessation.enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
+import java.util.List;
 
 @Entity
-@Table(name = "admins")
 @Getter
 @Setter
-public class Admin implements UserDetails {
+@Table(name = "admin")
+public class Admin {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,28 +21,7 @@ public class Admin implements UserDetails {
     public String password;
     public String fullName;
 
-    @Enumerated(EnumType.STRING)
-    public Role role = Role.ADMIN;
-
-    private boolean isActive = true;
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
-
-    @Override
-    public String getPassword() {
-        return this.password;
-    }
-
-    @Override
-    public String getUsername() {
-        return this.email;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return this.isActive;
-    }
+    @OneToMany(mappedBy = "admin")
+    @JsonIgnore
+    List<Coach> coach;
 }

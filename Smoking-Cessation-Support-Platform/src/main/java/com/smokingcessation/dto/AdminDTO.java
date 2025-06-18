@@ -1,17 +1,17 @@
 package com.smokingcessation.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.smokingcessation.enums.Role;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class AdminDTO {
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private long id;
+
+
     private String email;
     private String phone;
     private String fullName;
-    private Role role;
-    private String token;
 }

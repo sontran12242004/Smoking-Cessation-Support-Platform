@@ -1,10 +1,7 @@
 package com.smokingcessation.controller;
 
 import com.smokingcessation.dto.AdminDTO;
-import com.smokingcessation.entity.Account;
 import com.smokingcessation.entity.Admin;
-import com.smokingcessation.entity.Members;
-import com.smokingcessation.enums.Role;
 import com.smokingcessation.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,53 +10,45 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin")
-@CrossOrigin("*")
+@RequestMapping("/api/admins")
 public class AdminController {
 
     @Autowired
     private AdminService adminService;
 
-    @GetMapping("/users")
-    public ResponseEntity<List<Members>> getAllUsers() {
-        return ResponseEntity.ok(adminService.getAllUsers());
+    @GetMapping
+    public List<Admin> getAllAdmins() {
+        return adminService.getAllAdmins();
     }
 
-    @GetMapping("/accounts")
-    public ResponseEntity<List<Account>> getAllAccounts() {
-        return ResponseEntity.ok(adminService.getAllAccounts());
+    @GetMapping("/{id}")
+    public ResponseEntity<Admin> getAdminById(@PathVariable Long id) {
+        return adminService.getAdminById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/users/{email}/role")
-    public ResponseEntity<Account> updateUserRole(
-            @PathVariable String email,
-            @RequestParam Role newRole) {
-        Account updatedAccount = adminService.updateUserRole(email, newRole);
-        if (updatedAccount != null) {
-            return ResponseEntity.ok(updatedAccount);
+    @PostMapping
+    public Admin createAdmin(@RequestBody AdminDTO adminDTO) {
+        return adminService.createAdmin(adminDTO);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Admin> updateAdmin(@PathVariable Long id, @RequestBody Admin admin) {
+        Admin updated = adminService.updateAdmin(id, admin);
+        if (updated != null) {
+            return ResponseEntity.ok(updated);
+        } else {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/users/{email}")
-    public ResponseEntity<Void> deleteUser(@PathVariable String email) {
-        if (adminService.deleteUser(email)) {
-            return ResponseEntity.ok().build();
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAdmin(@PathVariable Long id) {
+        if (adminService.deleteAdmin(id)) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
-    }
-
-    @GetMapping("/statistics/users")
-    public ResponseEntity<Long> getTotalUsers() {
-        return ResponseEntity.ok(adminService.getTotalUsers());
-    }
-
-    @GetMapping("/users/{email}")
-    public ResponseEntity<Members> getUserByEmail(@PathVariable String email) {
-        Members user = adminService.findUserByEmail(email);
-        if (user != null) {
-            return ResponseEntity.ok(user);
-        }
-        return ResponseEntity.notFound().build();
     }
 }
