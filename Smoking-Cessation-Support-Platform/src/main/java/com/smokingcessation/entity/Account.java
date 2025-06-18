@@ -1,6 +1,7 @@
 package com.smokingcessation.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smokingcessation.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Getter
@@ -41,4 +43,9 @@ public class Account implements UserDetails {
     public String getUsername() {
         return this.email;
     }
+
+    @OneToMany(mappedBy = "account")
+    @JsonIgnore
+    List<AccountSlot> accountSlots;
+
 }

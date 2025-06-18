@@ -2,6 +2,7 @@ package com.smokingcessation.exception;
 
 
 import com.smokingcessation.exception.exceptions.AuthenticationException;
+import com.smokingcessation.exception.exceptions.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -32,4 +33,11 @@ public class MyExceptionHandler {
     public ResponseEntity handleAuthenticationException(AuthenticationException exception){
         return new ResponseEntity(exception.getMessage(), HttpStatus.UNAUTHORIZED);
     }
+
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity handleBadRequestException(BadRequestException exception){
+        return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
 }

@@ -4,6 +4,7 @@ import com.smokingcessation.dto.AssignRequest;
 import com.smokingcessation.dto.CoachDTO;
 import com.smokingcessation.entity.Coach;
 import com.smokingcessation.service.CoachService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@SecurityRequirement(name = "api")
 @RequestMapping("/api/coaches")
 public class CoachController {
 
