@@ -59,6 +59,9 @@ public class AppointmentService {
         appointment.setStatus(AppointmentEnum.PENDING);
         appointment.setAccount(currentAccount);
         appointment.setMedicineServices(services);
+        appointmentRepository.save(appointment);
+
+        slot.setAvailable(false);
 
         return appointment;
     }

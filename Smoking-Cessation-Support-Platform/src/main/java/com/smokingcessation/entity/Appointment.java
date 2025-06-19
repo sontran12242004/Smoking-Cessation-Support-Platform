@@ -18,6 +18,7 @@ public class Appointment {
 
     LocalDate createAt;
 
+    @Enumerated(EnumType.STRING)
     AppointmentEnum status;
 
     @ManyToOne
