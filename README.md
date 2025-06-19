@@ -6,16 +6,13 @@
 |----|------|
 |SE192039|Hồ Minh Quân|
 |SE184125|Dương Thanh Việt Anh|
-## Drive of pictures in project
 
+
+## Reference Figma prototype link of the project
+https://www.figma.com/design/WvIJx518iGxQchmAsYslLF/NicOff?node-id=0-1&p=f&t=qWK6zC5P7JhDPiib-0
+
+## Google Drive of pictures in project
 https://drive.google.com/drive/folders/1c9VzVh-IRoopi90gkLEMoMIGBLm2Seoz?usp=sharing
 
 
-
-
-![Image](https://github.com/user-attachments/assets/89e46c32-8326-44f1-9ed2-51b74837a21d)
-
-![Image](https://github.com/user-attachments/assets/42aea697-4175-46d5-8e56-31395ed304ed)
-
-![Image](https://github.com/user-attachments/assets/8eab5e02-5033-481c-b4f5-62e1dd605e4a)
 
