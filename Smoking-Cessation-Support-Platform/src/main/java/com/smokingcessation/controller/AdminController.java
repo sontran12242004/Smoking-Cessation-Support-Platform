@@ -3,6 +3,7 @@ package com.smokingcessation.controller;
 import com.smokingcessation.dto.AdminDTO;
 import com.smokingcessation.entity.Admin;
 import com.smokingcessation.service.AdminService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admins")
+@SecurityRequirement(name = "api")
+
 public class AdminController {
 
     @Autowired

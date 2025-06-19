@@ -1,30 +1,26 @@
 package com.smokingcessation.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
-public class AccountSlot
-{
+public class MedicineService {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long id;
-    LocalDate date;
 
+    String name;
+    String description;
+    float price;
     boolean isAvailable = true;
 
-    @ManyToOne
-    @JoinColumn(name = "account_id")
-    Account account;
-
-    @ManyToOne
-    @JoinColumn(name ="slot_id")
-    Slot slot;
-
+    @ManyToMany
+    @JsonIgnore
+    List<Appointment> appointments;
 }
-

@@ -48,4 +48,7 @@ public class Account implements UserDetails {
     @JsonIgnore
     List<AccountSlot> accountSlots;
 
+    @OneToMany
+            @JsonIgnore
+    List<Appointment> appointments;
 }
