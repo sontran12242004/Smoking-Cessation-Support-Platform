@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 function PackagePage() {
   const [showPayment, setShowPayment] = useState(false);
+  const navigate = useNavigate();
 
   const handleSelectPackage = () => {
     setShowPayment(true);
@@ -23,7 +25,7 @@ body,
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color:rgb(29, 228, 52);
+  background-color: #DBF5DD;
 }
 
 header {
@@ -91,23 +93,9 @@ main {
   flex-direction: column;
   align-items: center;
   padding: 40px;
-  background-image: url('/z6704234340468_d0d12baf257178fe87207c3dc9979725.jpg');
-  background-size: cover;
-  background-position: center;
+  background: #DBF5DD;
   text-align: center;
   position: relative;
-}
-
-main::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(192,192,192,0.4);
-  z-index: 1;
-  backdrop-filter: blur(8px);
 }
 
 .service-package-intro {
@@ -118,23 +106,25 @@ main::before {
   .service-package-intro h2 {
     font-size: 42px;
     margin-bottom: 15px;
-    color: #388E3C; /* Dark green for heading */
-    text-shadow: none; /* Remove text shadow */
+    color: #388E3C;
+    text-shadow: none;
   }
   
   .service-package-intro p {
     font-size: 20px;
     opacity: 1;
     font-weight: 300;
-    color: #666; /* Dark grey for description */
+    color: #666;
   }
 
 .packages-container {
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 30px;
   flex-wrap: wrap;
   z-index: 2;
+  min-height: 400px;
 }
 
 .package-card {
@@ -198,33 +188,6 @@ main::before {
 
 .package-card .features li {
   margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  font-size: 17px;
-  color: #444;
-  transition: color 0.3s ease, transform 0.2s ease;
-}
-
-.package-card .features li:hover {
-  color: #4CAF50;
-  transform: translateX(5px);
-}
-
-.package-card .features .check-icon {
-  color: #4CAF50;
-  font-size: 22px;
-  margin-right: 12px;
-  transition: transform 0.2s ease;
-}
-
-.package-card:hover .features .check-icon {
-  transform: scale(1.2); /* Pop effect on hover */
-}
-
-.package-card .features .cross-icon {
-  color: #D32F2F;
-  font-size: 22px;
-  margin-right: 12px;
 }
 
 .select-package-button {
@@ -663,91 +626,296 @@ main::before {
     padding: 12px 20px;
   }
 }
+
+.welcome-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 40px;
+  background-color: #fff;
+  border-bottom: 1px solid #d0e8ef;
+}
+
+.header-left,
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.header-center .logo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.header-center .app-name {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-center .app-name h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #4CAF50;
+}
+
+.header-center .app-name p {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.elite-nav {
+  background-color: #fff;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  width: 100vw;
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.elite-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}
+
+.elite-nav a {
+  text-decoration: none;
+  color: #5EBB34;
+  font-weight: 400;
+  font-size: 16px;
+  padding: 5px 0;
+  position: relative;
+  transition: color 0.3s;
+}
+
+.elite-nav a::after {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 3px;
+  background: #5EBB34;
+  border-radius: 2px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  z-index: 1;
+}
+
+.elite-nav a:hover::after, .elite-nav a:focus::after, .elite-nav a.active::after {
+  transform: scaleX(1);
+}
+
+.select-package-btn {
+  background: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 32px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.18s;
+  box-shadow: 0 2px 8px #4caf5022;
+}
+
+.select-package-btn:hover {
+  background: #388E3C;
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 4px 16px #4caf5044;
+}
+
+.payment-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.payment-modal {
+  background: #fff;
+  border-radius: 16px;
+  padding: 32px 28px 24px 28px;
+  min-width: 340px;
+  max-width: 95vw;
+  box-shadow: 0 8px 32px rgba(60,120,60,0.18);
+  position: relative;
+}
+
+.close-modal-btn {
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: #333;
+  cursor: pointer;
+}
+
+.payment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.payment-form label {
+  font-size: 15px;
+  color: #222;
+  margin-bottom: 2px;
+}
+
+.payment-form input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #b6d7b0;
+  border-radius: 6px;
+  font-size: 16px;
+  margin-top: 4px;
+  margin-bottom: 2px;
+}
+
+.pay-btn {
+  background: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 0;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.18s;
+}
+
+.pay-btn:hover {
+  background: #388E3C;
+  transform: translateY(-2px) scale(1.03);
+}
   `;
 
   return (
     <div>
       <style>{styles}</style>
-      {/* Header */}
-      <header>
-        <nav>
+      <div className="welcome-header">
+        <div className="header-left"></div>
+        <div className="header-center">
           <div className="logo-section">
-            <span className="logo">LOGO</span>
             <div className="app-name">
               <h1>NicOff</h1>
               <p>Turn Off Nicotine, Turn On Life!</p>
             </div>
           </div>
-          <ul className="nav-links">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Dashboard</a></li>
-            <li><a href="#">Achievement</a></li>
-            <li><a href="#">Coach</a></li>
-            <li><a href="#">Community</a></li>
-            <li><a href="#">Feedback</a></li>
-          </ul>
-        </nav>
-      </header>
+        </div>
+        <div className="header-right"></div>
+      </div>
+      <nav className="elite-nav">
+        <ul>
+          <li><Link to="/elite/home">Home</Link></li>
+          <li><Link to="/elite/dashboard">Dashboard</Link></li>
+          <li><Link to="/elite/achievement">Achievement</Link></li>
+          <li><Link to="/elite/coach">Coach</Link></li>
+          <li><Link to="/elite/community">Community</Link></li>
+          <li><Link to="/elite/feedback">Feedback</Link></li>
+        </ul>
+      </nav>
 
       {/* Main Content */}
       <main>
-        <section className="service-package-intro">
-          <h2>Service Package</h2>
-          <p>Nicoff offers comprehensive support packages for your quitting smoking journey.</p>
-        </section>
-
-        <section className="packages-container">
-          {/* Standard Package */}
-          <div className="package-card">
-            <h3>Standard Package</h3>
-            <p className="price">$29</p>
-            <p className="frequency">/month</p>
-            <hr />
-            <ul className="features">
-              <li><i className="check-icon">✔️</i> Basic progress tracking</li>
-              <li><i className="check-icon">✔️</i> Community Access</li>
-              <li><i className="check-icon">✔️</i> Weekly tips</li>
+        <div className="service-package-intro">
+          <h2>Subcribe Your Package</h2>
+          <p>Unlock the best support for your smoke-free journey.</p>
+        </div>
+        <div className="packages-container" style={{ flexDirection: 'column', alignItems: 'center' }}>
+          <div className="package-card elite" style={{
+            background: '#DBF5DD',
+            boxShadow: '0 4px 24px rgba(60,120,60,0.10)',
+            textAlign: 'left',
+            minWidth: 320,
+            borderRadius: 18,
+            border: '1.5px solid #b6d7b0',
+            padding: '32px 24px 28px 24px',
+            marginTop: 24,
+            marginBottom: 12,
+            transition: 'box-shadow 0.3s, transform 0.2s',
+            position: 'relative',
+          }}
+          onMouseOver={e => { e.currentTarget.style.boxShadow = '0 8px 32px rgba(60,120,60,0.18)'; e.currentTarget.style.transform = 'translateY(-4px) scale(1.015)'; }}
+          onMouseOut={e => { e.currentTarget.style.boxShadow = '0 4px 24px rgba(60,120,60,0.10)'; e.currentTarget.style.transform = 'none'; }}
+          >
+            <h3 style={{
+              color: '#388E3C',
+              fontWeight: 700,
+              marginBottom: 22,
+              textAlign: 'center',
+              textShadow: '2px 4px 8px #b6d7b0',
+              fontSize: 30,
+              letterSpacing: 1
+            }}>Elite Package</h3>
+            <div style={{ textAlign: 'center', marginBottom: 24 }}>
+              <span style={{ fontSize: 28, fontWeight: 900, color: '#222', letterSpacing: 2 }}>$</span>
+              <span style={{ fontSize: 28, fontWeight: 900, color: '#222', margin: '0 8px' }}>299</span>
+              <span style={{ fontSize: 18, fontWeight: 400, color: '#222', marginLeft: 4 }}>/year</span>
+            </div>
+            <ul className="features" style={{ color: '#222', margin: 0, padding: 0, listStyle: 'none', fontSize: 16, fontWeight: 400 }}>
+              <li style={{ display: 'flex', alignItems: 'center', marginBottom: 14, gap: 10 }}><span style={{ color: '#1ca21c', fontSize: 22, marginRight: 8 }}>✓</span><span>Premium progress tracking</span></li>
+              <li style={{ display: 'flex', alignItems: 'center', marginBottom: 14, gap: 10 }}><span style={{ color: '#1ca21c', fontSize: 22, marginRight: 8 }}>✓</span><span>Community access</span></li>
+              <li style={{ display: 'flex', alignItems: 'center', marginBottom: 14, gap: 10 }}><span style={{ color: '#1ca21c', fontSize: 22, marginRight: 8 }}>✓</span><span>Daily tips</span></li>
+              <li style={{ display: 'flex', alignItems: 'center', marginBottom: 14, gap: 10 }}><span style={{ color: '#1ca21c', fontSize: 22, marginRight: 8 }}>✓</span><span>Personal coach</span></li>
+              <li style={{ display: 'flex', alignItems: 'center', marginBottom: 14, gap: 10 }}><span style={{ color: '#1ca21c', fontSize: 22, marginRight: 8 }}>✓</span><span>Advanced analytics</span></li>
+              <li style={{ display: 'flex', alignItems: 'center', gap: 10 }}><span style={{ color: '#1ca21c', fontSize: 22, marginRight: 8 }}>✓</span><span>Email reminders</span></li>
             </ul>
-            <button className="select-package-button" onClick={handleSelectPackage}>Select Package</button>
           </div>
-
-          {/* Premium Package */}
-          <div className="package-card popular">
-            <div className="popular-badge">Popular</div>
-            <h3>Premium Package</h3>
-            <p className="price">$159</p>
-            <p className="frequency">/6 month</p>
-            <p className="save-text">Save 11% on Standard Package</p>
-            <hr />
-            <ul className="features">
-              <li><i className="check-icon">✔️</i> Premium progress tracking</li>
-              <li><i className="check-icon">✔️</i> Community access</li>
-              <li><i className="check-icon">✔️</i> Weekly tips</li>
-              <li><i className="cross-icon">❌</i> Personal coach</li>
-              <li><i className="cross-icon">❌</i> Advanced analytics</li>
-              <li><i className="check-icon">✔️</i> Email reminders</li>
-            </ul>
-            <button className="select-package-button" onClick={handleSelectPackage}>Select Package</button>
+          <div style={{ textAlign: 'center', marginTop: 0 }}>
+            <button className="select-package-btn" onClick={() => setShowPayment(true)}>
+              Select This Package
+            </button>
           </div>
-
-          {/* Elite Package */}
-          <div className="package-card elite">
-            <h3>Elite Package</h3>
-            <p className="price">$299</p>
-            <p className="frequency">/12 month</p>
-            <p className="save-text">Save 17% on Premium Package</p>
-            <hr />
-            <ul className="features">
-              <li><i className="check-icon">✔️</i> Pro progress tracking</li>
-              <li><i className="check-icon">✔️</i> Community access</li>
-              <li><i className="check-icon">✔️</i> Daily tips</li>
-              <li><i className="check-icon">✔️</i> Personal coach</li>
-              <li><i className="check-icon">✔️</i> Advanced analytics</li>
-              <li><i className="check-icon">✔️</i> Email reminders</li>
-            </ul>
-            <button className="select-package-button" onClick={handleSelectPackage}>Select Package</button>
-          </div>
-        </section>
+          {showPayment && (
+            <div className="payment-modal-overlay" onClick={() => setShowPayment(false)}>
+              <div className="payment-modal" onClick={e => e.stopPropagation()}>
+                <button className="close-modal-btn" onClick={() => setShowPayment(false)}>&times;</button>
+                <h2 style={{ textAlign: 'center', marginBottom: 18 }}>Payment Information</h2>
+                <form className="payment-form" onSubmit={e => { e.preventDefault(); setShowPayment(false); navigate('/elite/home'); }}>
+                  <label>Name on Card
+                    <input type="text" placeholder="Full Name" required />
+                  </label>
+                  <label>Card Number
+                    <input type="text" placeholder="1234 5678 9012 3456" maxLength={19} required />
+                  </label>
+                  <div style={{ display: 'flex', gap: 12 }}>
+                    <label style={{ flex: 1 }}>Expiry
+                      <input type="text" placeholder="MM/YY" maxLength={5} required />
+                    </label>
+                    <label style={{ flex: 1 }}>CVC
+                      <input type="text" placeholder="CVC" maxLength={4} required />
+                    </label>
+                  </div>
+                  <button type="submit" className="pay-btn">Pay</button>
+                </form>
+              </div>
+            </div>
+          )}
+        </div>
       </main>
 
       {/* Payment Information Section */}
@@ -777,7 +945,7 @@ main::before {
                 <input type="text" id="cvv" placeholder="123 ..." />
               </div>
             </div>
-            <button className="complete-select-button">Complete Select</button>
+            <button className="complete-select-button" onClick={() => navigate('/elite/home')}>Pay</button>
           </div>
         </section>
       )}

@@ -1,7 +1,9 @@
 import React from 'react';
-import journeyPath from '/z6704234340468_d0d12baf257178fe87207c3dc9979725.jpg';
+import { useNavigate } from 'react-router-dom';
+import journeyPath from '../assets/journey_path.jpg';
 
 function WelcomePage() {
+  const navigate = useNavigate();
   const styles = `
 /* react-app/src/components/WelcomePage.css */
 
@@ -181,7 +183,7 @@ body,
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: url('/journey_path.jpg');
+    background-image: linear-gradient(rgba(223, 245, 222, 0.5), rgba(223, 245, 222, 0.5)), url(${journeyPath});
     background-size: cover;
     background-position: center;
     color: #fff;
@@ -629,31 +631,7 @@ body,
       </nav>
 
       {/* Main Content */}
-      <main
-        className="welcome-main"
-        style={{
-          backgroundImage: `url(${journeyPath})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          color: '#fff',
-          padding: '20px',
-          flexGrow: 1,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          position: 'relative',
-        }}
-      >
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          background: 'rgba(223, 245, 222, 0.5)',
-          zIndex: 0,
-          pointerEvents: 'none',
-        }} />
+      <main className="welcome-main">
         <section className="welcome-message-card" style={{position: 'relative', zIndex: 1}}>
           <h2 style={{color: '#249325', marginTop: 0, marginBottom: 20}}><em>Welcome to NicOff!</em></h2>
           <p className="bold-message" style={{fontStyle: 'italic', fontWeight: 300}}>
@@ -664,7 +642,7 @@ body,
             <em>in turning off nicotine and turning on life.</em>
           </p>
           <p className="quote">"Every journey begins with a single step - you've just taken yours!"</p>
-          <button className="explore-button">Explore NicOff Now ➔</button>
+          <button className="explore-button" onClick={() => navigate('/elite/home')}>Explore NicOff Now ➔</button>
         </section>
       </main>
 

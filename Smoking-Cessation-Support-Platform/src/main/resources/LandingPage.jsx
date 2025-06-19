@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import landingBg from './assets/landing.jpg';
 
 export default function LandingPage() {
-  const [showResources, setShowResources] = useState(false);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
 
   const handleFeatureClick = (e) => {
@@ -15,40 +15,6 @@ export default function LandingPage() {
       {/* Header */}
       <header className="welcome-header">
         <div className="header-left">
-          <div className="resources-menu">
-            <button 
-              className="resources-btn"
-              onMouseEnter={() => setShowResources(true)}
-              onMouseLeave={() => setShowResources(false)}
-            >
-              Resources
-              <span className="dropdown-arrow">▼</span>
-            </button>
-            {showResources && (
-              <div 
-                className="resources-dropdown"
-                onMouseEnter={() => setShowResources(true)}
-                onMouseLeave={() => setShowResources(false)}
-              >
-                <Link to="/ebooks" className="resource-item">
-                  <span role="img" aria-label="book">📚</span>
-                  E-books
-                </Link>
-                <Link to="/videos" className="resource-item">
-                  <span role="img" aria-label="video">🎥</span>
-                  Video Guides
-                </Link>
-                <Link to="/infographics" className="resource-item">
-                  <span role="img" aria-label="chart">📊</span>
-                  Infographics
-                </Link>
-                <Link to="/tools" className="resource-item">
-                  <span role="img" aria-label="tools">🛠️</span>
-                  Support Tools
-                </Link>
-              </div>
-            )}
-          </div>
         </div>
         <div className="header-center">
           <div className="logo-section">
@@ -102,22 +68,17 @@ export default function LandingPage() {
       )}
 
       {/* Main content */}
-      <div className="landing-bg-split">
-        <div className="landing-left">
-          <div className="landing-content">
-            <h1>Journey To<br /><span>A Smoke-Free Life</span></h1>
-            <p>
-              We accompany you on the path to quitting smoking, aiming for a healthy and energetic life.
-            </p>
-            <div className="landing-benefits">
-              <div><span role="img" aria-label="money">💰</span> Save money</div>
-              <div><span role="img" aria-label="lungs">🫁</span> Healthier lungs</div>
-              <div><span role="img" aria-label="heart">❤️</span> Reduced risk of heart disease</div>
-            </div>
+      <div className="landing-bg" style={{ background: `url(${landingBg}) center center/cover no-repeat`, minHeight: '800px', width: '100%' }}>
+        <div className="landing-content" style={{ padding: '40px 0 0 7vw' }}>
+          <h1 style={{ fontSize: 48, fontWeight: 700, marginBottom: 0, color: '#222', lineHeight: 1.1 }}>Journey To<br /><span style={{ color: '#43b72a' }}>A Smoke-Free Life</span></h1>
+          <p style={{ fontSize: 20, color: '#222', margin: '32px 0 24px 0', maxWidth: 480 }}>
+            We accompany you on the path to quitting smoking, aiming for a healthy and energetic life.
+          </p>
+          <div className="landing-benefits" style={{ fontSize: 18, color: '#222', display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <div><span role="img" aria-label="money" style={{ marginRight: 8 }}>💰</span> Save money</div>
+            <div><span role="img" aria-label="lungs" style={{ marginRight: 8 }}>🫁</span> Healthier lungs</div>
+            <div><span role="img" aria-label="heart" style={{ marginRight: 8 }}>❤️</span> Reduced risk of heart disease</div>
           </div>
-        </div>
-        <div className="landing-right">
-          {/* Ảnh rõ nét */}
         </div>
       </div>
 
@@ -328,92 +289,108 @@ export default function LandingPage() {
           </div>
           <div className="stories-card">
             <div className="stories-quote stories-quote-blue">“</div>
-            <div className="stories-content">I used lozenges to help with cravings. However, when I'm around smokers I use a vape. This helped me quit for good. The NHS Quit Smoking app also helped. It shows the massive financial savings made. I'm totally confident that I have no need to smoke ever again.</div>
+            <div className="stories-content">I used lozenges to help with cravings. However, when I'm around smokers I use a vape. This helped me quit for good. The NicOff app also helped. It shows the massive financial savings made. I'm totally confident that I have no need to smoke ever again.</div>
             <div className="stories-name">Maria</div>
           </div>
           <div className="stories-card">
             <div className="stories-quote stories-quote-yellow">“</div>
-            <div className="stories-content">The NHS Quit Smoking app really helped me. I liked seeing my progress. Recording my goals and reading other people's stories kept me motivated. The daily health achievements made me feel proud. It was great to see how much money I saved too.</div>
+            <div className="stories-content">The NicOff app really helped me. I liked seeing my progress. Recording my goals and reading other people's stories kept me motivated. The daily health achievements made me feel proud. It was great to see how much money I saved too.</div>
             <div className="stories-name">Heather</div>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-            <footer>
-                <div className="footer-content">
-                    <div className="footer-column">
-                        <h4>NicOff</h4>
-                        <p>
-                            We're dedicated to helping you break free from smoking addiction
-                            through science-backed methods and community support
-                        </p>
-                    </div>
-                    <div className="footer-column">
-                        <h4>Quick Links</h4>
-                        <ul>
-                            <li>
-                                <Link to="/about">About Us</Link>
-                            </li>
-                            <li>
-                                <a href="/ourprograms">Our Programs</a>
-                            </li>
-                            <li>
-                                <a href="/successstories">Success Stories</a>
-                            </li>
-                            <li>
-                                <a href="/blog">Blog</a>
-                            </li>
-                            <li>
-                                <a href="contact">Contact</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div className="footer-column">
-                        <h4>Support</h4>
-                        <ul>
-                            <li>
-                                <a href="/faq">FAQ</a>
-                            </li>
-                            <li>
-                                <a href="/helpcenter">Help Center</a>
-                            </li>
-                            <li>
-                                <a href="/privacypolicy">Privacy Policy</a>
-                            </li>
-                            <li>
-                                <a href="/termsofservice">Term Of Service</a>
-                            </li>
-                            <li>
-                                <a href="/cookiepolicy">Cookie Policy</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div className="footer-column">
-                        <h4>NewsLetter</h4>
-                        <div className="newsletter-form">
-                            <input
-                                type="email"
-                                placeholder="Your Email Address..."
-                                className="newsletter-input"
-                            />
-                            <button className="newsletter-button">Subscribe</button>
-                        </div>
-                        <p className="newsletter-description">
-                            Get the latest tips and motivation to stay smoke-free delivered to
-                            your inbox
-                        </p>
-                    </div>
-                </div>
-                <hr className="footer-divider" />
-                <div className="footer-bottom-text">
-                    © 2025 NicOff. All rights reserved
-                </div>
-            </footer>
+      {/* Footer - copied 100% from EliteDashboard */}
+      <footer className="elite-footer">
+        <div className="footer-content">
+          <div className="footer-column">
+            <h3>NicOff</h3>
+            <p>We're dedicated to helping you break free from smoking addiction through science-backed methods and community support</p>
+          </div>
+          <div className="footer-column">
+            <h3>Quick Links</h3>
+            <Link to="/about-us">About Us</Link>
+            <Link to="/our-programs">Our Programs</Link>
+            <Link to="/success-stories">Success Stories</Link>
+            <Link to="/blog">Blog</Link>
+            <Link to="/contact">Contact</Link>
+          </div>
+          <div className="footer-column">
+            <h3>Support</h3>
+            <Link to="/faq">FAQ</Link>
+            <Link to="/help-center">Help Center</Link>
+            <Link to="/privacy-policy">Privacy Policy</Link>
+            <Link to="/terms-of-service">Term Of Service</Link>
+            <Link to="/cookie-policy">Cookie Policy</Link>
+          </div>
+          <div className="footer-column">
+            <h3>NewsLetter</h3>
+            <input type="email" placeholder="Your Email Address..." className="newsletter-input" />
+            <button className="newsletter-button">Subscribe</button>
+            <p style={{fontSize: '0.8em', color: '#ccc', marginTop: '10px'}}>Get the latest tips and motivation to stay smoke-free delivered to your inbox</p>
+          </div>
+        </div>
+        <div className="copyright">
+          <p>© 2025 NicOff. All rights reserved</p>
+        </div>
+      </footer>
 
       <style>{`
-        body, #root, .landing-root {
-          overflow-x: hidden;
+        html, body, #root {
+          width: 100%;
+          height: 100%;
+          margin: 0;
+        }
+        body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          background-color: #f0f2f5;
+        }
+        h1, h2, h3, h4, h5, h6 {
+          font-family: Arial, sans-serif;
+          font-weight: bold;
+          margin: 0 0 12px 0;
+        }
+        h1 {
+          font-size: 40px;
+        }
+        h2 {
+          font-size: 32px;
+        }
+        h3 {
+          font-size: 26px;
+        }
+        p, .landing-content p, .harms-desc, .quit-journey-desc, .timeline-desc {
+          font-family: Arial, sans-serif;
+          font-size: 18px;
+          font-weight: 400;
+          color: #444;
+        }
+        .landing-benefits div, .harms-card-desc, .harms-card-stat, .quit-journey-card-desc, .timeline-item-desc {
+          font-family: Arial, sans-serif;
+          font-size: 17px;
+          font-weight: 400;
+        }
+        .harms-card-title, .quit-journey-card-title, .timeline-title {
+          font-family: Arial, sans-serif;
+          font-size: 22px;
+          font-weight: bold;
+        }
+        .welcome-nav a {
+          font-family: Arial, sans-serif;
+          font-size: 28px;
+          font-weight: bold;
+        }
+        .app-name h1 {
+          margin: 0;
+          font-size: 24px;
+          color: #4CAF50;
+          font-weight: bold;
+        }
+        .app-name p {
+          margin: 0 0 24px 0;
+          font-size: 14px;
+          color: #666;
         }
         .landing-root {
           min-height: 100vh;
@@ -423,13 +400,12 @@ export default function LandingPage() {
           flex-direction: column;
         }
         .welcome-header {
-          
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 1rem 2rem;
-          background:rgb(135, 222, 138);
-          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+          padding: 10px 0 0 0;
+          background: #fff;
+          border-bottom: 1px solid #e0e0e0;
         }
         .header-left {
           display: flex;
@@ -448,16 +424,6 @@ export default function LandingPage() {
         }
         .logo-section {
           text-align: center;
-        }
-        .app-name h1 {
-          margin: 0;
-          font-size: 2rem;
-          color: #333;
-        }
-        .app-name p {
-          margin: 0;
-          font-size: 0.9rem;
-          color: #666;
         }
         .login-btn, .signup-btn {
           display: inline-block;
@@ -585,20 +551,13 @@ export default function LandingPage() {
         .welcome-nav a:hover::after, .welcome-nav a:focus::after, .welcome-nav a.active::after {
           transform: scaleX(1);
         }
-        .landing-bg-split {
+        .landing-bg {
           flex: 1;
           width: 100vw;
           min-height: 0;
           display: flex;
           position: relative;
           background: url('/062ee20a141c6c4bd2de0fff189f0328b971bdd0.jpg') center center/cover no-repeat;
-        }
-        .landing-left {
-          flex: 1 1 50%;
-          min-width: 320px;
-          display: flex;
-          align-items: center;
-          justify-content: flex-end;
         }
         .landing-content {
           padding: 48px 40px 40px 40px;
@@ -754,7 +713,7 @@ export default function LandingPage() {
           }
         }
         @media (max-width: 900px) {
-          .landing-bg-split {
+          .landing-bg {
             flex-direction: column;
           }
           .landing-left, .landing-right {
@@ -1351,264 +1310,134 @@ export default function LandingPage() {
             font-size: 38px;
           }
         }
-        footer {
-      background-color: #333;
-      color: white;
-      padding: 50px 40px 20px;
-      font-size: 15px;
-      width: 100vw;
-      position: relative;
-      left: 50%;
-      right: 50%;
-      transform: translateX(-50%);
-      box-sizing: border-box;
-    }
-    .footer-content {
-      display: flex;
-      justify-content: space-around;
-      flex-wrap: wrap;
-      gap: 30px;
-      margin-bottom: 30px;
-      max-width: 1400px;
-      margin-left: auto;
-      margin-right: auto;
-      width: 100%;
-    }
-    .footer-column {
-      flex: 1;
-      min-width: 200px;
-      max-width: 280px;
-    }
-    .footer-column h4 {
-      font-size: 18px;
-      margin-bottom: 15px;
-      color: #8BC34A; /* Light green for headings */
-    }
-    .footer-column p,
-    .footer-column li a {
-      color: #CFD8DC;
-      line-height: 1.8;
-    }
-    .footer-column ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    .footer-column li {
-      margin-bottom: 10px;
-    }
-    .footer-column li a {
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
-    .footer-column li a:hover {
-      color: white;
-    }
-    .newsletter-form {
-      display: flex;
-      margin-bottom: 15px;
-    }
-      .newsletter-input {
-      flex-grow: 1;
-      padding: 10px 15px;
-      border: 1px solid #7CB342;
-      border-radius: 5px 0 0 5px;
-      font-size: 14px;
-      background-color: #558B2F; /* Darker green for input background */
-      color: white;
-    }
-    .newsletter-input::placeholder {
-      color: #B2FF59; /* Lighter green for placeholder */
-    }
-    .newsletter-button {
-      background-color: #8BC34A; /* Light green for button */
-      color: #333;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 0 5px 5px 0;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: bold;
-      transition: background-color 0.3s ease;
-    }
-    .newsletter-button:hover {
-      background-color: #9CCC65;
-    }
-    .newsletter-description {
-      font-size: 13px;
-      line-height: 1.6;
-      color: #CFD8DC;
-    }
-    .footer-divider {
-      border: none;
-      border-top: 1px solid rgba(255, 255, 255, 0.2);
-      margin: 30px auto;
-      width: 100%;
-      max-width: 1400px;
-    }
-    .footer-bottom-text {
-      text-align: center;
-      font-size: 14px;
-      color: #CFD8DC;
-      width: 100vw;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .resources-menu {
-      position: relative;
-      margin-right: 20px;
-    }
-
-    .resources-btn {
-      background: none;
-      border: none;
-      color: #333;
-      font-size: 16px;
-      padding: 8px 16px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      transition: color 0.3s ease;
-    }
-
-    .resources-btn:hover {
-      color: #007bff;
-    }
-
-    .dropdown-arrow {
-      font-size: 12px;
-      transition: transform 0.3s ease;
-    }
-
-    .resources-btn:hover .dropdown-arrow {
-      transform: rotate(180deg);
-    }
-
-    .resources-dropdown {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      padding: 8px 0;
-      min-width: 200px;
-      z-index: 1000;
-      animation: fadeIn 0.2s ease;
-    }
-
-    .resource-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 16px;
-      color: #333;
-      text-decoration: none;
-      transition: background-color 0.2s ease;
-    }
-
-    .resource-item:hover {
-      background-color: #f5f5f5;
-      color: #007bff;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .popup-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(0, 0, 0, 0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      animation: fadeIn 0.3s ease;
-    }
-
-    .login-popup {
-      background: white;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-      width: 90%;
-      max-width: 400px;
-      animation: slideIn 0.3s ease;
-    }
-
-    .popup-content {
-      text-align: center;
-    }
-
-    .popup-content h2 {
-      color: #333;
-      margin-bottom: 1rem;
-      font-size: 1.5rem;
-    }
-
-    .popup-content p {
-      color: #666;
-      margin-bottom: 1.5rem;
-    }
-
-    .popup-buttons {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-    }
-
-    .popup-login-btn {
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      padding: 0.8rem 1.5rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 500;
-      transition: background-color 0.3s ease;
-    }
-
-    .popup-login-btn:hover {
-      background-color: #45a049;
-    }
-
-    .popup-close-btn {
-      background-color: #f5f5f5;
-      color: #333;
-      border: none;
-      padding: 0.8rem 1.5rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 500;
-      transition: background-color 0.3s ease;
-    }
-
-    .popup-close-btn:hover {
-      background-color: #e0e0e0;
-    }
-
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+        .popup-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background: rgba(0,0,0,0.4);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+        }
+        .login-popup {
+          background: #fff;
+          border-radius: 16px;
+          box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+          padding: 40px 32px 32px 32px;
+          min-width: 340px;
+          max-width: 90vw;
+          text-align: center;
+          animation: fadeIn 0.2s ease;
+        }
+        .popup-content h2 {
+          font-size: 2rem;
+          font-weight: bold;
+          color: #222;
+          margin-bottom: 18px;
+        }
+        .popup-content p {
+          font-size: 1.15rem;
+          color: #555;
+          margin-bottom: 24px;
+        }
+        .popup-buttons {
+          display: flex;
+          gap: 18px;
+          justify-content: center;
+        }
+        .popup-login-btn, .popup-close-btn {
+          background: #4CAF50;
+          color: #fff;
+          border: none;
+          border-radius: 8px;
+          padding: 10px 28px;
+          font-size: 1rem;
+          font-weight: bold;
+          cursor: pointer;
+          transition: background 0.2s, transform 0.2s;
+        }
+        .popup-close-btn {
+          background: #eee;
+          color: #333;
+        }
+        .popup-login-btn:hover {
+          background: #388E3C;
+        }
+        .popup-close-btn:hover {
+          background: #ccc;
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(-20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .elite-footer {
+          background-color: #333;
+          color: #fff;
+          padding: 30px 20px;
+          text-align: center;
+          font-size: 14px;
+          width: 100vw;
+          position: relative;
+          left: 50%;
+          right: 50%;
+          transform: translateX(-50%);
+        }
+        .footer-content {
+          display: flex;
+          justify-content: space-around;
+          align-items: flex-start;
+          max-width: 1200px;
+          margin: 0 auto 20px auto;
+          text-align: left;
+          flex-wrap: wrap;
+        }
+        .footer-column {
+          flex: 1;
+          min-width: 200px;
+          padding: 10px;
+        }
+        .footer-column h3 {
+          font-size: 18px;
+          margin-bottom: 15px;
+          color: #4CAF50;
+        }
+        .footer-column p, .footer-column a {
+          font-size: 14px;
+          color: #ccc;
+          text-decoration: none;
+          display: block;
+          margin-bottom: 8px;
+        }
+        .footer-column a:hover {
+          color: #fff;
+        }
+        .newsletter-input {
+          padding: 8px;
+          border: none;
+          border-radius: 5px;
+          margin-right: 10px;
+          width: 150px;
+        }
+        .newsletter-button {
+          background-color: #4CAF50;
+          color: #fff;
+          border: none;
+          padding: 8px 15px;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+        .newsletter-button:hover {
+          background-color: #45a049;
+        }
+        .copyright {
+          border-top: 1px solid #555;
+          padding-top: 15px;
+          margin-top: 15px;
+          color: #white;
+          font-weight: 500;
         }
       `}</style>
     </div>
