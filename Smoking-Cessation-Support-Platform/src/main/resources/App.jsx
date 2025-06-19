@@ -3,10 +3,8 @@ import { Routes, Route } from 'react-router-dom'
 import LandingPage from './LandingPage'
 import Login from './Login'
 import SignUp from './SignUp'
-import PremiumMemberHome from './PremiumMember/PremiumMemberHome'
 import EliteWelcome from './EliteMember/EliteWelcome'
 import EliteHome from './EliteMember/EliteHome'
-import PremiumMember_DailyCheckIn from './PremiumMember/PremiumMember_DailyCheckIn'
 import EliteDailyCheckIn from './EliteMember/EliteDailyCheckIn'
 import Questionnaire from './EliteMember/Questionnaire'
 import TimeofSuccess from './EliteMember/TimeofSuccess'
@@ -14,7 +12,6 @@ import EliteDashboard from './EliteMember/EliteDashboard'
 import EliteHealthMetric from './EliteMember/EliteHealthMetric'
 import EliteAchievement from './EliteMember/EliteAchievement'
 import EliteCoach from './EliteMember/EliteCoach'
-import PremiumBookAppointment from './PremiumMember/PremiumBookAppointment'
 import EliteBookAppointment from './EliteMember/EliteBookAppointment'
 import EliteCommunity from './EliteMember/EliteCommunity'
 import EliteFeedback from './EliteMember/EliteFeedback'
@@ -36,10 +33,8 @@ function App() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />
-      <Route path="/premium-home" element={<PremiumMemberHome />} />
       <Route path="/elitewelcome" element={<EliteWelcome />} />
       <Route path="/elite/home" element={<EliteHome />} />
-      <Route path="/premium/daily-checkin" element={<PremiumMember_DailyCheckIn />} />
       <Route path="/elite/daily-checkin" element={<EliteDailyCheckIn />} />
       <Route path="/elite/questionnaire" element={<Questionnaire />} />
       <Route path="/elite/timeofsuccess" element={<TimeofSuccess />} />
@@ -47,7 +42,6 @@ function App() {
       <Route path="/elitehealthmetric" element={<EliteHealthMetric />} />
       <Route path="/elite/achievement" element={<EliteAchievement />} />
       <Route path="/elite/coach" element={<EliteCoach />} />
-      <Route path="/premium/book-appointment" element={<PremiumBookAppointment />} />
       <Route path="/elite/book-appointment" element={<EliteBookAppointment />} />
       <Route path="/elite/community" element={<EliteCommunity />} />
       <Route path="/elite/feedback" element={<EliteFeedback />} />
