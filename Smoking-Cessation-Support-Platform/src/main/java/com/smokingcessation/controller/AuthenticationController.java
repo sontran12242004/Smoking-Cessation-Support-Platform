@@ -3,8 +3,8 @@ package com.smokingcessation.controller;
 import com.smokingcessation.dto.AccountDTO;
 import com.smokingcessation.dto.ForgotPasswordDTO;
 import com.smokingcessation.dto.LoginDTO;
+import com.smokingcessation.dto.ResetPasswordDTO;
 import com.smokingcessation.entity.Account;
-import com.smokingcessation.entity.ForgotPassword;
 import com.smokingcessation.service.AuthenticationService;
 import jakarta.validation.Valid;
 import javassist.NotFoundException;
@@ -35,9 +35,14 @@ public class    AuthenticationController {
         return ResponseEntity.ok(account);
     }
 
-    @PostMapping("forgot-password")
+    @PostMapping("/forgot-password")
     public ResponseEntity forgotPassword(@Valid @RequestBody ForgotPasswordDTO forgotPasswordDTO) throws NotFoundException {
         authenticationService.forgotPassword(forgotPasswordDTO);
         return ResponseEntity.ok("Forgot Password Successfuly");
+    }
+    @PostMapping("/reset-password")
+    public ResponseEntity resetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO ){
+        authenticationService.resetPassword(resetPasswordDTO);
+        return ResponseEntity.ok("Reset Password Successfuly");
     }
 }

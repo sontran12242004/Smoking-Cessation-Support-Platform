@@ -26,7 +26,7 @@ public class EmailService {
 
             context.setVariable("name", emailDetail.getReceiver().getEmail());
             context.setVariable("button", "Go to page");
-            context.setVariable("link", "test");
+            context.setVariable("link", emailDetail.getLink());
 
             String html = templateEngine.process("emailtemplate", context);
 
@@ -35,7 +35,7 @@ public class EmailService {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
 
             // Setting up necessary details
-            mimeMessageHelper.setFrom("admin@gmail.com");
+            mimeMessageHelper.setFrom("sontran122242004@gmail.com");
             mimeMessageHelper.setTo(emailDetail.getRecipient());
             mimeMessageHelper.setText(html, true);
             mimeMessageHelper.setSubject(emailDetail.getSubject());

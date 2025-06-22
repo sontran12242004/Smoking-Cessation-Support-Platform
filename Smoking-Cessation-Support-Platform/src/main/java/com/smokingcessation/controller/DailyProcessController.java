@@ -30,7 +30,6 @@ public class DailyProcessController {
         DailyProcessDTO savedProcess = dailyProcessService.saveDailyProcess(dailyProcessDTO);
         return ResponseEntity.ok(savedProcess);
     }
-
     @GetMapping("/member/{memberId}")
     public ResponseEntity<List<DailyProcessDTO>> getAllProcessesForMember(@PathVariable Long memberId) {
         List<DailyProcessDTO> processes = dailyProcessService.getAllProcessesForMember(memberId);
