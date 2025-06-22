@@ -24,7 +24,7 @@ public class EmailService {
 
             Context context = new Context();
 
-            context.setVariable("name", "Gia Bao");
+            context.setVariable("name", emailDetail.getReceiver().getEmail());
             context.setVariable("button", "Go to page");
             context.setVariable("link", "test");
 

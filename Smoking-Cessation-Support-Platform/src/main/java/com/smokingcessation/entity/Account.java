@@ -4,6 +4,9 @@ package com.smokingcessation.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smokingcessation.enums.Role;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,9 +24,13 @@ public class Account implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long id;
 
-    public String email;
+    @Pattern(regexp = "84|0|[3|5|7|8|9] + (\\d{8})", message = "Invalid Phone!")
+    @Column(unique = true)
     public String phone;
+
+    @Size(min = 6, message = "Password must be at least 6 character!")
     public String password;
+
     public String fullName;
 
     @Enumerated(EnumType.STRING)
@@ -51,4 +58,8 @@ public class Account implements UserDetails {
     @OneToMany
             @JsonIgnore
     List<Appointment> appointments;
+
+    @Email(message = "invalid email!")
+    @Column(unique = true)
+    public String email;;
 }

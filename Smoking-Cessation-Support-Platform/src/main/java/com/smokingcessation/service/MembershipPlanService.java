@@ -19,7 +19,6 @@ public class MembershipPlanService {
     // Khởi tạo dữ liệu mặc định
     @PostConstruct
     public void initDefaultPlans() {
-        addPlanIfNotExists("Standard Package - Basic Program (4 weeks)", 28, new BigDecimal("499000"));
         addPlanIfNotExists("Premium Package - Accelerated Program (6 months)", 180, new BigDecimal("1999000"));
         addPlanIfNotExists("Elite Package - Mastery Program (1 year)", 365, new BigDecimal("4999000"));
     }

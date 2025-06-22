@@ -3,10 +3,12 @@ package com.smokingcessation.service;
 
 import com.smokingcessation.dto.AccountDTO;
 import com.smokingcessation.dto.EmailDetail;
+import com.smokingcessation.dto.ForgotPasswordDTO;
 import com.smokingcessation.dto.LoginDTO;
 import com.smokingcessation.entity.Account;
 import com.smokingcessation.exception.exceptions.AuthenticationException;
 import com.smokingcessation.repository.AuthenticationRepository;
+import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -80,4 +82,21 @@ public class AuthenticationService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return authenticationRepository.findAccountByEmail(email);
     }
+
+    public void forgotPassword(String email) throws NotFoundException {
+        Account account = authenticationRepository.findAccountByEmail(email);
+        if(account == null){
+            throw new NotFoundException("Account Not Found");
+        }
+
+        else{
+            EmailDetail emailDetail =  new EmailDetail();
+            emailDetail.setReceiver(account);
+            emailDetail.setSubject("Reset Pasword");
+            emailDetail.setLink(""+ tokenService.generateToken(account));
+
+            emailService.sendMail(emailDetail);
+
+    }
+ }
 }
