@@ -38,7 +38,6 @@ import StandardMember_Commun from './StandardMember/StandardMember_Commun';
 import Feedback from './StandardMember/Feedback';
 import NotificationCenter from './StandardMember/NotificationCenter';
 import DailyCheckIn from './StandardMember/DailyCheckIn';
-import HealthMetric from './StandardMember/HealthMetric';
 
 function App() {
   return (
@@ -70,7 +69,6 @@ function App() {
       <Route path="/standard/feedback" element={<Feedback />} />
       <Route path="/standard/notification" element={<NotificationCenter />} />
       <Route path="/standard/daily-checkin" element={<DailyCheckIn />} />
-      <Route path="/standard/health-metric" element={<HealthMetric />} />
 
       <Route path="/package" element={<PackagePage />} />
       <Route path="/admin/dashboard" element={<AdminDashboard />} />

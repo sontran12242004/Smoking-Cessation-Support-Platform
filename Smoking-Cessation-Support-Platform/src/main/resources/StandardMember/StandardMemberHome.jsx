@@ -636,7 +636,7 @@ const StandardMemberHome = () => {
             <p>👤 Alex <span style={{float: 'right', fontSize: '0.8em', color: '#888'}}>Just now</span></p>
             <p>"I used the money I saved to buy a new bike!"</p>
           </div>
-          <a href="#" className="join-discussion-link">Join the discussion →</a>
+          <a href="/standard/community" className="join-discussion-link">Join the discussion →</a>
         </section>
 
         <section ref={dashboardLinkRef} className="animate-on-scroll" style={{textAlign: 'center', padding: '40px 20px', backgroundColor: '#DFF5DE'}}>

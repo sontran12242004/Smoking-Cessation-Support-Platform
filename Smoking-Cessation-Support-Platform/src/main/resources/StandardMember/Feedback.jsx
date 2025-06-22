@@ -1,24 +1,21 @@
-import React, { useState } from 'react';
-import EditProfileModal from '../EditProfileModal';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import journeyPath from '../assets/journey_path.jpg';
+
 function Feedback() {
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
-  const [feedback, setFeedback] = useState('');
+  const [feedback, setFeedback] = useState("");
   const [submitted, setSubmitted] = useState(false);
-  const [showEditProfile, setShowEditProfile] = useState(false);
   const navigate = useNavigate();
-
-  const handleNotificationClick = () => {
-    navigate('/notificationcenter');
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setSubmitted(true);
     // TODO: Gửi feedback lên server tại đây nếu cần
   };
-
+  const handleNotificationClick = () => {
+    navigate("/notificationcenter");
+  };
   const styles = `
     html, body, #root {
       width: 100%;
@@ -35,23 +32,28 @@ function Feedback() {
       flex-direction: column;
       min-height: 100vh;
     }
-    .welcome-header {
+    header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 10px 40px;
       background-color: #fff;
       border-bottom: 1px solid #d0e8ef;
+      width: 100vw;
+      position: relative;
+      left: 50%;
+      right: 50%;
+      transform: translateX(-50%);
+      box-sizing: border-box;
     }
-    .header-left,
-    .header-right {
+    .header-left, .header-right {
       display: flex;
       align-items: center;
-      gap: 15px;
     }
-    .profile-status {
+    .profile-section {
       display: flex;
       align-items: center;
+      margin-right: 20px;
       background: none;
       padding: 0;
       border-radius: 0;
@@ -82,6 +84,12 @@ function Feedback() {
       font-size: 20px;
       margin-right: 8px;
     }
+    .header-center {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
     .header-center .logo-section {
       display: flex;
       flex-direction: column;
@@ -95,12 +103,7 @@ function Feedback() {
       align-items: center;
       justify-content: center;
     }
-    .header-center .logo {
-      font-size: 24px;
-      font-weight: bold;
-      color: #333;
-      margin-right: 10px;
-    }
+    
     .header-center .app-name h1 {
       margin: 0;
       font-size: 24px;
@@ -111,30 +114,16 @@ function Feedback() {
       font-size: 14px;
       color: #666;
     }
-    .notification-icon {
-      font-size: 24px;
-      color: #f39c12;
-      cursor: pointer;
-    }
-    .logout-button {
-      background-color: #4CAF50;
-      color: #fff;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .logout-button:hover {
-      background-color: #45a049;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
     .welcome-nav {
       background-color: #fff;
       padding: 10px 0;
       border-bottom: 1px solid #eee;
+      width: 100vw;
+      position: relative;
+      left: 50%;
+      right: 50%;
+      transform: translateX(-50%);
+      box-sizing: border-box;
     }
     .welcome-nav ul {
       list-style: none;
@@ -146,12 +135,13 @@ function Feedback() {
     }
     .welcome-nav a {
       text-decoration: none;
-      color: #5EBB34;
-      font-weight: 400;
+      color: #4CAF50;
+      font-weight: 500;
       font-size: 16px;
       padding: 5px 0;
       position: relative;
       transition: color 0.3s;
+      opacity: 1;
     }
     .welcome-nav a::after {
       content: '';
@@ -161,7 +151,7 @@ function Feedback() {
       bottom: -2px;
       width: 100%;
       height: 3px;
-      background: #5EBB34;
+      background: #4CAF50;
       border-radius: 2px;
       transform: scaleX(0);
       transform-origin: left;
@@ -170,6 +160,26 @@ function Feedback() {
     }
     .welcome-nav a:hover::after, .welcome-nav a:focus::after, .welcome-nav a.active::after {
       transform: scaleX(1);
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+    }
+    .notification-icon {
+      font-size: 24px;
+      color: #FBC02D;
+      margin-right: 20px;
+      cursor: pointer;
+    }
+    .logout-button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
     }
     .feedback-bg {
       min-height: 50vh;
@@ -276,35 +286,44 @@ function Feedback() {
       margin-bottom: 15px;
     }
     .newsletter-input {
-      flex-grow: 1;
-      padding: 10px 15px;
-      border: 1px solid #7CB342;
-      border-radius: 5px 0 0 5px;
-      font-size: 14px;
-      background-color: #558B2F;
-      color: white;
+      padding: 4px 10px;
+      border: none;
+      border-radius: 5px;
+      margin-right: 10px;
+      width: 160px;
+      background: #fff;
+      color: #333;
+      font-size: 13px;
+      font-weight: 400;
+      height: 32px;
+      box-sizing: border-box;
     }
     .newsletter-input::placeholder {
-      color: #B2FF59;
+      color: #bbb;
+      opacity: 1;
     }
     .newsletter-button {
-      background-color: #8BC34A;
-      color: #333;
+      background-color: #4CAF50;
+      color: #fff;
       border: none;
-      padding: 10px 20px;
-      border-radius: 0 5px 5px 0;
+      padding: 4px 16px;
+      border-radius: 5px;
       cursor: pointer;
-      font-size: 14px;
-      font-weight: bold;
-      transition: background-color 0.3s ease;
+      font-size: 13px;
+      font-weight: 400;
+      height: 32px;
+      box-sizing: border-box;
+      display: inline-block;
+      vertical-align: middle;
     }
     .newsletter-button:hover {
-      background-color: #9CCC65;
+      background-color: #45a049;
     }
-    .newsletter-description {
+    .footer-column p.newsletter-desc {
+      margin-top: 8px;
       font-size: 13px;
-      line-height: 1.6;
-      color: #CFD8DC;
+      color: #ccc;
+      font-weight: 400;
     }
     .footer-divider {
       border: none;
@@ -471,18 +490,160 @@ function Feedback() {
         padding: 10px 10px;
       }
     }
+    .welcome-footer {
+      background-color: #333;
+      color: #fff;
+      padding: 40px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .footer-content {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin-bottom: 30px;
+      text-align: left;
+    }
+    .footer-section {
+      flex: 1;
+      min-width: 200px;
+    }
+    .footer-section h3 {
+      font-size: 20px;
+      margin-bottom: 15px;
+      color: #8BC34A;
+    }
+    .footer-section p,
+    .footer-section ul {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #eee;
+    }
+    .footer-section ul {
+      list-style: none;
+      padding: 0;
+    }
+    .footer-section ul li {
+      margin-bottom: 8px;
+    }
+    .footer-section ul li a {
+      text-decoration: none;
+      color: #B2FF59;
+      transition: color 0.3s ease;
+    }
+    .footer-section ul li a:hover {
+      color: #fff;
+    }
+    .newsletter input[type="email"] {
+      width: calc(100% - 20px);
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #555;
+      background-color: #444;
+      color: #fff;
+      border-radius: 5px;
+    }
+    .newsletter button {
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .newsletter button:hover {
+      background-color: #45a049;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .copyright {
+      border-top: 1px solid #555;
+      padding-top: 15px;
+      margin-top: 15px;
+    }
+    .elite-footer {
+      background-color: #333; 
+      color: #fff;
+      padding: 30px 20px;
+      text-align: center;
+      font-size: 14px;
+      width: 100vw;
+      position: relative;
+      left: 50%;
+      right: 50%;
+      transform: translateX(-50%);
+    }
+    .footer-content {
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-start;
+      max-width: 1200px;
+      margin: 0 auto 20px auto;
+      text-align: left;
+      flex-wrap: wrap;
+    }
+    .footer-column {
+      flex: 1;
+      min-width: 200px;
+      padding: 10px;
+    }
+    .footer-column h3 {
+      font-size: 18px;
+      margin-bottom: 15px;
+      color: #4CAF50;
+    }
+    .footer-column p, .footer-column a {
+      font-size: 14px;
+      color: #ccc;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 8px;
+    }
+    .footer-column a:hover {
+      color: #fff;
+    }
+    .newsletter-input {
+      padding: 8px;
+      border: none;
+      border-radius: 5px;
+      margin-right: 10px;
+      width: 150px;
+      background: #fff;
+      color: #333;
+    }
+    .newsletter-input::placeholder {
+      color: #888;
+      opacity: 1;
+    }
+    .newsletter-button {
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .newsletter-button:hover {
+      background-color: #45a049;
+    }
+    .copyright {
+      border-top: 1px solid #555;
+      padding-top: 15px;
+      margin-top: 15px;
+    }
   `;
 
   return (
     <div className="container">
       <style>{styles}</style>
-      <EditProfileModal open={showEditProfile} onClose={() => setShowEditProfile(false)} onSave={() => setShowEditProfile(false)} />
-      {/* Header */}
-      <header className="welcome-header">
+      <header>
         <div className="header-left">
-          <div className="profile-status">
-            <button className="profile-btn" onClick={() => setShowEditProfile(true)}>
-              <span className="profile-icon">👤</span> Standard Member
+          <div className="profile-section">
+            <button className="profile-btn" onClick={() => navigate('/standard-member-dashboard/edit-profile')}>
+              Standard Member
             </button>
           </div>
         </div>
@@ -495,126 +656,124 @@ function Feedback() {
           </div>
         </div>
         <div className="header-right">
-          <span className="notification-icon" onClick={handleNotificationClick}>🔔</span>
-          <button className="logout-button">Logout</button>
+          <div className="header-actions">
+            <span
+              className="notification-icon"
+              onClick={handleNotificationClick}
+            >
+              🔔
+            </span>
+            <button className="logout-button" onClick={() => navigate('/login')}>Logout</button>
+          </div>
         </div>
       </header>
-      {/* Navigation */}
       <nav className="welcome-nav">
         <ul>
-          <li><a href="/standardmemberhome">Home</a></li>
-          <li><a href="/standardmemberdashboard">Dashboard</a></li>
-          <li><a href="/standardachievement">Achievement</a></li>
-          <li><a href="/standardmembercoach">Coach</a></li>
-          <li><a href="/standardmembercommun">Community</a></li>
-          <li><a href="/feedback" className="active">Feedback</a></li>
+          <li>
+            <a href="/standard/home">Home</a>
+          </li>
+          <li>
+            <a href="/standard/dashboard">Dashboard</a>
+          </li>
+          <li>
+            <a href="/standard/achievement">Achievement</a>
+          </li>
+          <li>
+            <a href="/standard/coach">Coach</a>
+          </li>
+          <li>
+            <a href="/standard/community">Community</a>
+          </li>
+          <li>
+            <a href="/standard/feedback" className="active">Feedback</a>
+          </li>
         </ul>
       </nav>
-      <div className="feedback-bg">
-        <div className="feedback-card">
-          <div className="feedback-title">Share Your Feedback</div>
-          <div className="feedback-desc">
-            We value your opinion! Please let us know about your experience with NicOff. Your feedback helps us improve our service.
+      <div style={{ position: 'relative', background: `url(${journeyPath}) center/cover no-repeat`, minHeight: 'calc(100vh - 220px)' }}>
+        {/* Overlay */}
+        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: '#DFF5DE', opacity: 0.7, zIndex: 0 }} />
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <div className="feedback-bg">
+            <div className="feedback-card">
+              <div className="feedback-title">Share Your Feedback</div>
+              <div className="feedback-desc">
+                We value your opinion! Please let us know about your experience with
+                NicOff. Your feedback helps us improve our service.
+              </div>
+              <div className="feedback-question">
+                How would you rate your overall experience?
+              </div>
+              <div className="star-rating">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <span
+                    key={star}
+                    className={`star${(hover || rating) >= star ? " filled" : ""}`}
+                    onMouseEnter={() => setHover(star)}
+                    onMouseLeave={() => setHover(0)}
+                    onClick={() => setRating(star)}
+                    role="button"
+                    aria-label={`Rate ${star} star${star > 1 ? "s" : ""}`}
+                  >
+                    ★
+                  </span>
+                ))}
+              </div>
+              <form onSubmit={handleSubmit}>
+                <label className="feedback-label" htmlFor="feedback-text">
+                  Your feedback (optional):
+                </label>
+                <textarea
+                  id="feedback-text"
+                  className="feedback-textarea"
+                  placeholder="What did you like about NicOff? What we could improve?"
+                  value={feedback}
+                  onChange={(e) => setFeedback(e.target.value)}
+                />
+                <button className="send-btn" type="submit">
+                  Send Feedback
+                </button>
+              </form>
+              {submitted && (
+                <div className="feedback-success">Thank you for your feedback!</div>
+              )}
+            </div>
           </div>
-          <div className="feedback-question">How would you rate your overall experience?</div>
-          <div className="star-rating">
-            {[1,2,3,4,5].map((star) => (
-              <span
-                key={star}
-                className={`star${(hover || rating) >= star ? ' filled' : ''}`}
-                onMouseEnter={() => setHover(star)}
-                onMouseLeave={() => setHover(0)}
-                onClick={() => setRating(star)}
-                role="button"
-                aria-label={`Rate ${star} star${star > 1 ? 's' : ''}`}
-              >
-                ★
-              </span>
-            ))}
-          </div>
-          <form onSubmit={handleSubmit}>
-            <label className="feedback-label" htmlFor="feedback-text">Your feedback (optional):</label>
-            <textarea
-              id="feedback-text"
-              className="feedback-textarea"
-              placeholder="What did you like about NicOff? What we could improve?"
-              value={feedback}
-              onChange={e => setFeedback(e.target.value)}
-            />
-            <button className="send-btn" type="submit">Send Feedback</button>
-          </form>
-          {submitted && <div className="feedback-success">Thank you for your feedback!</div>}
         </div>
       </div>
       {/* Footer */}
-      <footer>
+      <footer className="elite-footer">
         <div className="footer-content">
           <div className="footer-column">
-            <h4>NicOff</h4>
-            <p>
-              We're dedicated to helping you break free from smoking addiction
-              through science-backed methods and community support
-            </p>
+            <h3>NicOff</h3>
+            <p>We're dedicated to helping you break free from smoking addiction through science-backed methods and community support</p>
           </div>
           <div className="footer-column">
-            <h4>Quick Links</h4>
-            <ul>
-              <li>
-                <a href="#">About Us</a>
-              </li>
-              <li>
-                <a href="#">Our Programs</a>
-              </li>
-              <li>
-                <a href="#">Success Stories</a>
-              </li>
-              <li>
-                <a href="#">Blog</a>
-              </li>
-              <li>
-                <a href="#">Contact</a>
-              </li>
-            </ul>
+            <h3>Quick Links</h3>
+            <Link to="/about-us">About Us</Link>
+            <Link to="/our-programs">Our Programs</Link>
+            <Link to="/success-stories">Success Stories</Link>
+            <Link to="/blog">Blog</Link>
+            <Link to="/contact">Contact</Link>
           </div>
           <div className="footer-column">
-            <h4>Support</h4>
-            <ul>
-              <li>
-                <a href="#">FAQ</a>
-              </li>
-              <li>
-                <a href="#">Help Center</a>
-              </li>
-              <li>
-                <a href="#">Privacy Policy</a>
-              </li>
-              <li>
-                <a href="#">Term Of Service</a>
-              </li>
-              <li>
-                <a href="#">Cookie Policy</a>
-              </li>
-            </ul>
+            <h3>Support</h3>
+            <Link to="/faq">FAQ</Link>
+            <Link to="/help-center">Help Center</Link>
+            <Link to="/privacy-policy">Privacy Policy</Link>
+            <Link to="/terms-of-service">Term Of Service</Link>
+            <Link to="/cookie-policy">Cookie Policy</Link>
           </div>
           <div className="footer-column">
-            <h4>NewsLetter</h4>
-            <div className="newsletter-form">
-              <input
-                type="email"
-                placeholder="Your Email Address..."
-                className="newsletter-input"
-              />
+            <h3>NewsLetter</h3>
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: 10 }}>
+              <input type="email" placeholder="Your Email Address..." className="newsletter-input" />
               <button className="newsletter-button">Subscribe</button>
             </div>
-            <p className="newsletter-description">
-              Get the latest tips and motivation to stay smoke-free delivered to
-              your inbox
-            </p>
+            <p className="newsletter-desc">Get the latest tips and motivation to stay smoke-free delivered to your inbox</p>
           </div>
         </div>
-        <hr className="footer-divider" />
-        <div className="footer-bottom-text">
-          © 2025 NicOff. All rights reserved
+        <div className="copyright">
+          <p>© 2025 NicOff. All rights reserved</p>
         </div>
       </footer>
     </div>
