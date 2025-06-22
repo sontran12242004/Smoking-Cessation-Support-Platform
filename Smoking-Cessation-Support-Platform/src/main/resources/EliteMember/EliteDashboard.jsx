@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import EditProfileModal from "../EditProfileModal";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, NavLink } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import journeyPath from '../assets/journey_path.jpg';
 
@@ -13,7 +12,6 @@ function StandardMemberDashboard({
   heartRate = "--",
 }) {
   const navigate = useNavigate();
-  const [showEditProfile, setShowEditProfile] = useState(false);
   const styles = `
     html,
     body,
@@ -812,7 +810,7 @@ function StandardMemberDashboard({
   };
   
   const handleNotificationClick = () => {
-    navigate("/premiumnotificationcenter");
+    navigate("/elite/notification");
   };
   // Mock data for charts
   const healthImprovementData = [
@@ -834,11 +832,6 @@ function StandardMemberDashboard({
   return (
     <div className="dashboard-bg" style={{ background: `url(${journeyPath}) center/cover no-repeat`, position: 'relative' }}>
       <style>{styles}</style>
-      <EditProfileModal
-        open={showEditProfile}
-        onClose={() => setShowEditProfile(false)}
-        onSave={() => setShowEditProfile(false)}
-      />
       <div style={{
         position: 'absolute',
         top: 0,
@@ -855,9 +848,9 @@ function StandardMemberDashboard({
           <div className="profile-section">
             <button
               className="profile-btn"
-              onClick={() => setShowEditProfile(true)}
+              onClick={() => navigate('/elite/edit-profile')}
             >
-              <span className="profile-icon">👤</span> Elite Member
+              Elite Member
             </button>
           </div>
         </div>

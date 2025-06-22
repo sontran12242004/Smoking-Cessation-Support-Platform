@@ -599,11 +599,9 @@ body,
       {/* Header */}
       <header className="welcome-header">
         <div className="header-left">
-          <div className="profile-status">
-            <button className="profile-btn" onClick={() => {}}>
-              <span className="profile-icon">👤</span> Elite Member
-            </button>
-          </div>
+          <button className="profile-btn">
+            Elite Member
+          </button>
         </div>
         <div className="header-center">
           <div className="logo-section">

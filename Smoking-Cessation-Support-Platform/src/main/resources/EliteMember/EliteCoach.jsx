@@ -48,6 +48,10 @@ function EliteCoach({
     setBookingHistory(null);
   };
 
+  const handleNotificationClick = () => {
+    navigate('/elite/notification');
+  };
+
   const styles = `
     .elite-home-container {
         display: flex;
@@ -256,9 +260,6 @@ function EliteCoach({
       margin-top: 15px;
     }
   `;
-  const handleNotificationClick = () => {
-    navigate("/elitenotificationcenter");
-  };
   return (
     <div className="elite-home-container">
       <style>{styles}</style>
@@ -282,7 +283,12 @@ function EliteCoach({
           </div>
         </div>
         <div className="header-right">
-          <span className="notification-icon" onClick={() => navigate('/elitenotificationcenter')}>🔔</span>
+          <span
+            className="notification-icon"
+            onClick={handleNotificationClick}
+          >
+            🔔
+          </span>
           <button className="logout-button" onClick={() => navigate('/login')}>Logout</button>
         </div>
       </header>

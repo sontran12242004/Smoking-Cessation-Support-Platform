@@ -15,6 +15,8 @@ import EliteCoach from './EliteMember/EliteCoach'
 import EliteBookAppointment from './EliteMember/EliteBookAppointment'
 import EliteCommunity from './EliteMember/EliteCommunity'
 import EliteFeedback from './EliteMember/EliteFeedback'
+import EliteNotificationsCenter from './EliteMember/EliteNotificationsCenter'
+import EliteEditProfile from './EliteMember/EliteEditProfile'
 import PackagePage from './Package/PackagePage'
 import AdminDashboard from './Admin/AdminDashboard'
 import AdminMembers from './Admin/AdminMembers'
@@ -26,6 +28,17 @@ import CoachDashboard from './Coach/CoachDashboard'
 import CoachProfile from './Coach/CoachProfile'
 import RequestSchedule from './Coach/RequestSchedule'
 import CoachEditProfile from './Coach/CoachEditProfile'
+
+// Standard Member Imports
+import StandardMemberHome from './StandardMember/StandardMemberHome';
+import StandardMemberDashboard from './StandardMember/StandardMemberDashboard';
+import StandardAchievement from './StandardMember/StandardAchievement';
+import StandardMember_Coach from './StandardMember/StandardMember_Coach';
+import StandardMember_Commun from './StandardMember/StandardMember_Commun';
+import Feedback from './StandardMember/Feedback';
+import NotificationCenter from './StandardMember/NotificationCenter';
+import DailyCheckIn from './StandardMember/DailyCheckIn';
+import HealthMetric from './StandardMember/HealthMetric';
 
 function App() {
   return (
@@ -45,6 +58,20 @@ function App() {
       <Route path="/elite/book-appointment" element={<EliteBookAppointment />} />
       <Route path="/elite/community" element={<EliteCommunity />} />
       <Route path="/elite/feedback" element={<EliteFeedback />} />
+      <Route path="/elite/notification" element={<EliteNotificationsCenter />} />
+      <Route path="/elite/edit-profile" element={<EliteEditProfile />} />
+
+      {/* Standard Member Routes */}
+      <Route path="/standard/home" element={<StandardMemberHome />} />
+      <Route path="/standard/dashboard" element={<StandardMemberDashboard />} />
+      <Route path="/standard/achievement" element={<StandardAchievement />} />
+      <Route path="/standard/coach" element={<StandardMember_Coach />} />
+      <Route path="/standard/community" element={<StandardMember_Commun />} />
+      <Route path="/standard/feedback" element={<Feedback />} />
+      <Route path="/standard/notification" element={<NotificationCenter />} />
+      <Route path="/standard/daily-checkin" element={<DailyCheckIn />} />
+      <Route path="/standard/health-metric" element={<HealthMetric />} />
+
       <Route path="/package" element={<PackagePage />} />
       <Route path="/admin/dashboard" element={<AdminDashboard />} />
       <Route path="/admin/members" element={<AdminMembers />} />

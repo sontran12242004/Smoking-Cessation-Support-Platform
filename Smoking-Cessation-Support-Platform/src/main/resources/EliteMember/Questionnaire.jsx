@@ -348,9 +348,11 @@ const Questionnaire = () => {
       {/* Header */}
       <div className="welcome-header">
         <div className="header-left">
-          <button className="profile-btn">
-            <span className="profile-icon">&#128100;</span> Elite Member
-          </button>
+          <div className="profile-section">
+            <button className="profile-btn" onClick={() => setShowEditProfile(true)}>
+              Elite Member
+            </button>
+          </div>
         </div>
         <div className="header-center">
           <div className="logo-section">

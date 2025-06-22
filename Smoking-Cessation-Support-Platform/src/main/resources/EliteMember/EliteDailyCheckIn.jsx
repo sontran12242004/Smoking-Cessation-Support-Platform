@@ -505,9 +505,9 @@ function DailyCheckIn() {
       {/* Header */}
       <header className="welcome-header">
         <div className="header-left">
-          <div className="profile-status">
-            <button className="profile-btn" onClick={() => setShowEditProfile(true)}>
-              <span className="profile-icon">👤</span> Elite Member
+          <div className="profile-section">
+            <button className="profile-btn" onClick={() => navigate('/elite/edit-profile')}>
+              Elite Member
             </button>
           </div>
         </div>

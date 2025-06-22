@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from 'react';
 import { useNavigate, Link } from "react-router-dom";
 import journeyPath from '../assets/journey_path.jpg';
 
-function EliteHealthMetric() {
+const EliteHealthMetric = () => {
   const navigate = useNavigate();
+
   const handleNotificationClick = () => {
     navigate("/elitenotificationcenter");
   };
@@ -795,11 +796,10 @@ function EliteHealthMetric() {
       <style>{styles}</style>
       <header className="welcome-header">
           <div className="header-left">
-          <button className="profile-btn" onClick={() => navigate('/elite/profile')}>
-            <span className="profile-icon">👤</span>
-            Elite Member
-              </button>
-            </div>
+            <button className="profile-btn" onClick={() => navigate('/elite/edit-profile')}>
+               Elite Member
+            </button>
+          </div>
         <div className="header-center">
             <div className="logo-section">
               <div className="app-name">

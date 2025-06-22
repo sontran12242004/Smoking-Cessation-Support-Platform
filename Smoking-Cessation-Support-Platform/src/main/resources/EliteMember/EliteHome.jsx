@@ -1,12 +1,54 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useEffect, useRef } from 'react';
+import { Link, useNavigate, NavLink } from 'react-router-dom';
 import cigaretteHouse from '../assets/cigarette_house.png';
 import journeyPath from '../assets/journey_path.jpg';
-import stayImg from '../assets/stay.png';
-import quitImg from '../assets/quit.png';
+import stayImage from '../assets/stay.png';
+import quitImage from '../assets/quit.png';
 
-function EliteHome() {
+const EliteHome = () => {
   const navigate = useNavigate();
+  const sectionsRef = useRef([]);
+
+  const handleNotificationClick = () => {
+    navigate('/elite/notification');
+  };
+
+  // Refs for scroll animation
+  const checkinSectionRef = useRef(null);
+  const planButtonRef = useRef(null);
+  const communityUpdateRef = useRef(null);
+  const dashboardLinkRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.1, // Animate when 10% of the element is visible
+      }
+    );
+
+    const refs = [checkinSectionRef, planButtonRef, communityUpdateRef, dashboardLinkRef];
+    refs.forEach(ref => {
+      if (ref.current) {
+        observer.observe(ref.current);
+      }
+    });
+
+    return () => {
+      refs.forEach(ref => {
+        if (ref.current) {
+          observer.unobserve(ref.current);
+        }
+      });
+    };
+  }, []);
 
   const styles = `
     .elite-home-container {
@@ -194,12 +236,15 @@ function EliteHome() {
       font-size: 36px;
       margin-bottom: 5px; /* Reduced margin-bottom to bring text closer */
       color: #000; /* Adjust color for 'Welcome back, John!' */
+      animation: slideInUp 0.8s ease-out forwards;
     }
 
     .hero-section-elite p {
       font-size: 18px;
       margin-bottom: 5px; /* Reduced margin-bottom to bring text closer */
       color: #000; /* Adjust color for other text */
+      animation: slideInUp 0.8s ease-out 0.2s forwards;
+      opacity: 0; /* Start with opacity 0 to let animation handle it */
     }
 
     .hero-section-elite .welcome-name {
@@ -211,6 +256,8 @@ function EliteHome() {
       flex-direction: column;
       align-items: center;
       margin-top: 20px;
+      animation: fadeIn 1.2s ease-out 0.5s forwards;
+      opacity: 0;
     }
 
     .stay-img {
@@ -384,6 +431,8 @@ function EliteHome() {
       margin: 0 auto;
       text-align: left;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Keep box shadow for card effect */
+      animation: fadeIn 1s ease-in-out forwards;
+      animation-delay: 0.3s;
     }
 
     .community-message p {
@@ -405,6 +454,8 @@ function EliteHome() {
       margin-top: 20px;
       display: inline-block;
       transition: color 0.2s;
+      animation: fadeIn 1s ease-in-out forwards;
+      animation-delay: 0.4s;
     }
 
     .join-discussion-link:hover {
@@ -499,6 +550,51 @@ function EliteHome() {
       padding-top: 15px;
       margin-top: 15px;
     }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .hero-section-elite h2, .hero-section-elite p, .stay-quit-text {
+        opacity: 0; /* Start hidden for load animation */
+    }
+
+    .hero-section-elite h2 {
+      animation: slideInUp 0.8s ease-out forwards;
+    }
+    
+    .hero-section-elite p {
+        animation: slideInUp 0.8s ease-out 0.2s forwards;
+    }
+
+    .stay-quit-text {
+        animation: fadeIn 1.2s ease-out 0.5s forwards;
+    }
+
+    /* Styles for scroll animations */
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+
+    .animate-on-scroll.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
   `;
 
   return (
@@ -506,8 +602,7 @@ function EliteHome() {
       <style>{styles}</style>
       <header className="welcome-header">
         <div className="header-left">
-          <button className="profile-btn">
-             
+          <button className="profile-btn" onClick={() => navigate('/elite/edit-profile')}>
             Elite Member
           </button>
         </div>
@@ -520,7 +615,7 @@ function EliteHome() {
           </div>
         </div>
         <div className="header-right">
-          <span className="notification-icon">🔔</span>
+          <span className="notification-icon" onClick={handleNotificationClick}>🔔</span>
           <button className="logout-button" onClick={() => navigate('/login')}>Logout</button>
         </div>
       </header>
@@ -541,12 +636,12 @@ function EliteHome() {
           <p>How are you feeling today?</p>
           <p>-remember to-</p>
           <div className="stay-quit-text">
-            <img src={stayImg} alt="STAY" className="stay-img" />
-            <img src={quitImg} alt="QUIT" className="quit-img" />
+            <img src={stayImage} alt="STAY" className="stay-img" />
+            <img src={quitImage} alt="QUIT" className="quit-img" />
           </div>
         </section>
 
-        <section className="checkin-section">
+        <section className="checkin-section animate-on-scroll" ref={checkinSectionRef}>
           <div className="checkin-left-column">
             <h2>Today's<br/>Check-In:</h2>
             <p className="checkin-question">Did you smoke today?</p>
@@ -566,9 +661,9 @@ function EliteHome() {
           </div>
         </section>
 
-        <button className="create-plan-button" onClick={() => navigate('/elite/questionnaire')}>Create My Quit Plan →</button>
+        <button className="create-plan-button animate-on-scroll" ref={planButtonRef} onClick={() => navigate('/elite/questionnaire')}>Create My Quit Plan →</button>
 
-        <section className="community-update-section">
+        <section className="community-update-section animate-on-scroll" ref={communityUpdateRef}>
           <h2>Community Update</h2>
           <p className="community-milestone-text">5 users just hit the 1-month smoke-free milestone!</p>
           <div className="community-message">
@@ -578,7 +673,7 @@ function EliteHome() {
           <a href="#" className="join-discussion-link">Join the discussion →</a>
         </section>
 
-        <section style={{textAlign: 'center', padding: '40px 20px', backgroundColor: '#DFF5DE'}}>
+        <section ref={dashboardLinkRef} className="animate-on-scroll" style={{textAlign: 'center', padding: '40px 20px', backgroundColor: '#DFF5DE'}}>
           <Link to="/elite/dashboard" className="view-dashboard-link">View Your Dashboard →</Link>
         </section>
       </main>

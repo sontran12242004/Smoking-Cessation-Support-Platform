@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import EditProfileModal from "../EditProfileModal";
 import { useNavigate, Link } from "react-router-dom";
 import journeyPath from '../assets/journey_path.jpg';
 import badgeIcon from '../assets/quit.png'; // Use a green badge icon or replace with suitable SVG if available
@@ -115,23 +114,17 @@ const badgeData = [
   { icon: '🏆', label: '$300 Saved', money: true },
 ];
 
-export default function EliteAchievement() {
-  const [showEditProfile, setShowEditProfile] = useState(false);
-  const [streak, setStreak] = React.useState(0); // bắt đầu từ 0 để thấy hiệu ứng tăng
+const EliteAchievement = () => {
   const navigate = useNavigate();
-  const targetDays = 182;
-  const percent = Math.min(100, Math.round((streak / targetDays) * 100));
 
-  // Tự động tăng streak mỗi giây cho đến khi đạt 182 ngày
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setStreak((s) => (s < targetDays ? s + 1 : s));
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
+  const achievements = [
+    {
+      // ... existing code ...
+    },
+  ];
 
   const handleNotificationClick = () => {
-    navigate('/elitenotificationcenter');
+    navigate('/elite/notification');
   };
   const handleLogout = () => {
     navigate('/login');
@@ -837,9 +830,12 @@ export default function EliteAchievement() {
       <style>{styles}</style>
       <header className="welcome-header">
         <div className="header-left">
-          <button className="profile-btn" onClick={() => setShowEditProfile(true)}>
-            <span className="profile-icon">👤</span> Elite Member
-            </button>
+          <button
+            className="profile-btn"
+            onClick={() => navigate('/elite/edit-profile')}
+          >
+            Elite Member
+          </button>
         </div>
         <div className="header-center">
           <div className="logo-section">
@@ -850,8 +846,15 @@ export default function EliteAchievement() {
           </div>
         </div>
         <div className="header-right">
-          <span className="notification-icon" onClick={handleNotificationClick}>🔔</span>
-          <button className="logout-button" onClick={handleLogout}>Logout</button>
+          <span
+            className="notification-icon"
+            onClick={handleNotificationClick}
+          >
+            🔔
+          </span>
+          <button className="logout-button" onClick={handleLogout}>
+            Logout
+          </button>
         </div>
       </header>
       <nav className="elite-nav">
@@ -1091,3 +1094,5 @@ export default function EliteAchievement() {
     </div>
   );
 }
+
+export default EliteAchievement;

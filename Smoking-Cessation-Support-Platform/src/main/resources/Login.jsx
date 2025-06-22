@@ -40,16 +40,6 @@ const Login = () => {
             </button>
             <form style={styles.form} onSubmit={e => { e.preventDefault(); navigate('/'); }}>
               <div style={styles.formGroup}>
-                <label htmlFor="username" style={styles.label}>Username</label>
-                <input
-                  type="text"
-                  id="username"
-                  placeholder="Enter your username"
-                  required
-                  style={styles.input}
-                />
-              </div>
-              <div style={styles.formGroup}>
                 <label htmlFor="email" style={styles.label}>Email Address</label>
                 <input
                   type="email"

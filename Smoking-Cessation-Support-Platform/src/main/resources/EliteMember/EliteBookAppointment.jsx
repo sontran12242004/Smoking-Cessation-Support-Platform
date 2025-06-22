@@ -323,7 +323,7 @@ const EliteBookAppointment = (props) => {
       `}</style>
       <header className="welcome-header">
         <div className="header-left">
-          <button className="profile-btn">Elite Member</button>
+          <button className="profile-btn" onClick={() => navigate('/elite/edit-profile')}>Elite Member</button>
         </div>
         <div className="header-center">
           <div className="logo-section">

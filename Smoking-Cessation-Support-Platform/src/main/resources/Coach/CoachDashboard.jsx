@@ -3,74 +3,64 @@ import { Link } from 'react-router-dom';
 
 const CoachDashboard = () => {
   const [activeMenu, setActiveMenu] = useState('My Schedule');
-  const [sessionStatus, setSessionStatus] = useState({
-    'session1': null, // pending, confirmed, rejected
-    'session2': null,
-    'session3': null
-  });
+  const [sessions, setSessions] = useState([
+    { 
+      id: 'session1', 
+      dateTime: '2024-09-15, 10:00 AM', 
+      member: 'Jane Doe', 
+      type: 'Elite Session', 
+      status: 'pending' // pending, confirmed, completed, rejected
+    },
+  ]);
 
-  const handleConfirm = (sessionId) => {
-    setSessionStatus(prev => ({
-      ...prev,
-      [sessionId]: 'confirmed'
-    }));
-  };
-
-  const handleReject = (sessionId) => {
-    setSessionStatus(prev => ({
-      ...prev,
-      [sessionId]: 'rejected'
-    }));
-  };
-
-  const renderActionButtons = (sessionId) => {
-    const status = sessionStatus[sessionId];
-    
-    if (!status) {
-      return null;
-    }
-    
-    if (status === 'confirmed') {
-      return (
-        <button 
-          style={styles.cancelButton}
-          onClick={() => handleReject(sessionId)}
-        >
-          Reject
-        </button>
-      );
-    }
-
-    if (status === 'rejected') {
-      return (
-        <>
-          <button style={styles.rejectedButton}>Rejected</button>
-          <button 
-            style={styles.confirmButton}
-            onClick={() => handleConfirm(sessionId)}
-          >
-            Confirm
-          </button>
-        </>
-      );
-    }
-    
-    return (
-      <>
-        <button 
-          style={styles.confirmButton}
-          onClick={() => handleConfirm(sessionId)}
-        >
-          Confirm
-        </button>
-        <button 
-          style={styles.cancelButton}
-          onClick={() => handleReject(sessionId)}
-        >
-          Reject
-        </button>
-      </>
+  const handleStatusChange = (sessionId, newStatus) => {
+    setSessions(currentSessions =>
+      currentSessions.map(session =>
+        session.id === sessionId ? { ...session, status: newStatus } : session
+      )
     );
+  };
+
+  const renderActionButtons = (session) => {
+    switch (session.status) {
+      case 'pending':
+        return (
+          <>
+            <button 
+              style={styles.confirmButton}
+              onClick={() => handleStatusChange(session.id, 'confirmed')}
+            >
+              Confirm
+            </button>
+            <button 
+              style={styles.cancelButton}
+              onClick={() => handleStatusChange(session.id, 'rejected')}
+            >
+              Reject
+            </button>
+          </>
+        );
+      case 'confirmed':
+        return (
+          <>
+            <button style={{...styles.confirmButton, backgroundColor: '#66BB6A', cursor: 'not-allowed'}} disabled>
+              Confirmed
+            </button>
+            <button 
+              style={{...styles.confirmButton, backgroundColor: '#2979FF'}}
+              onClick={() => handleStatusChange(session.id, 'completed')}
+            >
+              Completed
+            </button>
+          </>
+        );
+      case 'rejected':
+        return <span style={{color: styles.cancelButton.backgroundColor, fontWeight: 'bold'}}>Rejected</span>;
+      case 'completed':
+        return <span style={{color: styles.confirmButton.backgroundColor, fontWeight: 'bold'}}>Completed</span>;
+      default:
+        return null;
+    }
   };
 
   return (
@@ -149,29 +139,28 @@ const CoachDashboard = () => {
               </tr>
             </thead>
             <tbody>
+              {sessions.map(session => (
+                 <tr key={session.id} style={styles.tableRow}>
+                    <td style={styles.tableCell}>{session.dateTime}</td>
+                    <td style={styles.tableCell}>{session.member}</td>
+                    <td style={styles.tableCell}>{session.type}</td>
+                    <td style={styles.tableCell}>
+                      {renderActionButtons(session)}
+                    </td>
+                  </tr>
+              ))}
+              {/* These are empty rows to fill space, can be removed if you map more real data */}
               <tr style={styles.tableRow}>
                 <td style={styles.tableCell}></td>
                 <td style={styles.tableCell}></td>
                 <td style={styles.tableCell}></td>
-                <td style={styles.tableCell}>
-                  {renderActionButtons('session1')}
-                </td>
+                <td style={styles.tableCell}></td>
               </tr>
               <tr style={styles.tableRow}>
                 <td style={styles.tableCell}></td>
                 <td style={styles.tableCell}></td>
                 <td style={styles.tableCell}></td>
-                <td style={styles.tableCell}>
-                  {renderActionButtons('session2')}
-                </td>
-              </tr>
-              <tr style={styles.tableRow}>
                 <td style={styles.tableCell}></td>
-                <td style={styles.tableCell}></td>
-                <td style={styles.tableCell}></td>
-                <td style={styles.tableCell}>
-                  {renderActionButtons('session3')}
-                </td>
               </tr>
             </tbody>
           </table>

@@ -443,8 +443,7 @@ const TimeofSuccess = () => {
       <style>{allStyles}</style>
       <header className="welcome-header">
         <div className="header-left">
-          <i className="fas fa-user-circle profile-icon"></i>
-          <button className="profile-btn">
+          <button className="profile-btn" onClick={() => navigate('/elite/edit-profile')}>
             Elite Member
           </button>
         </div>
@@ -462,17 +461,19 @@ const TimeofSuccess = () => {
 
       <nav className="welcome-nav">
         <ul>
-          <li><NavLink to="/elite-home" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}>Home</NavLink></li>
-          <li><NavLink to="/dashboard" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}>Dashboard</NavLink></li>
-          <li><NavLink to="/achievement" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}>Achievement</NavLink></li>
-          <li><NavLink to="/coach" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}>Coach</NavLink></li>
-          <li><NavLink to="/community" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}>Community</NavLink></li>
-          <li><NavLink to="/feedback" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}>Feedback</NavLink></li>
+          <li><NavLink to="/elite/home" className="nav-link">Home</NavLink></li>
+          <li><NavLink to="/elite/dashboard" className="nav-link">Dashboard</NavLink></li>
+          <li><NavLink to="/elite/achievement" className="nav-link">Achievement</NavLink></li>
+          <li><NavLink to="/elite/coach" className="nav-link">Coach</NavLink></li>
+          <li><NavLink to="/elite/community" className="nav-link">Community</NavLink></li>
+          <li><NavLink to="/elite/feedback" className="nav-link">Feedback</NavLink></li>
         </ul>
       </nav>
 
-      <div className="time-of-success-main-content">
-        <h2 className="top-section-text">ESTIMATED TIME OF SUCCESS</h2>
+      <main className="time-of-success-main-content">
+        <div className="top-section-text">
+          ESTIMATED TIME OF SUCCESS
+        </div>
 
         <div className="progress-card">
           <h2 className="progress-card-title">Smoking Cessation Progress</h2>
@@ -532,7 +533,7 @@ const TimeofSuccess = () => {
         <button className="go-to-home-button" onClick={() => navigate('/elite/home')}>
           Go To Home
         </button>
-      </div>
+      </main>
 
       <footer className="welcome-footer">
         <div className="footer-content">

@@ -57,6 +57,10 @@ function EliteCommunity() {
     },
   ];
 
+  const handleNotificationClick = () => {
+    navigate('/elite/notification');
+  };
+
   const styles = `
     html, body, #root {
       width: 100%;
@@ -570,9 +574,6 @@ function EliteCommunity() {
     }
   `;
 
-  const handleNotificationClick = () => {
-    navigate("/elitenotificationcenter");
-  };
   return (
     <div className="community-bg" style={{ position: 'relative', background: `url(${journeyPath}) center/cover no-repeat` }}>
       <style>{styles}</style>
@@ -587,11 +588,8 @@ function EliteCommunity() {
       <div className="welcome-header">
         <div className="header-left">
           <div className="profile-section">
-            <button
-              className="profile-btn"
-              onClick={() => setShowEditProfile(true)}
-            >
-              <span className="profile-icon">👤</span> Elite Member
+            <button className="profile-btn" onClick={() => navigate('/elite/edit-profile')}>
+              Elite Member
             </button>
           </div>
         </div>
@@ -607,7 +605,9 @@ function EliteCommunity() {
           <span className="notification-icon" onClick={handleNotificationClick}>
             🔔
           </span>
-          <button className="logout-button">Logout</button>
+          <button className="logout-button" onClick={() => navigate("/login")}>
+            Logout
+          </button>
         </div>
       </div>
       <nav className="welcome-nav">

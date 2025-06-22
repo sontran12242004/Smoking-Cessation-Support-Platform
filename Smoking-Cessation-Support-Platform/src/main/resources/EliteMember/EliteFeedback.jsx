@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import EditProfileModal from "../EditProfileModal";
 import { useNavigate, Link } from "react-router-dom";
 import journeyPath from '../assets/journey_path.jpg';
 
@@ -8,7 +7,6 @@ function Feedback() {
   const [hover, setHover] = useState(0);
   const [feedback, setFeedback] = useState("");
   const [submitted, setSubmitted] = useState(false);
-  const [showEditProfile, setShowEditProfile] = useState(false);
   const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -16,7 +14,7 @@ function Feedback() {
     // TODO: Gửi feedback lên server tại đây nếu cần
   };
   const handleNotificationClick = () => {
-    navigate("/elitenotificationcenter");
+    navigate("/elite/notification");
   };
   const styles = `
     html, body, #root {
@@ -641,33 +639,32 @@ function Feedback() {
   return (
     <div className="container">
       <style>{styles}</style>
-      <EditProfileModal
-        open={showEditProfile}
-        onClose={() => setShowEditProfile(false)}
-        onSave={() => setShowEditProfile(false)}
-      />
       <header>
         <div className="header-left">
           <div className="profile-section">
-            <button
-              className="profile-btn"
-              onClick={() => setShowEditProfile(true)}
-            >
-              <span className="profile-icon">👤</span> Elite Member
+            <button className="profile-btn" onClick={() => navigate('/elite/edit-profile')}>
+              Elite Member
             </button>
           </div>
         </div>
         <div className="header-center">
-          <div className="app-name">
-            <h1>NicOff</h1>
-            <p>Turn Off Nicotine, Turn On Life!</p>
+          <div className="logo-section">
+            <div className="app-name">
+              <h1>NicOff</h1>
+              <p>Turn Off Nicotine, Turn On Life!</p>
+            </div>
           </div>
         </div>
         <div className="header-right">
-          <span className="notification-icon" onClick={handleNotificationClick}>
-            🔔  
-          </span>
-          <button className="logout-button" onClick={() => navigate('/login')}>Logout</button>
+          <div className="header-actions">
+            <span
+              className="notification-icon"
+              onClick={handleNotificationClick}
+            >
+              🔔
+            </span>
+            <button className="logout-button" onClick={() => navigate('/login')}>Logout</button>
+          </div>
         </div>
       </header>
       <nav className="welcome-nav">
