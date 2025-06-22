@@ -8,18 +8,20 @@ import java.time.LocalDate;
 
 @Data
 @Entity
+@Table(name = "subscription")
 public class Subscription {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer subscriptionID;
+    @Column(name = "subscription_id")
+    private Integer subscriptionid;
 
     @ManyToOne
-    @JoinColumn(name = "memberID", nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     private Members member;
 
     @ManyToOne
-    @JoinColumn(name = "planID", nullable = false)
+    @JoinColumn(name = "plan_id", nullable = false)
     private MembershipPlan membershipPlan;
 
     private LocalDate startDate;

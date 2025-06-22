@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Getter
 public class SubscriptionDTO {
 
-    private Integer subscriptionID;
+    private Integer subscriptionid;
     private Integer memberID;
     private Integer planID;
     private LocalDate startDate;
