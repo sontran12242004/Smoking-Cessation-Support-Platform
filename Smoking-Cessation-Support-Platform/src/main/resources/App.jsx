@@ -21,6 +21,8 @@ import PackagePage from './Package/PackagePage'
 import AdminDashboard from './Admin/AdminDashboard'
 import AdminMembers from './Admin/AdminMembers'
 import AdminPackage from './Admin/AdminPackage'
+import Contents from './Admin/AdminContents/Contents'
+import SendEmail from './Admin/AdminContents/SendEmail'
 import Coaches from './Admin/AdminContents/Coaches'
 import RatingsFeedbacksManagement from './Admin/RatingsFeedbacksManagement'
 import ConfirmCoachSchedule from './Admin/ConfirmCoachSchedule'
@@ -38,6 +40,21 @@ import StandardMember_Commun from './StandardMember/StandardMember_Commun';
 import Feedback from './StandardMember/Feedback';
 import NotificationCenter from './StandardMember/NotificationCenter';
 import DailyCheckIn from './StandardMember/DailyCheckIn';
+import StandardEditProfile from './StandardMember/StandardEditProfile'
+import StandardQuestionnaire from './StandardMember/StandardQuestionnaire';
+import StandardTimeofSuccess from './StandardMember/StandardTimeofSuccess';
+
+// Footer Imports
+import AboutUs from './Footer/AboutUs';
+import OurPrograms from './Footer/OurPrograms';
+import SuccessStories from './Footer/SuccessStories';
+import Blog from './Footer/Blog';
+import Contact from './Footer/Contact';
+import FAQ from './Footer/FAQ';
+import HelpCenter from './Footer/HelpCenter';
+import PrivacyPolicy from './Footer/PrivacyPolicy';
+import TermsOfService from './Footer/TermsOfService';
+import CookiePolicy from './Footer/CookiePolicy';
 
 function App() {
   return (
@@ -69,18 +86,40 @@ function App() {
       <Route path="/standard/feedback" element={<Feedback />} />
       <Route path="/standard/notification" element={<NotificationCenter />} />
       <Route path="/standard/daily-checkin" element={<DailyCheckIn />} />
+      <Route path="/standard/edit-profile" element={<StandardEditProfile />} />
+      <Route path="/standard/questionnaire" element={<StandardQuestionnaire />} />
+      <Route path="/standard/timeofsuccess" element={<StandardTimeofSuccess />} />
 
       <Route path="/package" element={<PackagePage />} />
       <Route path="/admin/dashboard" element={<AdminDashboard />} />
       <Route path="/admin/members" element={<AdminMembers />} />
       <Route path="/admin/packages" element={<AdminPackage />} />
+      <Route path="/admin/contents" element={<Contents />} />
+      <Route path="/admin/contents/send-email" element={<SendEmail />} />
       <Route path="/admin/coaches" element={<Coaches />} />
       <Route path="/admin/ratings" element={<RatingsFeedbacksManagement />} />
       <Route path="/confirm-coach-schedule" element={<ConfirmCoachSchedule />} />
+
+
+      // Coach router
+
       <Route path="/coach/dashboard" element={<CoachDashboard />} />
       <Route path="/coach/profile" element={<CoachProfile />} />
       <Route path="/coach/request-schedule" element={<RequestSchedule />} />
+      
       <Route path="/coach/edit-profile" element={<CoachEditProfile />} />
+
+      {/* Footer Routes */}
+      <Route path="/about-us" element={<AboutUs />} />
+      <Route path="/our-programs" element={<OurPrograms />} />
+      <Route path="/success-stories" element={<SuccessStories />} />
+      <Route path="/blog" element={<Blog />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/faq" element={<FAQ />} />
+      <Route path="/help-center" element={<HelpCenter />} />
+      <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+      <Route path="/terms-of-service" element={<TermsOfService />} />
+      <Route path="/cookie-policy" element={<CookiePolicy />} />
     </Routes>
   )
 }

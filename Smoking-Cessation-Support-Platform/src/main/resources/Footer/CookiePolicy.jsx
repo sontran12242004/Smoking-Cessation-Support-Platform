@@ -140,7 +140,7 @@ export default function CookiePolicy() {
         </section>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .cookie-policy {
           max-width: 1200px;
           margin: 0 auto;
@@ -149,6 +149,7 @@ export default function CookiePolicy() {
           background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
           position: relative;
           overflow: hidden;
+          font-family: Arial, sans-serif;
         }
 
         .cookie-policy::before {
@@ -516,7 +517,7 @@ export default function CookiePolicy() {
         @keyframes slideUp {
           from {
             opacity: 0;
-            transform: translateY(50px);
+            transform: translateY(30px);
           }
           to {
             opacity: 1;

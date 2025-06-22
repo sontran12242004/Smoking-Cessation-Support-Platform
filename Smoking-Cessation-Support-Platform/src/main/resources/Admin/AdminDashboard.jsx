@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 const AdminDashboard = () => {
   const [activeMenu, setActiveMenu] = useState('Dashboard');
+  const [showContentsDropdown, setShowContentsDropdown] = useState(false);
 
   return (
     <div style={styles.container}>
@@ -63,14 +64,25 @@ const AdminDashboard = () => {
                   Packages
                 </li>
               </Link>
-              <Link to="/admin/contents" style={styles.menuLink}>
-                <li 
-                  style={activeMenu === 'Contents' ? styles.activeMenuItem : styles.menuItem}
-                  onClick={() => setActiveMenu('Contents')}
-                >
-                  Contents
-                </li>
-              </Link>
+              <li 
+                style={activeMenu.startsWith('Contents') ? styles.activeMenuItem : styles.menuItem} 
+                onClick={() => setShowContentsDropdown(!showContentsDropdown)}
+              >
+                Contents <span style={{ float: 'right' }}>{showContentsDropdown ? '▲' : '▼'}</span>
+              </li>
+              {showContentsDropdown && (
+                <ul style={{...styles.menuList, paddingLeft: '20px'}}>
+                  <Link to="/admin/contents/send-notification" style={styles.menuLink}>
+                    <li style={activeMenu === 'ContentsSendNotification' ? styles.activeMenuItem : styles.menuItem} onClick={() => setActiveMenu('ContentsSendNotification')}>Send Notification To Members</li>
+                  </Link>
+                  <Link to="/admin/contents/send-motivation" style={styles.menuLink}>
+                    <li style={activeMenu === 'ContentsSendMotivation' ? styles.activeMenuItem : styles.menuItem} onClick={() => setActiveMenu('ContentsSendMotivation')}>Send Motivation To Members</li>
+                  </Link>
+                  <Link to="/admin/contents/send-email" style={styles.menuLink}>
+                    <li style={activeMenu === 'ContentsSendEmail' ? styles.activeMenuItem : styles.menuItem} onClick={() => setActiveMenu('ContentsSendEmail')}>Send Email</li>
+                  </Link>
+                </ul>
+              )}
               <Link to="/admin/coaches" style={styles.menuLink}>
                 <li 
                   style={activeMenu === 'Coaches' ? styles.activeMenuItem : styles.menuItem}

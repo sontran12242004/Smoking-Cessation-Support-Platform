@@ -642,7 +642,7 @@ function Feedback() {
       <header>
         <div className="header-left">
           <div className="profile-section">
-            <button className="profile-btn" onClick={() => navigate('/standard-member-dashboard/edit-profile')}>
+            <button className="profile-btn" onClick={() => navigate('/standard/edit-profile')}>
               Standard Member
             </button>
           </div>
@@ -659,7 +659,7 @@ function Feedback() {
           <div className="header-actions">
             <span
               className="notification-icon"
-              onClick={handleNotificationClick}
+              onClick={() => navigate('/standard/notification')}
             >
               🔔
             </span>

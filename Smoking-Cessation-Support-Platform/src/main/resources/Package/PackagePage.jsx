@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import journeyPath from '../assets/journey_path.jpg';
 
 function PackagePage() {
   const [showPayment, setShowPayment] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from || 'elite'; 
 
   const handleSelectPackage = () => {
     setShowPayment(true);
@@ -898,7 +901,7 @@ main {
         <div className="header-center">
           <div className="logo-section">
             <div className="app-name">
-              <h1>NicOff</h1>
+              <h1 onClick={() => navigate('/')} style={{cursor: 'pointer'}}>NicOff</h1>
               <p>Turn Off Nicotine, Turn On Life!</p>
             </div>
           </div>
@@ -907,12 +910,23 @@ main {
       </div>
       <nav className="elite-nav">
         <ul>
-          <li><Link to="/elite/home">Home</Link></li>
-          <li><Link to="/elite/dashboard">Dashboard</Link></li>
-          <li><Link to="/elite/achievement">Achievement</Link></li>
-          <li><Link to="/elite/coach">Coach</Link></li>
-          <li><Link to="/elite/community">Community</Link></li>
-          <li><Link to="/elite/feedback">Feedback</Link></li>
+          {from === 'standard' ? (
+            <>
+              <li><Link to="/standard/home">Home</Link></li>
+              <li><Link to="/standard/dashboard">Dashboard</Link></li>
+              <li><Link to="/standard/achievement">Achievement</Link></li>
+              <li><Link to="/standard/coach">Coach</Link></li>
+              <li><Link to="/standard/community">Community</Link></li>
+            </>
+          ) : (
+            <>
+              <li><Link to="/elite/home">Home</Link></li>
+              <li><Link to="/elite/dashboard">Dashboard</Link></li>
+              <li><Link to="/elite/achievement">Achievement</Link></li>
+              <li><Link to="/elite/coach">Coach</Link></li>
+              <li><Link to="/elite/community">Community</Link></li>
+            </>
+          )}
         </ul>
       </nav>
 

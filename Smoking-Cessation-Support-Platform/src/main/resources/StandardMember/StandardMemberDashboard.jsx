@@ -806,7 +806,7 @@ function StandardMemberDashboard({
     }
   `;
   const handleUpgrade = () => {
-    navigate('/package');
+    navigate('/package', { state: { from: 'standard' } });
   };
 
   const showLockedFeatureAlert = () => {
@@ -868,7 +868,7 @@ function StandardMemberDashboard({
           <span className="notification-icon" onClick={handleNotificationClick}>
             🔔
           </span>
-          <button className="logout-button">Logout</button>
+          <button className="logout-button" onClick={() => navigate('/login')}>Logout</button>
         </div>
       </div>
       <nav className="welcome-nav">
@@ -953,7 +953,7 @@ function StandardMemberDashboard({
         </div>
         <div className="dashboard-actions">
           <button className="dashboard-explore-btn" onClick={showLockedFeatureAlert}>
-            Explore more :(
+            Explore more
           </button>
         </div>
       </div>

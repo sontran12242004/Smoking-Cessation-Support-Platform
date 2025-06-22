@@ -16,6 +16,7 @@ function HelpCenter() {
       background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
           position: relative;
           overflow: hidden;
+          font-family: Arial, sans-serif;
         }
 
     .help-center::before {

@@ -96,7 +96,7 @@ export default function PrivacyPolicy() {
         </section>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .privacy-policy {
           max-width: 1200px;
           margin: 0 auto;
@@ -105,6 +105,7 @@ export default function PrivacyPolicy() {
           background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
           position: relative;
           overflow: hidden;
+          font-family: Arial, sans-serif;
         }
 
         .privacy-policy::before {
@@ -254,23 +255,24 @@ export default function PrivacyPolicy() {
         .contact-link {
           display: inline-flex;
           align-items: center;
-          color: #4CAF50;
+          gap: 10px;
+          color: #2E7D32;
+          font-weight: 600;
           text-decoration: none;
-          font-weight: 500;
-          margin-top: 15px;
-          padding: 10px 20px;
-          background: rgba(76, 175, 80, 0.1);
-          border-radius: 8px;
+          font-size: 18px;
           transition: all 0.3s ease;
+          padding: 10px 15px;
+          border-radius: 10px;
+          background: #f1f8e9;
         }
 
         .contact-link:hover {
-          background: rgba(76, 175, 80, 0.2);
-          transform: translateX(5px);
+          background: #e8f5e9;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .contact-link .arrow {
-          margin-left: 8px;
           transition: transform 0.3s ease;
         }
 
@@ -280,7 +282,7 @@ export default function PrivacyPolicy() {
 
         /* Animations */
         .animate-fade-in {
-          animation: fadeIn 0.8s ease-out forwards;
+          animation: fadeIn 1s ease-out forwards;
         }
 
         .animate-slide-up {
@@ -290,18 +292,16 @@ export default function PrivacyPolicy() {
         @keyframes fadeIn {
           from {
             opacity: 0;
-            transform: translateY(-20px);
           }
           to {
             opacity: 1;
-            transform: translateY(0);
           }
         }
 
         @keyframes slideUp {
           from {
             opacity: 0;
-            transform: translateY(40px);
+            transform: translateY(30px);
           }
           to {
             opacity: 1;

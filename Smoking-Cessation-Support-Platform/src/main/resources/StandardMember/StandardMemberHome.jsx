@@ -570,7 +570,7 @@ const StandardMemberHome = () => {
       <style>{styles}</style>
       <header className="welcome-header">
         <div className="header-left">
-          <button className="profile-btn" onClick={() => navigate('/standard/dashboard')}>
+          <button className="profile-btn" onClick={() => navigate('/standard/edit-profile')}>
             Standard Member
           </button>
         </div>

@@ -3,7 +3,7 @@ import { useNavigate, Link, NavLink } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import journeyPath from '../assets/journey_path.jpg';
 
-function StandardMemberDashboard({
+function EliteDashboard({
   daysSmokeFree = "--",
   daysToNext = "--",
   moneySaved = "--",
@@ -864,7 +864,7 @@ function StandardMemberDashboard({
           <span className="notification-icon" onClick={handleNotificationClick}>
             🔔
           </span>
-          <button className="logout-button">Logout</button>
+          <button className="logout-button" onClick={() => navigate('/login')}>Logout</button>
         </div>
       </div>
       <nav className="welcome-nav">
@@ -1024,5 +1024,5 @@ function StandardMemberDashboard({
   );
 }
 
-export default StandardMemberDashboard;
+export default EliteDashboard;
 

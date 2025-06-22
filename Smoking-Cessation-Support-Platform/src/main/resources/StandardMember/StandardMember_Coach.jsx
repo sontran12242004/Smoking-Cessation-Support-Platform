@@ -282,7 +282,7 @@ function StandardMember_Coach() {
         </div>
         <div className="header-right">
           <span className="notification-icon" onClick={() => navigate('/standard/notification')}>🔔</span>
-          <button className="logout-button">Logout</button>
+          <button className="logout-button" onClick={() => navigate('/login')}>Logout</button>
         </div>
       </div>
 
@@ -313,7 +313,7 @@ function StandardMember_Coach() {
             <div className="sad-face">:(</div>
             <div className="locked-message">This feature is locked</div>
             <div className="upgrade-text">Upgrade to Elite to get access to a personal coach.</div>
-            <button className="upgrade-btn" onClick={() => navigate('/package')}>
+            <button className="upgrade-btn" onClick={() => navigate('/package', { state: { from: 'standard' } })}>
               Upgrade to Elite
             </button>
           </div>

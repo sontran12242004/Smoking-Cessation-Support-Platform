@@ -1,42 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import SendNotificationToMembers from './SendNotificationToMembers';
-import MotivationMessagesList from './MotivationMessagesList';
-import SevenDaysMotivationalMessages from './SevenDaysMotivationalMessages';
 
 const Contents = () => {
   const [activeMenu, setActiveMenu] = useState('Contents');
-  const [showContentsSubmenu, setShowContentsSubmenu] = useState(false);
-  const [mainContentComponent, setMainContentComponent] = useState('ContentsManagement');
-
-  const handleSendNotification = () => {
-    setMainContentComponent('SendNotificationToMembers');
-  };
-
-  const handleSendMotivation = () => {
-    // Handle sending motivation to members
-    console.log('Sending motivation to members');
-    setMainContentComponent('MotivationMessagesList');
-  };
-
-  const handleSendEmail = () => {
-    // Handle sending email
-    console.log('Sending email');
-    setMainContentComponent('SevenDaysMotivationalMessages');
-  };
-
-  const renderMainContent = () => {
-    switch (mainContentComponent) {
-      case 'SendNotificationToMembers':
-        return <SendNotificationToMembers />;
-      case 'MotivationMessagesList':
-        return <MotivationMessagesList />;
-      case 'SevenDaysMotivationalMessages':
-        return <SevenDaysMotivationalMessages />;
-      default:
-        return <h1 style={styles.contentTitle}>Contents Management</h1>;
-    }
-  };
+  const [showContentsDropdown, setShowContentsDropdown] = useState(true);
 
   return (
     <div style={styles.container}>
@@ -89,7 +56,7 @@ const Contents = () => {
                   Members
                 </li>
               </Link>
-              <Link to="/packages" style={styles.menuLink}>
+              <Link to="/admin/packages" style={styles.menuLink}>
                 <li 
                   style={activeMenu === 'Packages' ? styles.activeMenuItem : styles.menuItem}
                   onClick={() => setActiveMenu('Packages')}
@@ -98,37 +65,25 @@ const Contents = () => {
                 </li>
               </Link>
               <li 
-                style={activeMenu === 'Contents' ? styles.activeMenuItem : styles.menuItem}
-                onClick={() => {
-                  setActiveMenu('Contents');
-                  setShowContentsSubmenu(!showContentsSubmenu);
-                }}
+                style={activeMenu.startsWith('Contents') ? styles.activeMenuItem : styles.menuItem} 
+                onClick={() => setShowContentsDropdown(!showContentsDropdown)}
               >
-                Contents {showContentsSubmenu ? '▼' : '▶'}
-                {showContentsSubmenu && (
-                  <ul style={styles.submenuList}>
-                    <li 
-                      style={styles.submenuItem}
-                      onClick={handleSendNotification}
-                    >
-                      Send Notification To Members
-                    </li>
-                    <li 
-                      style={styles.submenuItem}
-                      onClick={handleSendMotivation}
-                    >
-                      Send Motivation To Members
-                    </li>
-                    <li 
-                      style={styles.submenuItem}
-                      onClick={handleSendEmail}
-                    >
-                      Send Email
-                    </li>
-                  </ul>
-                )}
+                Contents <span style={{ float: 'right' }}>{showContentsDropdown ? '▲' : '▼'}</span>
               </li>
-              <Link to="/coaches" style={styles.menuLink}>
+              {showContentsDropdown && (
+                <ul style={{...styles.menuList, paddingLeft: '20px'}}>
+                  <Link to="/admin/contents/send-notification" style={styles.menuLink}>
+                    <li style={activeMenu === 'ContentsSendNotification' ? styles.activeMenuItem : styles.menuItem} onClick={() => setActiveMenu('ContentsSendNotification')}>Send Notification To Members</li>
+                  </Link>
+                  <Link to="/admin/contents/send-motivation" style={styles.menuLink}>
+                    <li style={activeMenu === 'ContentsSendMotivation' ? styles.activeMenuItem : styles.menuItem} onClick={() => setActiveMenu('ContentsSendMotivation')}>Send Motivation To Members</li>
+                  </Link>
+                  <Link to="/admin/contents/send-email" style={styles.menuLink}>
+                    <li style={activeMenu === 'ContentsSendEmail' ? styles.activeMenuItem : styles.menuItem} onClick={() => setActiveMenu('ContentsSendEmail')}>Send Email</li>
+                  </Link>
+                </ul>
+              )}
+              <Link to="/admin/coaches" style={styles.menuLink}>
                 <li 
                   style={activeMenu === 'Coaches' ? styles.activeMenuItem : styles.menuItem}
                   onClick={() => setActiveMenu('Coaches')}
@@ -152,7 +107,7 @@ const Contents = () => {
       {/* Main Content */}
       <div style={styles.mainContent}>
         <header style={styles.contentHeader}>
-          {renderMainContent()}
+          <h1 style={styles.contentTitle}>Contents Management</h1>
         </header>
       </div>
     </div>
@@ -246,22 +201,6 @@ const styles = {
   menuLink: {
     textDecoration: 'none',
     color: 'inherit'
-  },
-  submenuList: {
-    listStyle: 'none',
-    padding: '0',
-    margin: '10px 0 0 15px'
-  },
-  submenuItem: {
-    padding: '8px 15px',
-    color: '#555',
-    cursor: 'pointer',
-    fontSize: '14px',
-    transition: 'all 0.2s ease',
-    ':hover': {
-      color: '#2E7D32',
-      backgroundColor: '#E8F5E9'
-    }
   },
   mainContent: {
     flex: 1,

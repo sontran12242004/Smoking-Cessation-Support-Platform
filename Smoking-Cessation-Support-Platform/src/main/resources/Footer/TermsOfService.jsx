@@ -142,7 +142,7 @@ export default function TermsOfService() {
         </section>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .terms-of-service {
           max-width: 1200px;
           margin: 0 auto;
@@ -151,6 +151,7 @@ export default function TermsOfService() {
           background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
           position: relative;
           overflow: hidden;
+          font-family: Arial, sans-serif;
         }
 
         .terms-of-service::before {
@@ -452,7 +453,7 @@ export default function TermsOfService() {
         @keyframes slideUp {
           from {
             opacity: 0;
-            transform: translateY(50px);
+            transform: translateY(30px);
           }
           to {
             opacity: 1;

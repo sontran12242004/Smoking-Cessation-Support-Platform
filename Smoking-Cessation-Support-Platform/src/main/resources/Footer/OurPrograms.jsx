@@ -12,41 +12,26 @@ export default function OurPrograms() {
       <section className="programs-cards">
         <div className="program-card">
           <div className="program-icon">📅</div>
-          <h2>1-Month Plan</h2>
+          <h2>Standard</h2>
           <p className="program-desc">Start your journey with essential support and daily motivation.</p>
           <ul>
             <li>Access to quit-smoking guidance materials</li>
             <li>Daily email reminders</li>
           </ul>
         </div>
-        <div className="program-card premium">
-          <div className="program-icon">💬</div>
-          <h2>6-Month Plan</h2>
-          <p className="program-desc">Get more support and regular health tracking for a stronger commitment.</p>
-          <ul>
-            <li>Direct chat with Coach Off</li>
-            <li>Regular health reports</li>
-            <li>Personalized quit journey (lộ trình cá nhân hóa)</li>
-          </ul>
-          <div className="program-achievement">
-            <span className="achievement-icon">🏅</span> Achievement: Badges for milestones (7 days, 1 month smoke-free...)
-          </div>
-        </div>
         <div className="program-card">
           <div className="program-icon">🏆</div>
-          <h2>1-Year Plan</h2>
+          <h2>Elite</h2>
           <p className="program-desc">Full support, health consultations, and personalized appointments for long-term success.</p>
           <ul>
             <li>Direct chat with Coach (online/offline)</li>
             <li>Regular health consultations with doctors</li>
             <li>Book private consultation appointments on demand</li>
             <li>Regular health reports</li>
-            <li>Personalized quit journey (lộ trình cá nhân hóa)</li>
-            <li>Event privileges (ưu đãi sự kiện, workshop, offline/online)</li>
+            <li>Personalized quit journey</li>
+            <li>Event privileges</li>
           </ul>
-          <div className="program-achievement">
-            <span className="achievement-icon">🏅</span> Achievement: Badges for milestones (7 days, 1 month smoke-free...)
-          </div>
+          
         </div>
       </section>
       <style>{`

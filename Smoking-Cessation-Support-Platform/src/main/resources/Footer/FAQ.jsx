@@ -101,8 +101,8 @@ export default function FAQ() {
               {category.name}
             </button>
           ))}
-            </div>
-            
+        </div>
+        
         <div className="questions-container">
           {faqData[activeCategory].map((item, index) => (
             <div
@@ -113,16 +113,16 @@ export default function FAQ() {
               <div className="question-header">
                 <h3>{item.question}</h3>
                 <span className="toggle-icon">{activeQuestion === index ? '−' : '+'}</span>
-                    </div>
+              </div>
               <div className="answer-content">
                 <p>{item.answer}</p>
-                      </div>
-                  </div>
-                ))}
               </div>
-          </div>
+            </div>
+          ))}
+        </div>
+      </div>
 
-      <style jsx>{`
+      <style>{`
         .faq-page {
           max-width: 1200px;
           margin: 0 auto;
@@ -131,6 +131,7 @@ export default function FAQ() {
           background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
           position: relative;
           overflow: hidden;
+          font-family: Arial, sans-serif;
         }
 
         .faq-page::before {
@@ -248,98 +249,101 @@ export default function FAQ() {
           left: -100%;
           width: 100%;
           height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
-          animation: shine 3s infinite;
+          background: rgba(255, 255, 255, 0.2);
+          animation: shine 2s infinite;
         }
 
         @keyframes shine {
-          0% {
-            left: -100%;
-          }
-          20% {
+          to {
             left: 100%;
           }
-          100% {
-            left: 100%;
-          }
+        }
+
+        .faq-content {
+          display: flex;
+          gap: 40px;
         }
 
         .category-tabs {
           display: flex;
-          justify-content: center;
-          gap: 20px;
-          margin-bottom: 40px;
-          flex-wrap: wrap;
+          flex-direction: column;
+          gap: 15px;
+          flex-shrink: 0;
+          width: 280px;
         }
 
         .category-tab {
           display: flex;
           align-items: center;
-          gap: 10px;
-          padding: 15px 25px;
+          gap: 15px;
+          padding: 18px 25px;
           border: none;
-          border-radius: 50px;
           background: white;
-          color: #666;
-          font-size: 16px;
-          font-weight: 500;
+          border-radius: 15px;
           cursor: pointer;
+          text-align: left;
+          font-size: 18px;
+          font-weight: 600;
+          color: #555;
           transition: all 0.3s ease;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+          position: relative;
+          overflow: hidden;
         }
 
         .category-tab:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+          transform: translateY(-3px) scale(1.02);
+          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+          color: #2E7D32;
         }
 
         .category-tab.active {
-          background: #4CAF50;
+          background: linear-gradient(135deg, #4CAF50, #2E7D32);
           color: white;
-          box-shadow: 0 6px 16px rgba(76, 175, 80, 0.2);
+          box-shadow: 0 10px 20px rgba(76, 175, 80, 0.3);
+          transform: translateY(-3px) scale(1.02);
         }
-
+        
         .category-icon {
-          font-size: 20px;
+          font-size: 24px;
         }
 
         .questions-container {
-          max-width: 800px;
-          margin: 0 auto;
+          flex-grow: 1;
         }
 
         .question-card {
           background: white;
           border-radius: 15px;
           margin-bottom: 20px;
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+          cursor: pointer;
           overflow: hidden;
           transition: all 0.3s ease;
-          cursor: pointer;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
 
         .question-card:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+          transform: translateY(-3px);
+          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
 
         .question-header {
-          padding: 25px;
           display: flex;
           justify-content: space-between;
           align-items: center;
-          background: white;
+          padding: 25px;
         }
 
         .question-header h3 {
           margin: 0;
-          font-size: 18px;
+          font-size: 20px;
           color: #333;
           font-weight: 600;
         }
 
         .toggle-icon {
-          font-size: 24px;
+          font-size: 28px;
+          font-weight: 300;
           color: #4CAF50;
           transition: transform 0.3s ease;
         }
@@ -347,23 +351,25 @@ export default function FAQ() {
         .question-card.active .toggle-icon {
           transform: rotate(180deg);
         }
-
+        
         .answer-content {
           max-height: 0;
           overflow: hidden;
-          transition: max-height 0.3s ease;
-          background: #f8f9fa;
+          transition: max-height 0.5s ease, padding 0.5s ease;
         }
 
         .question-card.active .answer-content {
           max-height: 500px;
+          padding: 0 25px 25px;
         }
 
         .answer-content p {
           margin: 0;
-          padding: 25px;
-          color: #666;
-          line-height: 1.6;
+          color: #555;
+          font-size: 17px;
+          line-height: 1.8;
+          border-top: 1px solid #eee;
+          padding-top: 20px;
         }
 
         /* Animations */

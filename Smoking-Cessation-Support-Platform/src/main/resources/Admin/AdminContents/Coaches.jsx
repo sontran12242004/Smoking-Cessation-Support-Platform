@@ -52,6 +52,125 @@ const initialCoaches = [
   },
 ];
 
+const initialAppointments = [
+  {
+    id: 1,
+    member: 'John Doe',
+    coach: 'Christopher C. Ross, M.D.',
+    date: '2023-08-15',
+    time: '10:00 AM',
+    status: 'Pending'
+  },
+  {
+    id: 2,
+    member: 'Jane Smith',
+    coach: 'Xiang Gao, M.D., Ph.D.',
+    date: '2023-08-16',
+    time: '2:00 PM',
+    status: 'Pending'
+  },
+  {
+    id: 3,
+    member: 'Alice Johnson',
+    coach: 'Elizabeth T. Smith, Ph.D.',
+    date: '2023-08-17',
+    time: '11:00 AM',
+    status: 'Pending'
+  },
+  {
+    id: 4,
+    member: 'Bob Johnson',
+    coach: 'David B. Lee, M.D.',
+    date: '2023-08-18',
+    time: '3:00 PM',
+    status: 'Pending'
+  },
+  {
+    id: 5,
+    member: 'Emily Davis',
+    coach: 'Sophia R. Garcia, M.D.',
+    date: '2023-08-19',
+    time: '9:00 AM',
+    status: 'Pending'
+  },
+  {
+    id: 6,
+    member: 'Michael Brown',
+    coach: 'Robert C. Brown, Ph.D.',
+    date: '2023-08-20',
+    time: '1:00 PM',
+    status: 'Pending'
+  },
+];
+
+function AppointmentsModal({ coach, appointments, onClose, onStatusChange }) {
+    if (!coach) return null;
+
+    return (
+        <div style={modalStyles.overlay}>
+            <div style={{...modalStyles.popup, width: '60%', maxWidth: '800px'}}>
+                <button style={modalStyles.closeBtn} onClick={onClose}>✖</button>
+                <h2 style={{...modalStyles.title, marginBottom: '25px'}}>Appointments for {coach.name}</h2>
+                {appointments.length > 0 ? (
+                    <table style={tableStyles.table}>
+                        <thead>
+                            <tr>
+                                <th style={tableStyles.th}>Member</th>
+                                <th style={tableStyles.th}>Date</th>
+                                <th style={tableStyles.th}>Time</th>
+                                <th style={tableStyles.th}>Status</th>
+                                <th style={tableStyles.th}>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {appointments.map(app => (
+                                <tr key={app.id}>
+                                    <td style={tableStyles.td}>{app.member}</td>
+                                    <td style={tableStyles.td}>{app.date}</td>
+                                    <td style={tableStyles.td}>{app.time}</td>
+                                    <td style={tableStyles.td}>
+                                        <span style={{
+                                            ...tableStyles.status,
+                                            ...(app.status === 'Confirmed' ? tableStyles.statusConfirmed : {}),
+                                            ...(app.status === 'Rejected' ? tableStyles.statusRejected : {}),
+                                            ...(app.status === 'Pending' ? tableStyles.statusPending : {}),
+                                        }}>
+                                            {app.status}
+                                        </span>
+                                    </td>
+                                    <td style={tableStyles.td}>
+                                        {app.status === 'Pending' ? (
+                                            <>
+                                                <button 
+                                                    style={{...tableStyles.button, ...tableStyles.confirmButton}}
+                                                    onClick={() => onStatusChange(app.id, 'Confirmed')}
+                                                >
+                                                    Confirm
+                                                </button>
+                                                <button 
+                                                    style={{...tableStyles.button, ...tableStyles.rejectButton}}
+                                                    onClick={() => onStatusChange(app.id, 'Rejected')}
+                                                >
+                                                    Reject
+                                                </button>
+                                            </>
+                                        ) : (
+                                            <span>-</span>
+                                        )}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                ) : (
+                    <p style={{textAlign: 'center', padding: '20px', fontSize: '16px'}}>No appointments for this coach.</p>
+                )}
+            </div>
+        </div>
+    );
+}
+
+
 function AddCoachModal({ onClose, onAdd }) {
   // Các state cho form coach mới
   const [name, setName] = useState('');
@@ -416,8 +535,26 @@ const Coaches = () => {
   const [showEdit, setShowEdit] = useState(false);
   const [editingCoachId, setEditingCoachId] = useState(null);
   const [coaches, setCoaches] = useState(initialCoaches);
+  const [appointments, setAppointments] = useState(initialAppointments);
+  const [isAppointmentsModalOpen, setAppointmentsModalOpen] = useState(false);
+  const [viewingCoach, setViewingCoach] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [availabilityFilter, setAvailabilityFilter] = useState('All');
+  const [showContentsDropdown, setShowContentsDropdown] = useState(false);
+
+  const handleAppointmentStatus = (id, status) => {
+    setAppointments(appointments.map(app => (app.id === id ? { ...app, status } : app)));
+  };
+
+  const handleViewAppointmentsClick = (coach) => {
+    setViewingCoach(coach);
+    setAppointmentsModalOpen(true);
+  };
+
+  const handleCloseAppointmentsModal = () => {
+    setAppointmentsModalOpen(false);
+    setViewingCoach(null);
+  };
 
   const handleEditClick = (coachId) => {
     setEditingCoachId(coachId);
@@ -478,9 +615,25 @@ const Coaches = () => {
               <Link to="/admin/packages" style={styles.menuLink}>
                 <li style={activeMenu === 'Packages' ? styles.activeMenuItem : styles.menuItem} onClick={() => setActiveMenu('Packages')}>Packages</li>
               </Link>
-              <Link to="/admin/contents" style={styles.menuLink}>
-                <li style={activeMenu === 'Contents' ? styles.activeMenuItem : styles.menuItem} onClick={() => setActiveMenu('Contents')}>Contents</li>
-              </Link>
+              <li 
+                style={activeMenu.startsWith('Contents') ? styles.activeMenuItem : styles.menuItem} 
+                onClick={() => setShowContentsDropdown(!showContentsDropdown)}
+              >
+                Contents <span style={{ float: 'right' }}>{showContentsDropdown ? '▲' : '▼'}</span>
+              </li>
+              {showContentsDropdown && (
+                <ul style={{...styles.menuList, paddingLeft: '20px'}}>
+                  <Link to="/admin/contents/send-notification" style={styles.menuLink}>
+                    <li style={activeMenu === 'ContentsSendNotification' ? styles.activeMenuItem : styles.menuItem} onClick={() => setActiveMenu('ContentsSendNotification')}>Send Notification To Members</li>
+                  </Link>
+                  <Link to="/admin/contents/send-motivation" style={styles.menuLink}>
+                    <li style={activeMenu === 'ContentsSendMotivation' ? styles.activeMenuItem : styles.menuItem} onClick={() => setActiveMenu('ContentsSendMotivation')}>Send Motivation To Members</li>
+                  </Link>
+                  <Link to="/admin/contents/send-email" style={styles.menuLink}>
+                    <li style={activeMenu === 'ContentsSendEmail' ? styles.activeMenuItem : styles.menuItem} onClick={() => setActiveMenu('ContentsSendEmail')}>Send Email</li>
+                  </Link>
+                </ul>
+              )}
               <Link to="/admin/coaches" style={styles.menuLink}>
                 <li style={activeMenu === 'Coaches' ? styles.activeMenuItem : styles.menuItem} onClick={() => setActiveMenu('Coaches')}>Coaches</li>
               </Link>
@@ -492,7 +645,7 @@ const Coaches = () => {
         </div>
       </div>
       <div style={styles.mainContent}>
-        <div style={showAdd || showEdit ? { filter: 'blur(2px)', pointerEvents: 'none', userSelect: 'none' } : {}}>
+        <div style={showAdd || showEdit || isAppointmentsModalOpen ? { filter: 'blur(2px)', pointerEvents: 'none', userSelect: 'none' } : {}}>
           <div style={styles.wrapper}>
             <div style={styles.headerRow}>
               <h1 style={styles.title}>Coaches Management</h1>
@@ -523,32 +676,105 @@ const Coaches = () => {
               <div style={styles.statBox}><div style={styles.statLabel}>Avg. Rating</div><div style={styles.statValue}>4.5%</div></div>
             </div>
             <div style={styles.cardRow}>
-              {filteredCoaches.map((c, idx) => (
-                <div key={c.name + idx} style={styles.coachCard}>
-                  <div style={styles.coachImage}>
-                    <img src={c.avatar} alt={c.name} style={styles.coachImageContent} />
+              {filteredCoaches.map((c, idx) => {
+                const pendingCount = appointments.filter(a => a.coach === c.name && a.status === 'Pending').length;
+                const totalCount = appointments.filter(a => a.coach === c.name).length;
+                return (
+                  <div key={c.name + idx} style={styles.coachCard}>
+                    <div style={styles.coachImage}>
+                      <img src={c.avatar} alt={c.name} style={styles.coachImageContent} />
+                    </div>
+                    <div style={styles.coachName}>{c.name}</div>
+                    <div style={styles.coachInfoRow}>
+                      <span style={styles.coachRating}>★ {c.rating} <span style={{ color: '#888', fontWeight: 400 }}>({c.ratingCount})</span></span>
+                      <span style={styles.coachClients}>👤 {c.clients} clients</span>
+                    </div>
+                    <div style={styles.coachBtnRow}>
+                      <button style={styles.editBtn} onClick={() => handleEditClick(c.name)}>Edit</button>
+                      <Link to="/confirm-coach-schedule" style={styles.scheduleButtonLink}>
+                        <button style={styles.scheduleButton}>Schedule</button>
+                      </Link>
+                      {totalCount > 0 && (
+                        <button 
+                            style={pendingCount > 0 ? styles.pendingBtn : styles.appointmentsBtn}
+                            onClick={() => handleViewAppointmentsClick(c)}
+                        >
+                            {pendingCount > 0 ? `Pending (${pendingCount})` : `Appointments (${totalCount})`}
+                        </button>
+                      )}
+                    </div>
                   </div>
-                  <div style={styles.coachName}>{c.name}</div>
-                  <div style={styles.coachInfoRow}>
-                    <span style={styles.coachRating}>★ {c.rating} <span style={{ color: '#888', fontWeight: 400 }}>({c.ratingCount})</span></span>
-                    <span style={styles.coachClients}>👤 {c.clients} clients</span>
-                  </div>
-                  <div style={styles.coachBtnRow}>
-                    <button style={styles.editBtn} onClick={() => handleEditClick(c.name)}>Edit</button>
-                    <Link to="/confirm-coach-schedule" style={styles.scheduleButtonLink}>
-                      <button style={styles.scheduleButton}>Schedule</button>
-                    </Link>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
         {showAdd && <AddCoachModal onClose={() => setShowAdd(false)} onAdd={handleAddCoach} />}
         {showEdit && coachToEdit && <EditCoachModal onClose={() => setShowEdit(false)} coach={coachToEdit} onSave={handleSaveEdit} />}
+        {isAppointmentsModalOpen && (
+            <AppointmentsModal 
+                coach={viewingCoach}
+                appointments={appointments.filter(a => a.coach === viewingCoach?.name)}
+                onClose={handleCloseAppointmentsModal}
+                onStatusChange={handleAppointmentStatus}
+            />
+        )}
       </div>
     </div>
   );
+};
+
+const tableStyles = {
+  table: {
+    width: '100%',
+    borderCollapse: 'collapse',
+    marginBottom: '20px',
+  },
+  th: {
+    backgroundColor: '#4caf50',
+    color: '#fff',
+    padding: '10px',
+    textAlign: 'left',
+    fontWeight: 'bold',
+  },
+  td: {
+    border: '1px solid #ddd',
+    padding: '8px',
+    textAlign: 'left',
+  },
+  button: {
+    padding: '6px 12px',
+    border: 'none',
+    borderRadius: '4px',
+    color: '#fff',
+    cursor: 'pointer',
+    marginRight: '5px',
+  },
+  confirmButton: {
+    backgroundColor: '#4caf50',
+  },
+  rejectButton: {
+    backgroundColor: '#f44336',
+  },
+  status: {
+    padding: '4px 8px',
+    borderRadius: '12px',
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: '12px',
+    textTransform: 'uppercase',
+    display: 'inline-block',
+  },
+  statusConfirmed: {
+    backgroundColor: '#4CAF50',
+  },
+  statusRejected: {
+    backgroundColor: '#f44336',
+  },
+  statusPending: {
+    backgroundColor: '#ffc107',
+    color: '#000',
+  }
 };
 
 const styles = {
@@ -867,6 +1093,28 @@ const styles = {
   coachCardText: {
     marginBottom: '10px',
   },
+  pendingBtn: {
+    background: '#ffc107',
+    color: '#000',
+    border: 'none',
+    borderRadius: 8,
+    padding: '8px 12px',
+    fontWeight: 600,
+    fontSize: 14,
+    cursor: 'pointer',
+    transition: 'background 0.2s',
+  },
+  appointmentsBtn: {
+    background: '#2196F3',
+    color: '#fff',
+    border: 'none',
+    borderRadius: 8,
+    padding: '8px 12px',
+    fontWeight: 600,
+    fontSize: 14,
+    cursor: 'pointer',
+    transition: 'background 0.2s',
+  },
 };
 
 const modalStyles = {
@@ -881,6 +1129,16 @@ const modalStyles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  popup: {
+    backgroundColor: '#fff',
+    padding: '20px',
+    borderRadius: '8px',
+    boxShadow: '0 2px 10px rgba(0, 0, 0, 0.2)',
+    position: 'relative',
+    width: '80%',
+    maxWidth: '600px',
+    margin: '0 auto',
   },
   popupLarge: {
     background: '#fff',
@@ -909,6 +1167,12 @@ const modalStyles = {
     zIndex: 10,
     fontWeight: 700,
     transition: 'color 0.2s',
+  },
+  title: {
+    fontSize: '24px',
+    fontWeight: 'bold',
+    marginBottom: '20px',
+    textAlign: 'center',
   },
   titleLarge: {
     color: '#357a38',
