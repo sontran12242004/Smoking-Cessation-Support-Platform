@@ -4,8 +4,10 @@ import com.smokingcessation.dto.AccountDTO;
 import com.smokingcessation.dto.ForgotPasswordDTO;
 import com.smokingcessation.dto.LoginDTO;
 import com.smokingcessation.entity.Account;
+import com.smokingcessation.entity.ForgotPassword;
 import com.smokingcessation.service.AuthenticationService;
 import jakarta.validation.Valid;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -29,14 +31,13 @@ public class    AuthenticationController {
     @PostMapping("/api/login")
     @CrossOrigin(origins = "http://localhost:3005")
     public ResponseEntity login(@RequestBody LoginDTO loginDTO){
-
         AccountDTO account = authenticationService.login(loginDTO);
-
         return ResponseEntity.ok(account);
     }
 
     @PostMapping("forgot-password")
-    public ResponseEntity forgotpassword(@Valid @RequestBody ForgotPasswordDTO forgotpasswordDTO){
-
+    public ResponseEntity forgotPassword(@Valid @RequestBody ForgotPasswordDTO forgotPasswordDTO) throws NotFoundException {
+        authenticationService.forgotPassword(forgotPasswordDTO);
+        return ResponseEntity.ok("Forgot Password Successfuly");
     }
 }

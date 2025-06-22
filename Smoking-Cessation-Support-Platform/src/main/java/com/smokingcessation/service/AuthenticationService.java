@@ -6,6 +6,7 @@ import com.smokingcessation.dto.EmailDetail;
 import com.smokingcessation.dto.ForgotPasswordDTO;
 import com.smokingcessation.dto.LoginDTO;
 import com.smokingcessation.entity.Account;
+import com.smokingcessation.entity.ForgotPassword;
 import com.smokingcessation.exception.exceptions.AuthenticationException;
 import com.smokingcessation.repository.AuthenticationRepository;
 import javassist.NotFoundException;
@@ -83,8 +84,8 @@ public class AuthenticationService implements UserDetailsService {
         return authenticationRepository.findAccountByEmail(email);
     }
 
-    public void forgotPassword(String email) throws NotFoundException {
-        Account account = authenticationRepository.findAccountByEmail(email);
+    public void forgotPassword(ForgotPasswordDTO forgotPasswordDTO) throws NotFoundException {
+        Account account = authenticationRepository.findAccountByEmail(forgotPasswordDTO.getEmail());
         if(account == null){
             throw new NotFoundException("Account Not Found");
         }
