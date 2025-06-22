@@ -8,11 +8,11 @@
 # Members
 | Email                      | Student ID | Name             |
 |----------------------------|------------|------------------|
-| anhhdse182336@fpt.edu.vn   | 	SE184125  | 	Dương Thanh Việt Anh   |
-| viltse180769@fpt.edu.vn    | SE184005  | 	Trần Đình Sơn     |
-| phucvxse180225@fpt.edu.vn  | 	SE192039  | 	Hồ Minh Quân    |
-| khahdse180386@fpt.edu.vn   | 	SE184607  | 	Võ Đồng Đăng Khoa   |
-| cuongtqse140061@fpt.edu.vn | 	SE192970  | 	Trần Lê Khôi Nguyên |
+| anhdtvse184125@fpt.edu.vn   | 	SE184125  | 	Dương Thanh Việt Anh   |
+| sontdse184005@fpt.edu.vn    | SE184005  | 	Trần Đình Sơn     |
+| quanho17082005@gmail.com  | 	SE192039  | 	Hồ Minh Quân    |
+| khoavddse184607@fpt.edu.vn  | 	SE184607  | 	Võ Đồng Đăng Khoa   |
+| ... | 	SE192970  | 	Trần Lê Khôi Nguyên |
 
 # Links
 - Figma: https://www.figma.com/design/WvIJx518iGxQchmAsYslLF/NicOff?node-id=1-4&t=cv5OeXTGtXgibAWb-1
