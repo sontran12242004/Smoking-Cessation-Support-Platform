@@ -7,6 +7,7 @@ import com.smokingcessation.dto.LoginDTO;
 import com.smokingcessation.dto.ResetPasswordDTO;
 import com.smokingcessation.entity.Account;
 import com.smokingcessation.service.AuthenticationService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,13 @@ public class AuthenticationController {
     public  ResponseEntity forgotPassword(@RequestBody ForgotPasswordDTO forgotPasswordRequest){
         authenticationService.forgotPassword(forgotPasswordRequest);
         return ResponseEntity.ok("Forgot Password successful");
+    }
+
+    @SecurityRequirement(name = "api")
+    @PostMapping("/reset-password")
+    public ResponseEntity resetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO ){
+        authenticationService.resetPassword(resetPasswordDTO);
+        return ResponseEntity.ok("Reset Password Successfuly");
     }
 
 //    @GetMapping("/doctors")

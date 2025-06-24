@@ -83,7 +83,8 @@ public class AuthenticationService implements UserDetailsService {
             EmailDetail emailDetail = new EmailDetail();
             emailDetail.setReceiver(account);
             emailDetail.setSubject("Reset Password");
-            emailDetail.setRecipient("abcdjc" +tokenService.generateToken(account));
+            emailDetail.setRecipient(account.getEmail());
+            emailDetail.setLink("http://your-domain/reset?token=" + tokenService.generateToken(account));
             emailService.sendMail(emailDetail);
 
         }
@@ -95,6 +96,12 @@ public class AuthenticationService implements UserDetailsService {
     }
 
 
+
+    public Account resetPassword(ResetPasswordDTO resetPasswordDTO ) {
+        Account account = getCurrentAccount();
+        account.setPassword(passwordEncoder.encode(resetPasswordDTO.getPassword()));
+        return authenticationRepository.save(account);
+    }
 
 
 
