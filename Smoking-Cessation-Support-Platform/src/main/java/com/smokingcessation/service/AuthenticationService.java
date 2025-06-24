@@ -4,6 +4,7 @@ package com.smokingcessation.service;
 import com.smokingcessation.dto.*;
 import com.smokingcessation.entity.Account;
 import com.smokingcessation.entity.ForgotPassword;
+import com.smokingcessation.enums.Role;
 import com.smokingcessation.exception.exceptions.AuthenticationException;
 import com.smokingcessation.repository.AccountSlotRepository;
 import com.smokingcessation.repository.AuthenticationRepository;
@@ -18,6 +19,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Service
@@ -40,8 +43,6 @@ public class AuthenticationService implements UserDetailsService {
 
     @Autowired
     EmailService emailService;
-    @Autowired
-    private AccountSlotRepository accountSlotRepository;
 
     public Account register(Account account) {
         account.password = passwordEncoder.encode(account.getPassword());
@@ -61,7 +62,7 @@ public class AuthenticationService implements UserDetailsService {
                     loginRequest.getPassword()
             ));
         }catch (Exception e){
-            // sai thông tin đăng nhậpw
+            // sai thông tin đăng nhập
             System.out.println("Thông tin đăng nhập ko chính xác");
 
             throw new AuthenticationException("Invalid username or password");
@@ -73,35 +74,44 @@ public class AuthenticationService implements UserDetailsService {
         accountResponse.setToken(token);
         return accountResponse;
     }
+    public void forgotPassword(ForgotPasswordDTO  forgotPasswordRequest) {
+        Account account =authenticationRepository.findAccountByEmail(forgotPasswordRequest.getEmail());
+        if(account == null){
+            throw new RuntimeException("Account not found");
+        }else
+        {
+            EmailDetail emailDetail = new EmailDetail();
+            emailDetail.setReceiver(account);
+            emailDetail.setSubject("Reset Password");
+            emailDetail.setRecipient("abcdjc" +tokenService.generateToken(account));
+            emailService.sendMail(emailDetail);
+
+        }
+    }
 
     public Account getCurrentAccount(){
-        Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return authenticationRepository.findAccountByEmail(account.getEmail());
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return authenticationRepository.findAccountByEmail(email);
     }
+
+
+
+
+
+
+
+
+
+
+
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return authenticationRepository.findAccountByEmail(email);
     }
 
-    public void forgotPassword(ForgotPasswordDTO forgotPasswordDTO) throws NotFoundException {
-        Account account = authenticationRepository.findAccountByEmail(forgotPasswordDTO.getEmail());
-        if (account == null) {
-            throw new NotFoundException("Account Not Found");
-        } else {
-            EmailDetail emailDetail = new EmailDetail();
-            emailDetail.setReceiver(account);
-            emailDetail.setSubject("Reset Pasword");
-            emailDetail.setLink("http://localhost:8080/reset-password/" + tokenService.generateToken(account));
 
-            emailService.sendMail(emailDetail);
-
-        }
-    }
-
-    public Account resetPassword(ResetPasswordDTO resetPasswordDTO ) {
-        Account account = getCurrentAccount();
-        account.setPassword(passwordEncoder.encode(resetPasswordDTO.getPassword()));
-        return authenticationRepository.save(account);
+    public List<Account> getCoachs() {
+        return authenticationRepository.findByRole(Role.Coach);
     }
 }

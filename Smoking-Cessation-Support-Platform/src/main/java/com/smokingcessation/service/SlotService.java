@@ -11,6 +11,7 @@ import com.smokingcessation.repository.SlotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,14 +33,14 @@ public class SlotService
     }
     public List<AccountSlot> registerSlot(RegisterSlotDTO registerSlotDTO)
     {
-        Account account = authenticationRepository.findById(registerSlotDTO.getAccountId()).get();
+        Account  account = authenticationRepository.findById(registerSlotDTO.getAccountId()).get();
         List<AccountSlot>  accountSlots = new ArrayList<>();
         List<AccountSlot> oldAccountSlot= accountSlotRepository.findAccountSlotsByAccountAndDate(account,registerSlotDTO.getDate());
 
         if(!oldAccountSlot.isEmpty())
         {
             //=> da co lich roi
-            throw new BadRequestException("Already registed!!!");
+            throw new BadRequestException("........");
         }
 
         for(Slot slot : slotRepository.findAll())
@@ -72,5 +73,20 @@ public class SlotService
             start = start.plusMinutes(30);
         }
         slotRepository.saveAll(slots);
+    }
+
+    public List<AccountSlot> getRegisteredSlots(Long doctorId, LocalDate date) {
+        Account doctor = authenticationRepository.findById(doctorId)
+                .orElseThrow(() -> new BadRequestException("Doctor not found"));
+
+        List<AccountSlot> accountSlots = accountSlotRepository.findAccountSlotsByAccountAndDate(doctor,date);
+        List<AccountSlot> slotsAvailable = new ArrayList<>();
+        for(AccountSlot accountSlot : accountSlots){
+            if(accountSlot.isAvailable()){
+                slotsAvailable.add(accountSlot);
+            }
+
+        }
+        return  slotsAvailable;
     }
 }

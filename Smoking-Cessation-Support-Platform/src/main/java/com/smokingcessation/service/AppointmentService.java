@@ -33,34 +33,45 @@ public class AppointmentService {
     @Autowired
     MedicineServiceRepository medicineServiceRepository;
 
-    @Transactional
-    public Appointment create(AppointmentDTO appointmentDTO) {
-        //found coach
-        Account coach = authenticationRepository.findById(appointmentDTO.getCoachId()).orElseThrow(()-> new BadRequestException("Coach not found"));
-        if(coach.getRole().equals(Role.Coach)){
-            throw new BadRequestException("Account is not a Coach");
-        }
-        //found slot
-        AccountSlot slot = accountSlotRepository.findAccountSlotBySlotIdAndAccountAndDate(
-                appointmentDTO.getSlotId(),
-                coach,
-                appointmentDTO.getAppointmentDate());
 
-        if (!slot.isAvailable()){
+    @Transactional
+    public Appointment create(AppointmentDTO appointmentRequest) {
+
+//        tim doctor
+        Account doctor = authenticationRepository.findById(appointmentRequest.getCoachId()).orElseThrow(()-> new BadRequestException("doctor not found"));
+
+        if(!doctor.getRole().equals(Role.Coach)){
+            throw new BadRequestException("account is not a doctor");
+        }
+
+
+//        tim slot
+        AccountSlot slot = accountSlotRepository.findAccountSlotBySlotIdAndAccountAndDate(
+                appointmentRequest.getSlotId(),
+                doctor,
+                appointmentRequest.getAppointmentDate()
+        );
+//        check xem slot do da dat hay chua
+        if(!slot.isAvailable()){
             throw new BadRequestException("slot is not available");
         }
 
-        List<MedicineService> services = medicineServiceRepository.findByIdIn(appointmentDTO.getServicesId());
 
+//        lay Services
+        List<MedicineService> services = medicineServiceRepository.findByIdIn(appointmentRequest.getServicesId());
+
+
+//        lay tai khoan hien tai
         Account currentAccount = authenticationService.getCurrentAccount();
 
+//       appointment
         Appointment appointment = new Appointment();
         appointment.setCreateAt(LocalDate.now());
         appointment.setStatus(AppointmentEnum.PENDING);
         appointment.setAccount(currentAccount);
         appointment.setMedicineServices(services);
         appointmentRepository.save(appointment);
-
+//        set slot do thanh da dat
         slot.setAvailable(false);
 
         return appointment;

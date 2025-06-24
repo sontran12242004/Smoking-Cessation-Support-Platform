@@ -24,13 +24,9 @@ public class Account implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long id;
 
-    @Pattern(regexp = "84|0|[3|5|7|8|9] + (\\d{8})", message = "Invalid Phone!")
-    @Column(unique = true)
+    public String email;
     public String phone;
-
-    @Size(min = 6, message = "Password must be at least 6 character!")
     public String password;
-
     public String fullName;
 
     @Enumerated(EnumType.STRING)
@@ -55,11 +51,14 @@ public class Account implements UserDetails {
     @JsonIgnore
     List<AccountSlot> accountSlots;
 
-    @OneToMany
-            @JsonIgnore
+    @OneToMany(mappedBy = "account")
+    @JsonIgnore
     List<Appointment> appointments;
 
-    @Email(message = "invalid email!")
-    @Column(unique = true)
-    public String email;;
+//    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+//    List<Rating> ratings;
+//
+//    @OneToMany(mappedBy = "account")
+//    List<Report> reports;
+
 }

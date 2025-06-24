@@ -1,5 +1,6 @@
 package com.smokingcessation.controller;
 
+
 import com.smokingcessation.dto.AccountDTO;
 import com.smokingcessation.dto.ForgotPasswordDTO;
 import com.smokingcessation.dto.LoginDTO;
@@ -10,39 +11,41 @@ import jakarta.validation.Valid;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-public class    AuthenticationController {
+public class AuthenticationController {
 
     @Autowired
     AuthenticationService authenticationService;
 
     // api > service > repository
-    @CrossOrigin()
+
     @PostMapping("/api/register")
     public ResponseEntity register(@RequestBody Account account){
         Account newAccount = authenticationService.register(account);
         return ResponseEntity.ok(newAccount);
     }
+
     @PostMapping("/api/login")
-    @CrossOrigin(origins = "http://localhost:3005")
-    public ResponseEntity login(@RequestBody LoginDTO loginDTO){
-        AccountDTO account = authenticationService.login(loginDTO);
+    public ResponseEntity login(@RequestBody LoginDTO loginRequest){
+
+        AccountDTO account = authenticationService.login(loginRequest);
+
         return ResponseEntity.ok(account);
     }
-
     @PostMapping("/api/forgot-password")
-    public ResponseEntity forgotPassword(@Valid @RequestBody ForgotPasswordDTO forgotPasswordDTO) throws NotFoundException {
-        authenticationService.forgotPassword(forgotPasswordDTO);
-        return ResponseEntity.ok("Forgot Password Successfuly");
+    public  ResponseEntity forgotPassword(@RequestBody ForgotPasswordDTO forgotPasswordRequest){
+        authenticationService.forgotPassword(forgotPasswordRequest);
+        return ResponseEntity.ok("Forgot Password successful");
     }
-    @PostMapping("/api/reset-password")
-    public ResponseEntity resetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO ){
-        authenticationService.resetPassword(resetPasswordDTO);
-        return ResponseEntity.ok("Reset Password Successfuly");
-    }
+
+//    @GetMapping("/doctors")
+//    public ResponseEntity getDoctors(){
+//        List<Account> doctors = authenticationService.getDoctors();
+//        return ResponseEntity.ok(doctors);
+//    }
+
 }

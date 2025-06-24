@@ -7,12 +7,8 @@ import lombok.experimental.FieldDefaults;
 
 
 @Data
-@FieldDefaults(level = AccessLevel.PRIVATE)
-@NoArgsConstructor
-
 public class EmailDetail {
+    private Account receiver;
     private String recipient;
     private String subject;
-    private Account receiver;
-    private String link;
 }

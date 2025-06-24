@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @SecurityRequirement(name = "api")
 public class AppointmentController {
     @Autowired
-    private AppointmentService appointmentService;
+     AppointmentService appointmentService;
 
     @PostMapping
     public ResponseEntity<Appointment> create(@RequestBody AppointmentDTO appointmentDTO){
