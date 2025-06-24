@@ -1,13 +1,11 @@
 package com.smokingcessation.service;
 
 
-import com.smokingcessation.dto.AccountDTO;
-import com.smokingcessation.dto.EmailDetail;
-import com.smokingcessation.dto.ForgotPasswordDTO;
-import com.smokingcessation.dto.LoginDTO;
+import com.smokingcessation.dto.*;
 import com.smokingcessation.entity.Account;
 import com.smokingcessation.entity.ForgotPassword;
 import com.smokingcessation.exception.exceptions.AuthenticationException;
+import com.smokingcessation.repository.AccountSlotRepository;
 import com.smokingcessation.repository.AuthenticationRepository;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
@@ -42,6 +40,8 @@ public class AuthenticationService implements UserDetailsService {
 
     @Autowired
     EmailService emailService;
+    @Autowired
+    private AccountSlotRepository accountSlotRepository;
 
     public Account register(Account account) {
         account.password = passwordEncoder.encode(account.getPassword());
@@ -75,8 +75,8 @@ public class AuthenticationService implements UserDetailsService {
     }
 
     public Account getCurrentAccount(){
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        return authenticationRepository.findAccountByEmail(email);
+        Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return authenticationRepository.findAccountByEmail(account.getEmail());
     }
 
     @Override
@@ -86,18 +86,22 @@ public class AuthenticationService implements UserDetailsService {
 
     public void forgotPassword(ForgotPasswordDTO forgotPasswordDTO) throws NotFoundException {
         Account account = authenticationRepository.findAccountByEmail(forgotPasswordDTO.getEmail());
-        if(account == null){
+        if (account == null) {
             throw new NotFoundException("Account Not Found");
-        }
-
-        else{
-            EmailDetail emailDetail =  new EmailDetail();
+        } else {
+            EmailDetail emailDetail = new EmailDetail();
             emailDetail.setReceiver(account);
             emailDetail.setSubject("Reset Pasword");
-            emailDetail.setLink(""+ tokenService.generateToken(account));
+            emailDetail.setLink("http://localhost:8080/reset-password/" + tokenService.generateToken(account));
 
             emailService.sendMail(emailDetail);
 
+        }
     }
- }
+
+        public Account resetPassword(ResetPasswordDTO resetPasswordDTO ) {
+        Account account = getCurrentAccount();
+        account.setPassword(passwordEncoder.encode(resetPasswordDTO.getPassword()));
+        return authenticationRepository.save(account);
+  }
 }
