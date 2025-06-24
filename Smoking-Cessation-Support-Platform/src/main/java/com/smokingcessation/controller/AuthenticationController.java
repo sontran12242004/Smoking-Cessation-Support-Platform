@@ -35,12 +35,12 @@ public class    AuthenticationController {
         return ResponseEntity.ok(account);
     }
 
-    @PostMapping("/forgot-password")
+    @PostMapping("/api/forgot-password")
     public ResponseEntity forgotPassword(@Valid @RequestBody ForgotPasswordDTO forgotPasswordDTO) throws NotFoundException {
         authenticationService.forgotPassword(forgotPasswordDTO);
         return ResponseEntity.ok("Forgot Password Successfuly");
     }
-    @PostMapping("/reset-password")
+    @PostMapping("/api/reset-password")
     public ResponseEntity resetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO ){
         authenticationService.resetPassword(resetPasswordDTO);
         return ResponseEntity.ok("Reset Password Successfuly");
