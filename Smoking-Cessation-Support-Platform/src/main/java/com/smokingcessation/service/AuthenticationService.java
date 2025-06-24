@@ -54,7 +54,7 @@ public class AuthenticationService implements UserDetailsService {
         return newAccount;
     }
 
-        public AccountDTO login(LoginDTO loginRequest){
+    public AccountDTO login(LoginDTO loginRequest){
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     loginRequest.getEmail(),
@@ -99,9 +99,9 @@ public class AuthenticationService implements UserDetailsService {
         }
     }
 
-        public Account resetPassword(ResetPasswordDTO resetPasswordDTO ) {
+    public Account resetPassword(ResetPasswordDTO resetPasswordDTO ) {
         Account account = getCurrentAccount();
         account.setPassword(passwordEncoder.encode(resetPasswordDTO.getPassword()));
         return authenticationRepository.save(account);
-  }
+    }
 }
