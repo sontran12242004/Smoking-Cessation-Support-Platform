@@ -35,8 +35,8 @@ public class Filter extends OncePerRequestFilter {
     private final List<String> PUBLIC_API = List.of(
             "POST:/api/register",
             "POST:/api/login",
-            "POST:/api/forgot-password",
-            "forgot-password"
+            "/api/forgot-password"
+
     );
 
     public boolean isPublicAPI(String uri, String method) {
@@ -55,6 +55,8 @@ public class Filter extends OncePerRequestFilter {
         });
     }
 
+
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // function này sẽ đc chạy mỗi khi mà có request từ FE
@@ -64,7 +66,7 @@ public class Filter extends OncePerRequestFilter {
         String method = request.getMethod();
 
         if(isPublicAPI(uri, method)){
-            // nếu public cho qua luôn ko cần check
+            // nếu public   cho qua luôn ko cần check
             filterChain.doFilter(request, response);
         }else{
             // xác thực
