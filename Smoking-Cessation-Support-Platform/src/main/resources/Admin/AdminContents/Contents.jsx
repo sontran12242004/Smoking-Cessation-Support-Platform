@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
+
 const Contents = () => {
   const [activeMenu, setActiveMenu] = useState('Contents');
   const [showContentsDropdown, setShowContentsDropdown] = useState(true);
@@ -107,7 +108,7 @@ const Contents = () => {
       {/* Main Content */}
       <div style={styles.mainContent}>
         <header style={styles.contentHeader}>
-          <h1 style={styles.contentTitle}>Contents Management</h1>
+          {renderMainContent()}
         </header>
       </div>
     </div>

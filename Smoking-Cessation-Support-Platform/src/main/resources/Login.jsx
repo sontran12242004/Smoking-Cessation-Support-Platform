@@ -1,8 +1,46 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Login = () => {
   const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError('');
+    try {
+      const response = await axios.post('http://localhost:8085/api/login', {
+        email,
+        password
+      }, { withCredentials: true });
+      console.log('Full response:', response);
+      // Nếu login thành công, chuyển hướng theo vai trò (role)
+      if (response.status === 200 && response.data) {
+        const user = response.data;
+        switch (user.role) {
+          case 'ADMIN':
+            navigate('/admin/dashboard');
+            break;
+          case 'USER':
+            navigate('/elite/home'); // Chuyển đến trang của member
+            break;
+          case 'Coach':
+            navigate('/coach/dashboard'); // Chuyển đến trang của coach
+            break;
+          default:
+            // Nếu không có role hoặc role là GUEST, về trang chủ
+            navigate('/');
+        }
+      } else {
+        setError('Login failed: Invalid response from server.');
+      }
+    } catch (err) {
+      setError('Incorrect email or password.');
+    }
+  };
 
   return (
     <div style={styles.container}>
@@ -38,7 +76,7 @@ const Login = () => {
               />
               Continue with Google
             </button>
-            <form style={styles.form} onSubmit={e => { e.preventDefault(); navigate('/'); }}>
+            <form style={styles.form} onSubmit={handleLogin}>
               <div style={styles.formGroup}>
                 <label htmlFor="email" style={styles.label}>Email Address</label>
                 <input
@@ -47,6 +85,8 @@ const Login = () => {
                   placeholder="Enter your email"
                   required
                   style={styles.input}
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
                 />
               </div>
               <div style={styles.formGroup}>
@@ -57,12 +97,15 @@ const Login = () => {
                   placeholder="Enter your password"
                   required
                   style={styles.input}
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
                 />
               </div>
               <div style={styles.remember}>
                 <input type="checkbox" id="remember" style={styles.checkbox} />
                 <label htmlFor="remember" style={styles.rememberLabel}>Remember me</label>
               </div>
+              {error && <div style={{ color: 'red', marginBottom: 10 }}>{error}</div>}
               <button type="submit" style={styles.loginBtn}>Log in</button>
             </form>
             <Link to="/forgot-password" style={styles.forgot}>Forgot password?</Link>

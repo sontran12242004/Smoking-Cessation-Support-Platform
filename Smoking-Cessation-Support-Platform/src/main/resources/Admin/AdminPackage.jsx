@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const initialPackages = [
   {
-    name: 'Standard',
+    name: 'Standard Package',
     price: '$ 0',
     duration: 'month',
     features: [

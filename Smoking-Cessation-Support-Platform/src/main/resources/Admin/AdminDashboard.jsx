@@ -119,28 +119,28 @@ const AdminDashboard = () => {
           {/* Total Users */}
           <div style={styles.statCard}>
             <h3 style={styles.cardTitle}>Total Users</h3>
-            <p style={styles.cardNumber}>140</p>
+            <p style={styles.cardNumber}>''</p>
             <p style={styles.cardStatPositive}>+12% from last month</p>
           </div>
 
           {/* Active Members */}
           <div style={styles.statCard}>
             <h3 style={styles.cardTitle}>Active Members</h3>
-            <p style={styles.cardNumber}>100</p>
+            <p style={styles.cardNumber}>''</p>
             <p style={styles.cardStatPositive}>+8% from last month</p>
           </div>
 
           {/* 30-Day Smoke-Free Rate */}
           <div style={styles.statCard}>
             <h3 style={styles.cardTitle}>30-Day Smoke-Free Rate</h3>
-            <p style={styles.cardNumber}>18%</p>
+            <p style={styles.cardNumber}>''%</p>
             <p style={styles.cardStatPositive}>+5% from last month</p>
           </div>
 
           {/* Avg. Response Rate */}
           <div style={styles.statCard}>
             <h3 style={styles.cardTitle}>Avg. Response Rate</h3>
-            <p style={styles.cardNumber}>4.5%</p>
+            <p style={styles.cardNumber}>''%</p>
             <p style={styles.cardStatNegative}>-2% from last month</p>
           </div>
         </div>

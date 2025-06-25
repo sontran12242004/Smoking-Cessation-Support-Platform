@@ -29,16 +29,6 @@ const Signup = () => {
             <h2 style={styles.title}>Create Account</h2>
             <form style={styles.form}>
               <div style={styles.formGroup}>
-                <label htmlFor="username" style={styles.label}>Username</label>
-                <input
-                  type="text"
-                  id="username"
-                  placeholder="Enter your username"
-                  required
-                  style={styles.input}
-                />
-              </div>
-              <div style={styles.formGroup}>
                 <label htmlFor="email" style={styles.label}>Email Address</label>
                 <input
                   type="email"

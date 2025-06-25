@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom'
 import LandingPage from './LandingPage'
 import Login from './Login'
 import SignUp from './SignUp'
+import ForgotPassword from './ForgotPassword'
 import EliteWelcome from './EliteMember/EliteWelcome'
 import EliteHome from './EliteMember/EliteHome'
 import EliteDailyCheckIn from './EliteMember/EliteDailyCheckIn'
@@ -17,7 +18,10 @@ import EliteCommunity from './EliteMember/EliteCommunity'
 import EliteFeedback from './EliteMember/EliteFeedback'
 import EliteNotificationsCenter from './EliteMember/EliteNotificationsCenter'
 import EliteEditProfile from './EliteMember/EliteEditProfile'
+import EliteViewSubscription from './EliteMember/EliteViewSubscription'
 import PackagePage from './Package/PackagePage'
+
+
 import AdminDashboard from './Admin/AdminDashboard'
 import AdminMembers from './Admin/AdminMembers'
 import AdminPackage from './Admin/AdminPackage'
@@ -43,6 +47,7 @@ import DailyCheckIn from './StandardMember/DailyCheckIn';
 import StandardEditProfile from './StandardMember/StandardEditProfile'
 import StandardQuestionnaire from './StandardMember/StandardQuestionnaire';
 import StandardTimeofSuccess from './StandardMember/StandardTimeofSuccess';
+import StandardViewSubscription from './StandardMember/StandardViewSubscription';
 
 // Footer Imports
 import AboutUs from './Footer/AboutUs';
@@ -62,6 +67,7 @@ function App() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/elitewelcome" element={<EliteWelcome />} />
       <Route path="/elite/home" element={<EliteHome />} />
       <Route path="/elite/daily-checkin" element={<EliteDailyCheckIn />} />
@@ -76,6 +82,7 @@ function App() {
       <Route path="/elite/feedback" element={<EliteFeedback />} />
       <Route path="/elite/notification" element={<EliteNotificationsCenter />} />
       <Route path="/elite/edit-profile" element={<EliteEditProfile />} />
+      <Route path="/elite-subscription" element={<EliteViewSubscription />} />
 
       {/* Standard Member Routes */}
       <Route path="/standard/home" element={<StandardMemberHome />} />
@@ -89,6 +96,7 @@ function App() {
       <Route path="/standard/edit-profile" element={<StandardEditProfile />} />
       <Route path="/standard/questionnaire" element={<StandardQuestionnaire />} />
       <Route path="/standard/timeofsuccess" element={<StandardTimeofSuccess />} />
+      <Route path="/standard-subscription" element={<StandardViewSubscription />} />
 
       <Route path="/package" element={<PackagePage />} />
       <Route path="/admin/dashboard" element={<AdminDashboard />} />

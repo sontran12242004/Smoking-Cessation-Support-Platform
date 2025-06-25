@@ -227,6 +227,39 @@ function StandardEditProfile() {
         border-top: 1px solid #444;
         margin-top: 20px;
     }
+
+  
+    /* Styles for the new subscription section */
+    .subscription-section {
+        margin-top: 40px;
+        padding-top: 30px;
+        border-top: 1px solid #e0e0e0;
+        text-align: center;
+    }
+
+    .subscription-title {
+        font-size: 22px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .view-sub-btn-new {
+        padding: 10px 25px;
+        border: 2px solid #4CAF50;
+        border-radius: 5px;
+        background-color: transparent;
+        color: #4CAF50;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .view-sub-btn-new:hover {
+        background-color: #4CAF50;
+        color: white;
+    }
   `;
 
   return (
@@ -296,6 +329,19 @@ function StandardEditProfile() {
                 <option>Social Reasons</option>
                 <option>Other</option>
               </select>
+
+              {/* New Subscription Section */}
+            <div className="subscription-section">
+              <h3 className="subscription-title">Subscription Details</h3>
+              <button 
+                type="button" 
+                className="view-sub-btn-new" 
+                onClick={() => navigate('/standard-subscription')}
+              >
+                Manage My Subscription
+              </button>
+            </div>
+
             </div>
             <div className="form-buttons">
               <button type="button" className="cancel-btn" onClick={() => navigate(-1)}>Cancel</button>
