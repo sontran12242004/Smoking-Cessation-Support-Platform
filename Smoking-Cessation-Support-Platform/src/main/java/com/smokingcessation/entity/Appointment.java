@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -25,6 +26,10 @@ public class Appointment {
     @JoinColumn(name = "account_id")
     Account account;
 
+    @ManyToOne
+    @JoinColumn(name = "coach_id")
+    Coach coach;
+
     @ManyToMany(cascade = CascadeType.ALL)
             @JoinTable(
                     name = "appointment_service",
@@ -32,4 +37,8 @@ public class Appointment {
                     inverseJoinColumns = @JoinColumn(name = "service_id")
             )
     List<MedicineService> medicineServices;
+
+    private String notes;
+    
+    private LocalDateTime createdAt;
 }

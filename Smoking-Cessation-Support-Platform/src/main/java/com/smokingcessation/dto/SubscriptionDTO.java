@@ -8,12 +8,17 @@ import java.time.LocalDate;
 @Setter
 @Getter
 public class SubscriptionDTO {
-
-    private Integer subscriptionid;
-    private Integer memberID;
-    private Integer planID;
+    private Integer subscriptionId;
+    private Long memberId;
+    private String memberName;
+    private String memberEmail;
+    private Integer planId;
+    private String planName;
+    private Integer planDuration;
     private LocalDate startDate;
     private LocalDate endDate;
     private boolean isActive;
+    private String paymentMethod;
+    private String notes;
 
 }

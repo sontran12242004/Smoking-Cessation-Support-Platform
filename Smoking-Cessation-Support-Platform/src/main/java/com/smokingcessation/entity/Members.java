@@ -1,5 +1,6 @@
 package com.smokingcessation.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smokingcessation.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -29,4 +31,23 @@ public class Members {
     
     private LocalDateTime createdAt;
 
+    private String address;
+    
+    private LocalDate dateOfBirth;
+    
+    private String gender;
+    
+    private boolean isActive = true;
+    
+    @OneToMany(mappedBy = "member")
+    @JsonIgnore
+    private List<Subscription> subscriptions;
+    
+    @OneToMany(mappedBy = "member")
+    @JsonIgnore
+    private List<DailyProcess> dailyProcesses;
+    
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<CigaretteLog> cigaretteLogs;
 }

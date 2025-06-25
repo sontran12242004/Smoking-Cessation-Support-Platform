@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,4 +26,14 @@ public class Coach {
     @JoinColumn(name = "admin_id") //khoa ngoai
     Admin admin;
 
+    private String specialization;
+    
+    private String experience;
+    
+    private boolean isActive = true;
+    
+    private LocalDateTime createdAt;
+    
+    @OneToMany(mappedBy = "coach")
+    private List<Appointment> appointments;
 }

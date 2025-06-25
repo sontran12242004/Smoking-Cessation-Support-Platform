@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -19,6 +20,11 @@ public class MedicineService {
     String description;
     float price;
     boolean isAvailable = true;
+
+    private LocalDateTime createdAt;
+    
+    @OneToMany(mappedBy = "medicineService")
+    private List<Rating> ratings;
 
     @ManyToMany
     @JsonIgnore

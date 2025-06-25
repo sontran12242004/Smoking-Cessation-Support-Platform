@@ -23,7 +23,7 @@ public class Report {
 
 
     @ManyToOne
-    @JoinColumn(name = "acount_id")
+    @JoinColumn(name = "account_id")
     @JsonIgnore
     Account account;
 

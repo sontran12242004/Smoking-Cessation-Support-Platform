@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.smokingcessation.service.MedicineServicesService;
+import com.smokingcessation.service.MedicineServices;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +17,7 @@ import java.util.Optional;
 public class MedicineController {
 
     @Autowired
-    private MedicineServicesService medicineServicesService;
+    private MedicineServices medicineServices;
 
     /**
      * GET /api/medicineservices
@@ -26,7 +26,7 @@ public class MedicineController {
      */
     @GetMapping
     public ResponseEntity<List<MedicineService>> getAllMedicineServices() {
-        List<MedicineService> medicineServices = medicineServicesService.getAllMedicineServices();
+        List<MedicineService> medicineServices = this.medicineServices.getAllMedicineServices();
         return new ResponseEntity<>(medicineServices, HttpStatus.OK);
     }
 
@@ -38,7 +38,7 @@ public class MedicineController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<MedicineService> getMedicineServiceById(@PathVariable Long id) {
-        Optional<MedicineService> medicineService = medicineServicesService.getMedicineServiceById(id);
+        Optional<MedicineService> medicineService = medicineServices.getMedicineServiceById(id);
         return medicineService.map(service -> new ResponseEntity<>(service, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
@@ -51,7 +51,7 @@ public class MedicineController {
      */
     @PostMapping
     public ResponseEntity<MedicineService> createMedicineService(@RequestBody MedicineService medicineService) {
-        MedicineService createdService = medicineServicesService.createMedicineService(medicineService);
+        MedicineService createdService = medicineServices.createMedicineService(medicineService);
         return new ResponseEntity<>(createdService, HttpStatus.CREATED);
     }
 
@@ -64,7 +64,7 @@ public class MedicineController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<MedicineService> updateMedicineService(@PathVariable Long id, @RequestBody MedicineService medicineServiceDetails) {
-        Optional<MedicineService> updatedService = medicineServicesService.updateMedicineService(id, medicineServiceDetails);
+        Optional<MedicineService> updatedService = medicineServices.updateMedicineService(id, medicineServiceDetails);
         return updatedService.map(service -> new ResponseEntity<>(service, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
@@ -77,7 +77,7 @@ public class MedicineController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMedicineService(@PathVariable Long id) {
-        boolean deleted = medicineServicesService.deleteMedicineService(id);
+        boolean deleted = medicineServices.deleteMedicineService(id);
         if (deleted) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {

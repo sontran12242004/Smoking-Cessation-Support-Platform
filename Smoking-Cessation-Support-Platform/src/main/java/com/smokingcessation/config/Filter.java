@@ -32,11 +32,17 @@ public class Filter extends OncePerRequestFilter {
     @Autowired
     TokenService tokenService;
 
+    // Thêm vào danh sách PUBLIC_API trong Filter.java
     private final List<String> PUBLIC_API = List.of(
             "POST:/api/register",
             "POST:/api/login",
             "POST:/api/forgot-password",
-            "POST:/api/reset-password"
+            "POST:/api/reset-password",
+            "GET:/api/members/*",
+            "POST:/api/members",
+            "PUT:/api/members/*",
+            "GET:/api/membership-plans",
+            "GET:/api/membership-plans/*"
     );
 
     public boolean isPublicAPI(String uri, String method) {
