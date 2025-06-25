@@ -42,7 +42,14 @@ public class Filter extends OncePerRequestFilter {
             "POST:/api/members",
             "PUT:/api/members/*",
             "GET:/api/membership-plans",
-            "GET:/api/membership-plans/*"
+            "GET:/api/membership-plans/*",
+            "POST:/api/daily-process/member/*/submit",
+            "GET:/api/daily-process/member/*/health-metrics",
+            "POST:/api/daily-process/member/*",
+            "GET:/api/daily-process/member/*",
+            "GET:/api/daily-process/member/*/date/*",
+            "GET:/api/daily-process/member/*/range",
+            "DELETE:/api/daily-process/*"
     );
 
     public boolean isPublicAPI(String uri, String method) {

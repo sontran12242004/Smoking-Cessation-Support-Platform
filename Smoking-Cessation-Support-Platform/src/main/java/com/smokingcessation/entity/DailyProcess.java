@@ -22,6 +22,8 @@ public class DailyProcess {
     
     private int cigarettesNotSmoked; // Number of cigarettes avoided today
     
+    private int cigarettesSmokedToday; // Number of cigarettes smoked today
+    
     private double moneySaved; // Money saved today by not smoking
     
     private int cravingIntensity; // On a scale of 1-10, how strong were cravings

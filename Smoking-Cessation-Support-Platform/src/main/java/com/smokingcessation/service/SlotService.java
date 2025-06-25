@@ -1,5 +1,4 @@
 package com.smokingcessation.service;
-
 import com.smokingcessation.dto.RegisterSlotDTO;
 import com.smokingcessation.entity.Account;
 import com.smokingcessation.entity.AccountSlot;
@@ -10,7 +9,6 @@ import com.smokingcessation.repository.AuthenticationRepository;
 import com.smokingcessation.repository.SlotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -92,3 +90,4 @@ public class SlotService
         return  slotsAvailable;
     }
 }
+

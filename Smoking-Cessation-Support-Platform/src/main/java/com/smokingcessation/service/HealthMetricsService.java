@@ -32,9 +32,13 @@ public class HealthMetricsService {
     }
 
     /**
-     * Tính tổng số tiền tiết kiệm được kể từ khi bắt đầu cai thuốc
+     * Tính tổng số tiền tiết kiệm được từ ngày bắt đầu đến hiện tại
+     * Cộng dồn liên tục dựa trên dailyCost và số ngày
      */
     public int getMoneySaved(Members user) {
+        LocalDate quitDate = user.getQuitDate();
+        if (quitDate == null) return 0;
+        
         int days = getDaysSmokeFree(user);
         return days * user.getDailyCost();
     }
@@ -45,21 +49,17 @@ public class HealthMetricsService {
     public int getTotalCigarettesSmoked(Members user) {
         LocalDate quitDate = user.getQuitDate();
         if (quitDate == null) return 0;
-        int total = 0;
-        LocalDate today = LocalDate.now();
-        for (LocalDate date = quitDate; !date.isAfter(today); date = date.plusDays(1)) {
-            total += cigaretteLogRepository.findByUserAndLogDate(user, date)
-                    .map(CigaretteLog::getCigarettesSmoked).orElse(0);
-        }
-        return total;
+        
+        // Sử dụng query tối ưu thay vì loop
+        return cigaretteLogRepository.sumCigarettesByUserAndDateRange(user, quitDate, LocalDate.now());
     }
 
     /**
      * Kiểm tra dữ liệu đầu vào của user
      */
     private void validateUserData(Members user) {
-        if (user.getQuitDate() == null || user.getQuitDate().isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException("Ngày bắt đầu cai thuốc không hợp lệ");
+        if (user.getQuitDate() == null) {
+            throw new IllegalArgumentException("Người dùng chưa bắt đầu theo dõi sức khỏe");
         }
         if (user.getDailyCost() < 0) {
             throw new IllegalArgumentException("Số tiền hút thuốc mỗi ngày không hợp lệ");
@@ -67,93 +67,123 @@ public class HealthMetricsService {
     }
 
     /**
-     * Tính % cải thiện sức khỏe tổng thể dựa trên số ngày cai và tổng số điếu hút
+     * Tính % cải thiện sức khỏe tổng thể
+     * Dựa trên số ngày và số điếu thuốc hút
      */
     public double getHealthImprovedPercent(Members user) {
         int days = getDaysSmokeFree(user);
         int cigarettes = getTotalCigarettesSmoked(user);
-        double percent = 100.0 + days * 2.0 - cigarettes * 1.0;
+        
+        // Công thức: 100% + (số ngày * 2%) - (số điếu thuốc * 1%)
+        double percent = 100.0 + (days * 2.0) - (cigarettes * 1.0);
         return Math.max(0, Math.min(100, percent));
     }
 
     /**
      * Tính % giảm nguy cơ đau tim
+     * Dựa trên số ngày và số điếu thuốc hút
      */
     public double getHeartAttackRisk(Members user) {
         int days = getDaysSmokeFree(user);
         int cigarettes = getTotalCigarettesSmoked(user);
-        double percent = 100.0 - days * 1.2 - cigarettes * 0.8;
+        
+        // Công thức: 100% - (số ngày * 1.2%) - (số điếu thuốc * 0.8%)
+        double percent = 100.0 - (days * 1.2) - (cigarettes * 0.8);
         return Math.max(0, Math.min(100, percent));
     }
 
     /**
      * Tính % giảm nguy cơ ung thư phổi
+     * Dựa trên số ngày và số điếu thuốc hút
      */
     public double getLungCancerRisk(Members user) {
         int days = getDaysSmokeFree(user);
         int cigarettes = getTotalCigarettesSmoked(user);
-        double percent = 100.0 - days * 1.1 - cigarettes * 0.7;
+        
+        // Công thức: 100% - (số ngày * 1.1%) - (số điếu thuốc * 0.7%)
+        double percent = 100.0 - (days * 1.1) - (cigarettes * 0.7);
         return Math.max(0, Math.min(100, percent));
     }
 
     /**
      * Tính % giảm nguy cơ bệnh tim
+     * Dựa trên số ngày
      */
     public double getHeartDiseaseRisk(Members user) {
         int days = getDaysSmokeFree(user);
-        return Math.min(27, days * 1.9);
+        // Công thức: 100% - (số ngày * 1.9%), tối đa giảm 27%
+        double percent = 100.0 - Math.min(27, days * 1.9);
+        return Math.max(0, Math.min(100, percent));
     }
 
     /**
      * Tính % cải thiện hệ miễn dịch
+     * Dựa trên số ngày
      */
     public double getImmuneFunction(Members user) {
         int days = getDaysSmokeFree(user);
-        return Math.min(22, days * 1.6);
+        // Công thức: số ngày * 1.6%, tối đa 22%
+        double percent = Math.min(22, days * 1.6);
+        return Math.max(0, Math.min(100, percent));
     }
 
     /**
      * Tính % trắng răng
+     * Dựa trên số ngày
      */
     public double getTeethWhitening(Members user) {
         int days = getDaysSmokeFree(user);
-        return Math.min(19, days * 1.3);
+        // Công thức: số ngày * 1.3%, tối đa 19%
+        double percent = Math.min(19, days * 1.3);
+        return Math.max(0, Math.min(100, percent));
     }
 
     /**
      * Tính % cải thiện hơi thở thơm mát
+     * Dựa trên số ngày
      */
     public double getBreathFreshness(Members user) {
         int days = getDaysSmokeFree(user);
-        return Math.min(38.5, days * 2.75);
+        // Công thức: số ngày * 2.75%, tối đa 38.5%
+        double percent = Math.min(38.5, days * 2.75);
+        return Math.max(0, Math.min(100, percent));
     }
 
     /**
      * Tính % cải thiện vị giác/khứu giác
+     * Dựa trên số ngày
      */
     public double getTasteAndSmell(Members user) {
         int days = getDaysSmokeFree(user);
-        return Math.min(45, days * 3.2);
+        // Công thức: số ngày * 3.2%, tối đa 45%
+        double percent = Math.min(45, days * 3.2);
+        return Math.max(0, Math.min(100, percent));
     }
 
     /**
      * Tính % giảm CO trong máu
+     * Dựa trên số ngày
      */
     public double getCOLvls(Members user) {
         int days = getDaysSmokeFree(user);
-        return Math.min(83, days * 5.9);
+        // Công thức: số ngày * 5.9%, tối đa 83%
+        double percent = Math.min(83, days * 5.9);
+        return Math.max(0, Math.min(100, percent));
     }
 
     /**
      * Tính % tăng lượng Oxy trong máu
+     * Dựa trên số ngày
      */
     public double getOxygenLvls(Members user) {
         int days = getDaysSmokeFree(user);
-        return Math.min(12, days * 0.85);
+        // Công thức: số ngày * 0.85%, tối đa 12%
+        double percent = Math.min(12, days * 0.85);
+        return Math.max(0, Math.min(100, percent));
     }
 
     /**
-     * Lấy hoặc tạo mới chỉ số sức khỏe cho user trong ngày, rollback nếu lỗi
+     * Lấy hoặc tạo mới chỉ số sức khỏe cho user trong ngày
      */
     @Transactional(rollbackFor = Exception.class)
     public HealthMetricsDTO getOrCreateTodayMetrics(Members user) {

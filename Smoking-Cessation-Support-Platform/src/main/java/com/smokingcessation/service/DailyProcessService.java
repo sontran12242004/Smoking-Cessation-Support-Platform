@@ -1,12 +1,15 @@
 package com.smokingcessation.service;
 
 import com.smokingcessation.dto.DailyProcessDTO;
+import com.smokingcessation.entity.CigaretteLog;
 import com.smokingcessation.entity.DailyProcess;
 import com.smokingcessation.entity.Members;
+import com.smokingcessation.repository.CigaretteLogRepository;
 import com.smokingcessation.repository.DailyProcessRepository;
 import com.smokingcessation.repository.MembersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,7 +25,14 @@ public class DailyProcessService {
     @Autowired
     private MembersRepository membersRepository;
     
-    // Create or update daily process record
+    @Autowired
+    private CigaretteLogRepository cigaretteLogRepository;
+    
+    @Autowired
+    private HealthMetricsService healthMetricsService;
+    
+    // Create or update daily process record and update health metrics
+    @Transactional
     public DailyProcessDTO saveDailyProcess(DailyProcessDTO dailyProcessDTO) {
         Optional<Members> memberOpt = membersRepository.findById(dailyProcessDTO.getMemberId());
         if (!memberOpt.isPresent()) {
@@ -36,6 +46,8 @@ public class DailyProcessService {
             dailyProcessRepository.findByMember_MemberIDAndDate(member.getMemberID(), dailyProcessDTO.getDate());
         
         DailyProcess dailyProcess;
+        boolean isFirstEntry = false;
+        
         if (existingProcess.isPresent()) {
             // Update existing record
             dailyProcess = existingProcess.get();
@@ -44,12 +56,14 @@ public class DailyProcessService {
             dailyProcess = new DailyProcess();
             dailyProcess.setMember(member);
             dailyProcess.setDate(dailyProcessDTO.getDate());
+            isFirstEntry = true;
         }
         
         // Calculate money saved based on member's daily cost
         double moneySaved = member.getDailyCost() * dailyProcessDTO.getCigarettesNotSmoked();
         
         dailyProcess.setCigarettesNotSmoked(dailyProcessDTO.getCigarettesNotSmoked());
+        dailyProcess.setCigarettesSmokedToday(dailyProcessDTO.getCigarettesSmokedToday());
         dailyProcess.setMoneySaved(moneySaved);
         dailyProcess.setCravingIntensity(dailyProcessDTO.getCravingIntensity());
         dailyProcess.setMood(dailyProcessDTO.getMood());
@@ -57,11 +71,45 @@ public class DailyProcessService {
         
         dailyProcess = dailyProcessRepository.save(dailyProcess);
         
+        // Save cigarette log for today (số điếu thuốc đã hút hôm nay)
+        saveCigaretteLog(member, dailyProcessDTO.getDate(), dailyProcessDTO.getCigarettesSmokedToday());
+        
+        // If this is the first entry, initialize health tracking
+        if (isFirstEntry && member.getQuitDate() == null) {
+            member.setQuitDate(dailyProcessDTO.getDate());
+            membersRepository.save(member);
+        }
+        
+        // Update health metrics
+        try {
+            healthMetricsService.getOrCreateTodayMetrics(member);
+        } catch (Exception e) {
+            // Log error but don't fail the process
+            System.err.println("Error updating health metrics: " + e.getMessage());
+        }
+        
         // Convert back to DTO
         dailyProcessDTO.setProcessId(dailyProcess.getProcessId());
         dailyProcessDTO.setMoneySaved(dailyProcess.getMoneySaved());
         
         return dailyProcessDTO;
+    }
+    
+    // Save cigarette log for the day
+    private void saveCigaretteLog(Members member, LocalDate date, int cigarettesSmoked) {
+        Optional<CigaretteLog> existingLog = cigaretteLogRepository.findByUserAndLogDate(member, date);
+        
+        CigaretteLog log;
+        if (existingLog.isPresent()) {
+            log = existingLog.get();
+        } else {
+            log = new CigaretteLog();
+            log.setUser(member);
+            log.setLogDate(date);
+        }
+        
+        log.setCigarettesSmoked(cigarettesSmoked);
+        cigaretteLogRepository.save(log);
     }
     
     // Get all daily processes for a member
@@ -103,10 +151,16 @@ public class DailyProcessService {
         dto.setMemberId(dailyProcess.getMember().getMemberID());
         dto.setDate(dailyProcess.getDate());
         dto.setCigarettesNotSmoked(dailyProcess.getCigarettesNotSmoked());
+        dto.setCigarettesSmokedToday(dailyProcess.getCigarettesSmokedToday());
         dto.setMoneySaved(dailyProcess.getMoneySaved());
         dto.setCravingIntensity(dailyProcess.getCravingIntensity());
         dto.setMood(dailyProcess.getMood());
         dto.setNotes(dailyProcess.getNotes());
         return dto;
+    }
+    
+    // Get member by ID
+    public Members getMemberById(Long memberId) {
+        return membersRepository.findById(memberId).orElse(null);
     }
 }

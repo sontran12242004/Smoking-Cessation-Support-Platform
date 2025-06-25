@@ -17,18 +17,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class    AuthenticationController {
+public class AuthenticationController {
 
     @Autowired
     AuthenticationService authenticationService;
 
-    // api > service > repository
+    // đăng ký tài khoản mới
     @CrossOrigin()
     @PostMapping("/api/register")
     public ResponseEntity register(@RequestBody Account account){
         Account newAccount = authenticationService.register(account);
         return ResponseEntity.ok(newAccount);
     }
+
+    // đăng nhập vào hệ thống
     @PostMapping("/api/login")
     @CrossOrigin(origins = "http://localhost:3005")
     public ResponseEntity login(@RequestBody LoginDTO loginDTO){
@@ -36,15 +38,17 @@ public class    AuthenticationController {
         return ResponseEntity.ok(account);
     }
 
+    // gửi email quên mật khẩu
     @PostMapping("/api/forgot-password")
     public ResponseEntity forgotPassword(@Valid @RequestBody ForgotPasswordDTO forgotPasswordDTO) throws NotFoundException {
         authenticationService.forgotPassword(forgotPasswordDTO);
         return ResponseEntity.ok("Forgot Password Successfuly");
     }
+
+    // reset mật khẩu với token
     @PostMapping("/api/reset-password")
     public ResponseEntity resetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO ){
         authenticationService.resetPassword(resetPasswordDTO);
         return ResponseEntity.ok("Reset Password Successfuly");
     }
-
 }

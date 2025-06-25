@@ -22,7 +22,7 @@ public class SubscriptionController {
         this.subscriptionService = subscriptionService;
     }
 
-    // EXISTING ENDPOINTS - Updated to return DTOs
+    // lấy tất cả subscription
     @GetMapping
     public ResponseEntity<List<SubscriptionDTO>> getAll() {
         List<Subscription> subscriptions = subscriptionService.getAllSubscriptions();
@@ -32,6 +32,7 @@ public class SubscriptionController {
         return ResponseEntity.ok(responseDTOs);
     }
 
+    // lấy subscription theo ID
     @GetMapping("/{id}")
     public ResponseEntity<SubscriptionDTO> getById(@PathVariable Integer id) {
         Subscription subscription = subscriptionService.getSubscriptionById(id);
@@ -39,6 +40,7 @@ public class SubscriptionController {
         return ResponseEntity.ok(responseDTO);
     }
 
+    // lấy subscription theo member ID
     @GetMapping("/member/{memberId}")
     public ResponseEntity<List<SubscriptionDTO>> getByMemberId(@PathVariable Long memberId) {
         List<Subscription> subscriptions = subscriptionService.getSubscriptionsByMemberId(memberId);
@@ -48,6 +50,7 @@ public class SubscriptionController {
         return ResponseEntity.ok(responseDTOs);
     }
 
+    // tạo subscription mới
     @PostMapping
     public ResponseEntity<SubscriptionDTO> create(@RequestBody Subscription subscription) {
         Subscription created = subscriptionService.createSubscription(subscription);
@@ -55,6 +58,7 @@ public class SubscriptionController {
         return ResponseEntity.ok(responseDTO);
     }
 
+    // cập nhật subscription
     @PutMapping("/{id}")
     public ResponseEntity<SubscriptionDTO> update(@PathVariable Integer id, @RequestBody Subscription subscription) {
         Subscription updated = subscriptionService.updateSubscription(id, subscription);
@@ -62,13 +66,14 @@ public class SubscriptionController {
         return ResponseEntity.ok(responseDTO);
     }
 
+    // hủy kích hoạt subscription
     @PutMapping("/{id}/deactivate")
     public ResponseEntity<Void> deactivate(@PathVariable Integer id) {
         subscriptionService.deactivateSubscription(id);
         return ResponseEntity.noContent().build();
     }
 
-    // NEW ENDPOINTS - Updated to return DTOs
+    // lấy subscription đang hoạt động của member
     @GetMapping("/member/{memberId}/active")
     public ResponseEntity<SubscriptionDTO> getActiveSubscription(@PathVariable Long memberId) {
         Subscription activeSubscription = subscriptionService.getActiveSubscriptionForMember(memberId);
@@ -79,6 +84,7 @@ public class SubscriptionController {
         return ResponseEntity.ok(responseDTO);
     }
 
+    // lấy trạng thái subscription của member
     @GetMapping("/member/{memberId}/status")
     public ResponseEntity<SubscriptionStatusDTO> getSubscriptionStatus(@PathVariable Long memberId) {
         SubscriptionStatusDTO status = subscriptionService.getSubscriptionStatus(memberId);

@@ -1,7 +1,9 @@
 package com.smokingcessation.controller;
 
 import com.smokingcessation.dto.DailyProcessDTO;
+import com.smokingcessation.dto.HealthMetricsDTO;
 import com.smokingcessation.service.DailyProcessService;
+import com.smokingcessation.service.HealthMetricsService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +15,44 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/daily-process")
-@CrossOrigin("*")
+
 public class DailyProcessController {
     
     @Autowired
     private DailyProcessService dailyProcessService;
+    
+    @Autowired
+    private HealthMetricsService healthMetricsService;
+    
+    // Submit daily form and update health metrics
+    @PostMapping("/member/{memberId}/submit")
+    public ResponseEntity<DailyProcessDTO> submitDailyForm(
+            @PathVariable Long memberId,
+            @Valid @RequestBody DailyProcessDTO dailyProcessDTO) {
+        dailyProcessDTO.setMemberId(memberId);
+        if (dailyProcessDTO.getDate() == null) {
+            dailyProcessDTO.setDate(LocalDate.now());
+        }
+        DailyProcessDTO savedProcess = dailyProcessService.saveDailyProcess(dailyProcessDTO);
+        return ResponseEntity.ok(savedProcess);
+    }
+    
+    // Get updated health metrics after submitting daily form
+    @GetMapping("/member/{memberId}/health-metrics")
+    public ResponseEntity<HealthMetricsDTO> getUpdatedHealthMetrics(@PathVariable Long memberId) {
+        try {
+            // Get member and calculate health metrics
+            var member = dailyProcessService.getMemberById(memberId);
+            if (member == null) {
+                return ResponseEntity.notFound().build();
+            }
+            
+            HealthMetricsDTO metrics = healthMetricsService.getOrCreateTodayMetrics(member);
+            return ResponseEntity.ok(metrics);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
     
     @PostMapping("/member/{memberId}")
     public ResponseEntity<DailyProcessDTO> addDailyProcess(
@@ -30,6 +65,7 @@ public class DailyProcessController {
         DailyProcessDTO savedProcess = dailyProcessService.saveDailyProcess(dailyProcessDTO);
         return ResponseEntity.ok(savedProcess);
     }
+    
     @GetMapping("/member/{memberId}")
     public ResponseEntity<List<DailyProcessDTO>> getAllProcessesForMember(@PathVariable Long memberId) {
         List<DailyProcessDTO> processes = dailyProcessService.getAllProcessesForMember(memberId);

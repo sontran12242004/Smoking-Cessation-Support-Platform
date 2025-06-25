@@ -14,6 +14,7 @@ public class DailyProcessDTO {
     private Long memberId;
     private LocalDate date;
     private int cigarettesNotSmoked;
+    private int cigarettesSmokedToday;
     private double moneySaved;
     private int cravingIntensity;
     private String mood;

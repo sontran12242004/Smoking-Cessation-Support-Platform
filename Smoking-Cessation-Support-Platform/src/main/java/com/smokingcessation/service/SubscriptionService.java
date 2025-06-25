@@ -35,20 +35,23 @@ public class SubscriptionService {
         this.membershipPlanService = membershipPlanService;
     }
 
-    // EXISTING METHODS
+    // lấy tất cả subscription
     public List<Subscription> getAllSubscriptions() {
         return subscriptionRepository.findAll();
     }
 
+    // lấy subscription theo ID
     public Subscription getSubscriptionById(Integer id) {
         return subscriptionRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy subscription"));
     }
 
+    // lấy subscription theo member ID
     public List<Subscription> getSubscriptionsByMemberId(Long memberId) {
         return subscriptionRepository.findByMember_MemberID(memberId);
     }
 
+    // tạo subscription mới
     public Subscription createSubscription(Subscription subscription) {
         if (subscription.getCreatedAt() == null) {
             subscription.setCreatedAt(LocalDateTime.now());
@@ -57,6 +60,7 @@ public class SubscriptionService {
         return subscriptionRepository.save(subscription);
     }
 
+    // cập nhật subscription
     public Subscription updateSubscription(Integer id, Subscription updated) {
         Subscription existing = getSubscriptionById(id);
         existing.setMembershipPlan(updated.getMembershipPlan());
@@ -66,13 +70,14 @@ public class SubscriptionService {
         return subscriptionRepository.save(existing);
     }
 
+    // hủy kích hoạt subscription
     public void deactivateSubscription(Integer id) {
         Subscription subscription = getSubscriptionById(id);
         subscription.setActive(false);
         subscriptionRepository.save(subscription);
     }
 
-    // NEW METHODS FOR MEMBER MANAGEMENT
+    // lấy subscription đang hoạt động của member
     public Subscription getActiveSubscriptionForMember(Long memberId) {
         List<Subscription> subscriptions = subscriptionRepository.findByMember_MemberID(memberId);
         return subscriptions.stream()
@@ -81,6 +86,7 @@ public class SubscriptionService {
                 .orElse(null);
     }
 
+    // lấy thông tin subscription của member
     public MemberSubscriptionDTO getMemberSubscriptionInfo(Long memberId) {
         Subscription currentSubscription = getActiveSubscriptionForMember(memberId);
         List<Subscription> history = getSubscriptionHistory(memberId);
@@ -103,6 +109,7 @@ public class SubscriptionService {
         return dto;
     }
 
+    // lấy trạng thái subscription
     public SubscriptionStatusDTO getSubscriptionStatus(Long memberId) {
         Subscription activeSubscription = getActiveSubscriptionForMember(memberId);
         SubscriptionStatusDTO status = new SubscriptionStatusDTO();
@@ -129,6 +136,7 @@ public class SubscriptionService {
         return status;
     }
 
+    // đăng ký gói membership mới
     @Transactional
     public Subscription subscribeToPlan(Long memberId, SubscriptionRequestDTO request) {
         // Validate request
@@ -150,9 +158,11 @@ public class SubscriptionService {
         subscription.setCreatedAt(LocalDateTime.now());
         subscription.setPaymentMethod(request.getPaymentMethod());
         subscription.setNotes(request.getNotes());
+
         return subscriptionRepository.save(subscription);
     }
 
+    // gia hạn subscription
     @Transactional
     public Subscription renewSubscription(Long memberId, SubscriptionRenewalDTO request) {
         // Check if member has active subscription
@@ -173,6 +183,7 @@ public class SubscriptionService {
         return subscribeToPlan(memberId, newRequest);
     }
 
+    // hủy subscription
     @Transactional
     public void cancelSubscription(Long memberId) {
         Subscription activeSubscription = getActiveSubscriptionForMember(memberId);
@@ -184,10 +195,12 @@ public class SubscriptionService {
         subscriptionRepository.save(activeSubscription);
     }
 
+    // lấy lịch sử subscription
     public List<Subscription> getSubscriptionHistory(Long memberId) {
         return subscriptionRepository.findByMember_MemberID(memberId);
     }
 
+    // kiểm tra subscription đã hết hạn chưa
     public boolean isSubscriptionExpired(Long memberId) {
         Subscription activeSubscription = getActiveSubscriptionForMember(memberId);
         if (activeSubscription == null) {
@@ -196,6 +209,7 @@ public class SubscriptionService {
         return activeSubscription.getEndDate().isBefore(LocalDate.now());
     }
 
+    // tính số ngày còn lại
     public long getDaysRemaining(Long memberId) {
         Subscription activeSubscription = getActiveSubscriptionForMember(memberId);
         if (activeSubscription == null || isSubscriptionExpired(memberId)) {
@@ -204,6 +218,7 @@ public class SubscriptionService {
         return java.time.temporal.ChronoUnit.DAYS.between(LocalDate.now(), activeSubscription.getEndDate());
     }
 
+    // kiểm tra có thể gia hạn không
     public boolean canRenewSubscription(Long memberId) {
         Subscription activeSubscription = getActiveSubscriptionForMember(memberId);
         if (activeSubscription == null) {
@@ -213,11 +228,13 @@ public class SubscriptionService {
         return getDaysRemaining(memberId) <= 30;
     }
 
+    // kiểm tra có thể hủy không
     public boolean canCancelSubscription(Long memberId) {
         Subscription activeSubscription = getActiveSubscriptionForMember(memberId);
         return activeSubscription != null && activeSubscription.isActive();
     }
 
+    // validate request đăng ký subscription
     private void validateSubscriptionRequest(Long memberId, Integer planId) {
         // Check if member exists
         if (!membersRepository.existsById(memberId)) {
@@ -236,7 +253,7 @@ public class SubscriptionService {
         }
     }
 
-    // Helper method to convert Entity to DTO with correct field names
+    // convert entity sang DTO
     public SubscriptionDTO convertToDTO(Subscription subscription) {
         SubscriptionDTO dto = new SubscriptionDTO();
         dto.setSubscriptionId(subscription.getSubscriptionid());
