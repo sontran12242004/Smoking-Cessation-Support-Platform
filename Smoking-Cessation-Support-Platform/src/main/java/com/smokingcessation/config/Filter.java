@@ -32,91 +32,78 @@ public class Filter extends OncePerRequestFilter {
     @Autowired
     TokenService tokenService;
 
-    // Thêm vào danh sách PUBLIC_API trong Filter.java
-    private final List<String> PUBLIC_API = List.of(
-            "POST:/api/register",
-            "POST:/api/login",
-            "POST:/api/forgot-password",
-            "POST:/api/reset-password",
-            "GET:/api/members/*",
-            "POST:/api/members",
-            "PUT:/api/members/*",
-            "GET:/api/membership-plans",
-            "GET:/api/membership-plans/*",
-            "POST:/api/daily-process/member/*/submit",
-            "GET:/api/daily-process/member/*/health-metrics",
-            "POST:/api/daily-process/member/*",
-            "GET:/api/daily-process/member/*",
-            "GET:/api/daily-process/member/*/date/*",
-            "GET:/api/daily-process/member/*/range",
-            "DELETE:/api/daily-process/*"
+    // Danh sách public endpoints không cần token
+    private final List<String> PUBLIC_ENDPOINTS = List.of(
+            // Swagger UI
+            "/swagger-ui",
+            "/swagger-ui.html",
+            "/v3/api-docs",
+            "/swagger-resources",
+            "/webjars",
+            
+            // Authentication (chỉ register, login, forgot-password)
+            "/api/register",
+            "/api/login", 
+            "/api/forgot-password",
+            
+            // Public data
+            "/api/membership-plans",
+            "/api/health-metrics",
+            "/api/medicineService",
+            
+            // Member registration
+            "/api/members"
     );
 
-    public boolean isPublicAPI(String uri, String method) {
+    private boolean isPublicEndpoint(String uri) {
         AntPathMatcher matcher = new AntPathMatcher();
-
-        if(method.equals("GET")) return true;
-
-        return PUBLIC_API.stream().anyMatch(pattern -> {
-            String[] parts = pattern.split(":", 2);
-            if (parts.length != 2) return false;
-
-            String allowedMethod = parts[0];
-            String allowedUri = parts[1];
-
-            return method.equalsIgnoreCase(allowedMethod) && matcher.match(allowedUri, uri);
-        });
+        return PUBLIC_ENDPOINTS.stream().anyMatch(pattern -> 
+            matcher.match(pattern + "/**", uri) || matcher.match(pattern, uri)
+        );
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // function này sẽ đc chạy mỗi khi mà có request từ FE
-        // cho phép truy cập vào lớp controller
-
         String uri = request.getRequestURI();
-        String method = request.getMethod();
-
-        if(isPublicAPI(uri, method)){
-            // nếu public cho qua luôn ko cần check
+        
+        // Bỏ qua token validation cho public endpoints
+        if (isPublicEndpoint(uri)) {
             filterChain.doFilter(request, response);
-        }else{
-            // xác thực
-            String token = getToken(request);
-
-            if(token == null){
-                resolver.resolveException(request, response, null, new AuthenticationException("Empty token!"));
-                return;
-            }
-
-            // có cung cấp token
-            // verify token
-            Account account;
-            try {
-                // từ token tìm ra thằng đó là ai
-                account = tokenService.extractAccount(token);
-            } catch (ExpiredJwtException expiredJwtException) {
-                // token het han
-                resolver.resolveException(request, response, null, new AuthenticationException("Expired Token!"));
-                return;
-            } catch (MalformedJwtException malformedJwtException) {
-                resolver.resolveException(request, response, null, new AuthenticationException("Invalid Token!"));
-                return;
-            }
-            // => token dung
-            UsernamePasswordAuthenticationToken
-                    authenToken =
-                    new UsernamePasswordAuthenticationToken(account, token, account.getAuthorities());
-            authenToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authenToken);
-
-            // token ok, cho vao`
-            filterChain.doFilter(request, response);
+            return;
         }
+
+        // Xác thực token cho các endpoints khác
+        String token = getToken(request);
+
+        if(token == null){
+            resolver.resolveException(request, response, null, new AuthenticationException("Empty token!"));
+            return;
+        }
+
+        // Verify token
+        Account account;
+        try {
+            account = tokenService.extractAccount(token);
+        } catch (ExpiredJwtException expiredJwtException) {
+            resolver.resolveException(request, response, null, new AuthenticationException("Expired Token!"));
+            return;
+        } catch (MalformedJwtException malformedJwtException) {
+            resolver.resolveException(request, response, null, new AuthenticationException("Invalid Token!"));
+            return;
+        }
+
+        // Token hợp lệ - set authentication context
+        UsernamePasswordAuthenticationToken authToken = 
+            new UsernamePasswordAuthenticationToken(account, token, account.getAuthorities());
+        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        SecurityContextHolder.getContext().setAuthentication(authToken);
+
+        filterChain.doFilter(request, response);
     }
 
     public String getToken(HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
-        if (authHeader == null) return null;
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) return null;
         return authHeader.substring(7);
     }
 }

@@ -60,7 +60,7 @@ public class Coach {
             this.account.setPhone(this.phone);
             this.account.setPassword(this.password);
             this.account.setFullName(this.name);
-            this.account.setRole(Role.Coach);
+            this.account.setRole(Role.COACH);
         }
         return this.account;
     }

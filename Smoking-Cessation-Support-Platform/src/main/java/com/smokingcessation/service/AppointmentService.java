@@ -8,6 +8,7 @@ import com.smokingcessation.exception.exceptions.BadRequestException;
 import com.smokingcessation.repository.AccountSlotRepository;
 import com.smokingcessation.repository.AppointmentRepository;
 import com.smokingcessation.repository.AuthenticationRepository;
+import com.smokingcessation.repository.CoachRepository;
 import com.smokingcessation.repository.MedicineServiceRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public class AppointmentService {
     AuthenticationRepository authenticationRepository;
 
     @Autowired
+    CoachRepository coachRepository;
+
+    @Autowired
     AuthenticationService authenticationService;
 
     @Autowired
@@ -37,40 +41,42 @@ public class AppointmentService {
     @Transactional
     public Appointment create(AppointmentDTO appointmentRequest) {
 
-        Account coach = authenticationRepository.findById(appointmentRequest.getCoachId()).orElseThrow(()-> new BadRequestException("coach not found"));
+        // Tìm coach theo ID
+        Coach coach = coachRepository.findById(appointmentRequest.getCoachId())
+                .orElseThrow(() -> new BadRequestException("Coach not found"));
 
-        if(!coach.getRole().equals(Role.Coach)){
-            throw new BadRequestException("account is not a coach");
+        if (!coach.isCoachActive()) {
+            throw new BadRequestException("Coach is not active");
         }
 
-
-//        tim slot
+        // Tìm slot
         AccountSlot slot = accountSlotRepository.findAccountSlotBySlotIdAndAccountAndDate(
                 appointmentRequest.getSlotId(),
-                coach,
+                coach.getAccount(),
                 appointmentRequest.getAppointmentDate()
         );
-//        check xem slot do da dat hay chua
-        if(!slot.isAvailable()){
-            throw new BadRequestException("slot is not available");
+        
+        // Check xem slot do da dat hay chua
+        if (!slot.isAvailable()) {
+            throw new BadRequestException("Slot is not available");
         }
 
-
-//        lay Services
+        // Lay Services
         List<MedicineService> services = medicineServiceRepository.findByIdIn(appointmentRequest.getServicesId());
 
-
-//        lay tai khoan hien tai
+        // Lay tai khoan hien tai
         Account currentAccount = authenticationService.getCurrentAccount();
 
-//       appointment
+        // Tạo appointment
         Appointment appointment = new Appointment();
         appointment.setCreateAt(LocalDate.now());
         appointment.setStatus(AppointmentEnum.PENDING);
         appointment.setAccount(currentAccount);
+        appointment.setCoach(coach);
         appointment.setMedicineServices(services);
         appointmentRepository.save(appointment);
-//        set slot do thanh da dat
+        
+        // Set slot do thanh da dat
         slot.setAvailable(false);
 
         return appointment;

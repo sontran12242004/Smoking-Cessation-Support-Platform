@@ -8,8 +8,8 @@ import java.util.List;
 
 @Data
 public class AppointmentDTO {
-    long slotId;
-    long coachId;
+    Long slotId;
+    Long coachId;
     LocalDate appointmentDate;
     List<Long> servicesId;
 }

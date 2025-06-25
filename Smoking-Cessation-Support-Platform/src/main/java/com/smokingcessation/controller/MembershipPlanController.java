@@ -16,30 +16,33 @@ public class MembershipPlanController {
     @Autowired
     private MembershipPlanService membershipPlanService;
 
-    // EXISTING ENDPOINTS
+    // PUBLIC - Guest, Members, Coach, Admin đều có thể xem plans
     @GetMapping
     public List<MembershipPlan> getAllPlans() {
         return membershipPlanService.getAllPlans();
     }
 
+    // PUBLIC - Guest, Members, Coach, Admin đều có thể xem plan chi tiết
     @GetMapping("/{id}")
     public Optional<MembershipPlan> getPlanById(@PathVariable Integer id) {
         return membershipPlanService.getPlanById(id);
     }
 
+    // ADMIN - Chỉ admin mới có thể tạo plan mới
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public MembershipPlan createPlan(@RequestBody MembershipPlan plan) {
         return membershipPlanService.save(plan);
     }
 
+    // ADMIN - Chỉ admin mới có thể xóa plan
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public void deletePlan(@PathVariable Integer id) {
         membershipPlanService.deletePlan(id);
     }
 
-    // NEW ENDPOINT
+    // PUBLIC - Guest có thể xem available plans cho member
     @GetMapping("/member/{memberId}/available")
     public List<MembershipPlan> getAvailablePlansForMember(@PathVariable Long memberId) {
         return membershipPlanService.getAvailablePlansForMember(memberId);

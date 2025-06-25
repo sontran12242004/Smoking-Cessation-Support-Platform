@@ -103,15 +103,6 @@ public class AuthenticationService implements UserDetailsService {
         return authenticationRepository.save(account);
     }
 
-
-
-
-
-
-
-
-
-
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return authenticationRepository.findAccountByEmail(email);
@@ -119,6 +110,6 @@ public class AuthenticationService implements UserDetailsService {
 
 
     public List<Account> getCoachs() {
-        return authenticationRepository.findByRole(Role.Coach);
+        return authenticationRepository.findByRole(Role.COACH);
     }
 }

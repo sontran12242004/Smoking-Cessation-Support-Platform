@@ -7,6 +7,7 @@ import com.smokingcessation.service.RatingService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +20,9 @@ public class RatingController {
     @Autowired
     RatingService ratingService;
 
+    // AUTHENTICATED - Members (chỉ rate cho mình), Admin (rate cho bất kỳ ai)
     @PostMapping
+    @PreAuthorize("hasAnyRole('MEMBERS', 'ADMIN')")
     public ResponseEntity createRating(@RequestBody RatingDTO ratingRequest) {
         Rating newRating = ratingService.create(ratingRequest);
         return ResponseEntity.ok(newRating);

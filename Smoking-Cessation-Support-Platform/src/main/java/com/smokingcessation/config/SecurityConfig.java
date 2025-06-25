@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -20,6 +21,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
 @Configuration
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     @Autowired
@@ -41,12 +43,37 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .cors() //  Kích hoạt CORS (rất quan trọng)
+                .cors() // Kích hoạt CORS
                 .and()
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         req -> req
-                                .requestMatchers("/**").permitAll()
+                                // PUBLIC endpoints - không cần authentication
+                                .requestMatchers(
+                                        // Swagger UI
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html",
+                                        "/v3/api-docs/**",
+                                        "/swagger-resources/**",
+                                        "/webjars/**",
+                                        
+                                        // Authentication (chỉ register, login, forgot-password)
+                                        "/api/register",
+                                        "/api/login", 
+                                        "/api/forgot-password",
+                                        
+                                        // Public data
+                                        "/api/membership-plans",
+                                        "/api/membership-plans/*",
+                                        "/api/health-metrics/**",
+                                        "/api/medicineService",
+                                        "/api/medicineService/*",
+                                        
+                                        // Member registration
+                                        "/api/members"
+                                ).permitAll()
+                                
+                                // Tất cả endpoints khác cần authentication
                                 .anyRequest().authenticated()
                 )
                 .userDetailsService(authenticationService)
@@ -61,7 +88,7 @@ public class SecurityConfig {
         config.setAllowedOrigins(List.of("http://localhost:3000"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true); //  Cho phép gửi cookies/token từ FE
+        config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

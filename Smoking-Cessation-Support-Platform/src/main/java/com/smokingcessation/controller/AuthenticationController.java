@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +23,7 @@ public class AuthenticationController {
     @Autowired
     AuthenticationService authenticationService;
 
-    // đăng ký tài khoản mới
+    // PUBLIC - Guest, Members, Coach, Admin đều có thể đăng ký
     @CrossOrigin()
     @PostMapping("/api/register")
     public ResponseEntity register(@RequestBody Account account){
@@ -30,7 +31,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(newAccount);
     }
 
-    // đăng nhập vào hệ thống
+    // PUBLIC - Guest, Members, Coach, Admin đều có thể đăng nhập
     @PostMapping("/api/login")
     @CrossOrigin(origins = "http://localhost:3005")
     public ResponseEntity login(@RequestBody LoginDTO loginDTO){
@@ -38,15 +39,16 @@ public class AuthenticationController {
         return ResponseEntity.ok(account);
     }
 
-    // gửi email quên mật khẩu
+    // PUBLIC - Guest, Members, Coach, Admin đều có thể quên mật khẩu
     @PostMapping("/api/forgot-password")
     public ResponseEntity forgotPassword(@Valid @RequestBody ForgotPasswordDTO forgotPasswordDTO) throws NotFoundException {
         authenticationService.forgotPassword(forgotPasswordDTO);
         return ResponseEntity.ok("Forgot Password Successfuly");
     }
 
-    // reset mật khẩu với token
+    // AUTHENTICATED - Chỉ user đã đăng nhập mới có thể reset password
     @PostMapping("/api/reset-password")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity resetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO ){
         authenticationService.resetPassword(resetPasswordDTO);
         return ResponseEntity.ok("Reset Password Successfuly");

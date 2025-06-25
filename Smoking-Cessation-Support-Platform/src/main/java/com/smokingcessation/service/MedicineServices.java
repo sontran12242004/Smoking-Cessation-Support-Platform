@@ -44,9 +44,9 @@ public class MedicineServices {
      * If the medicine service with the given ID exists, it updates its details.
      * @param id The ID of the medicine service to update.
      * @param medicineServiceDetails The updated MedicineService entity.
-     * @return An Optional containing the updated MedicineService if found and updated, or empty if not found.
+     * @return The updated MedicineService if found and updated, or null if not found.
      */
-    public Optional<MedicineService> updateMedicineService(Long id, MedicineService medicineServiceDetails) {
+    public MedicineService updateMedicineService(Long id, MedicineService medicineServiceDetails) {
         return medicineServiceRepository.findById(id)
                 .map(medicineService -> {
                     medicineService.setName(medicineServiceDetails.getName());
@@ -54,7 +54,8 @@ public class MedicineServices {
                     medicineService.setPrice(medicineServiceDetails.getPrice());
                     medicineService.setAvailable(medicineServiceDetails.isAvailable());
                     return medicineServiceRepository.save(medicineService);
-                });
+                })
+                .orElse(null);
     }
 
     /**

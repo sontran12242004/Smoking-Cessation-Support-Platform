@@ -6,6 +6,7 @@ import com.smokingcessation.repository.MembersRepository;
 import com.smokingcessation.service.HealthMetricsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,6 +19,7 @@ public class HealthMetricsController {
     @Autowired
     private HealthMetricsService healthMetricsService;
 
+    // PUBLIC - Guest, Members, Coach, Admin đều có thể xem health metrics
     @GetMapping("/{userId}")
     public ResponseEntity<HealthMetricsDTO> getHealthMetrics(@PathVariable Long userId) {
         Members user = userRepository.findById(userId)
@@ -34,6 +36,7 @@ public class HealthMetricsController {
         return ResponseEntity.ok(metrics);
     }
 
+    // PUBLIC - Guest, Members, Coach, Admin đều có thể xem days free
     @GetMapping("/days-free")
     public ResponseEntity getDaysSmokeFree(@RequestParam Long userId) {
         Members user = userRepository.findById(userId)
@@ -42,6 +45,7 @@ public class HealthMetricsController {
         return ResponseEntity.ok(days);
     }
 
+    // PUBLIC - Guest, Members, Coach, Admin đều có thể xem money saved
     @GetMapping("/money-saved")
     public ResponseEntity getMoneySaved(@RequestParam Long userId) {
         Members user = userRepository.findById(userId)
@@ -50,6 +54,7 @@ public class HealthMetricsController {
         return ResponseEntity.ok(money);
     }
 
+    // PUBLIC - Guest, Members, Coach, Admin đều có thể xem total cigarettes
     @GetMapping("/total-cigarettes")
     public ResponseEntity getTotalCigarettes(@RequestParam Long userId) {
         Members user = userRepository.findById(userId)
@@ -58,6 +63,7 @@ public class HealthMetricsController {
         return ResponseEntity.ok(cigarettes);
     }
 
+    // PUBLIC - Guest, Members, Coach, Admin đều có thể xem health improved
     @GetMapping("/percent/health-improved")
     public ResponseEntity getHealthImproved(@RequestParam Long userId) {
         Members user = userRepository.findById(userId)
@@ -66,6 +72,7 @@ public class HealthMetricsController {
         return ResponseEntity.ok(percent);
     }
 
+    // PUBLIC - Guest, Members, Coach, Admin đều có thể xem heart attack risk
     @GetMapping("/risk/heart-attack")
     public ResponseEntity getHeartAttackRisk(@RequestParam Long userId) {
         Members user = userRepository.findById(userId)
@@ -74,6 +81,7 @@ public class HealthMetricsController {
         return ResponseEntity.ok(risk);
     }
 
+    // PUBLIC - Guest, Members, Coach, Admin đều có thể xem lung cancer risk
     @GetMapping("/risk/lung-cancer")
     public ResponseEntity getLungCancerRisk(@RequestParam Long userId) {
         Members user = userRepository.findById(userId)
@@ -82,6 +90,7 @@ public class HealthMetricsController {
         return ResponseEntity.ok(risk);
     }
 
+    // PUBLIC - Guest, Members, Coach, Admin đều có thể xem heart disease risk
     @GetMapping("/risk/heart-disease")
     public ResponseEntity getHeartDiseaseRisk(@RequestParam Long userId) {
         Members user = userRepository.findById(userId)
@@ -90,6 +99,7 @@ public class HealthMetricsController {
         return ResponseEntity.ok(risk);
     }
 
+    // PUBLIC - Guest, Members, Coach, Admin đều có thể xem immune function
     @GetMapping("/percent/immune-function")
     public ResponseEntity getImmuneFunction(@RequestParam Long userId) {
         Members user = userRepository.findById(userId)
@@ -98,6 +108,7 @@ public class HealthMetricsController {
         return ResponseEntity.ok(percent);
     }
 
+    // PUBLIC - Guest, Members, Coach, Admin đều có thể xem teeth whitening
     @GetMapping("/percent/teeth-whitening")
     public ResponseEntity getTeethWhitening(@RequestParam Long userId) {
         Members user = userRepository.findById(userId)
@@ -106,6 +117,7 @@ public class HealthMetricsController {
         return ResponseEntity.ok(percent);
     }
 
+    // PUBLIC - Guest, Members, Coach, Admin đều có thể xem breath freshness
     @GetMapping("/percent/breath-freshness")
     public ResponseEntity getBreathFreshness(@RequestParam Long userId) {
         Members user = userRepository.findById(userId)
@@ -114,6 +126,7 @@ public class HealthMetricsController {
         return ResponseEntity.ok(percent);
     }
 
+    // PUBLIC - Guest, Members, Coach, Admin đều có thể xem taste smell
     @GetMapping("/percent/taste-smell")
     public ResponseEntity getTasteAndSmell(@RequestParam Long userId) {
         Members user = userRepository.findById(userId)
@@ -122,6 +135,7 @@ public class HealthMetricsController {
         return ResponseEntity.ok(percent);
     }
 
+    // PUBLIC - Guest, Members, Coach, Admin đều có thể xem CO levels
     @GetMapping("/percent/co-levels")
     public ResponseEntity getCOLevels(@RequestParam Long userId) {
         Members user = userRepository.findById(userId)
@@ -130,6 +144,7 @@ public class HealthMetricsController {
         return ResponseEntity.ok(percent);
     }
 
+    // PUBLIC - Guest, Members, Coach, Admin đều có thể xem oxygen levels
     @GetMapping("/percent/oxygen-levels")
     public ResponseEntity getOxygenLevels(@RequestParam Long userId) {
         Members user = userRepository.findById(userId)

@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.smokingcessation.service.MedicineServices;
 
@@ -50,6 +51,7 @@ public class MedicineController {
      * @return ResponseEntity with the created MedicineService and HTTP status CREATED.
      */
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MedicineService> createMedicineService(@RequestBody MedicineService medicineService) {
         MedicineService createdService = medicineServices.createMedicineService(medicineService);
         return new ResponseEntity<>(createdService, HttpStatus.CREATED);
@@ -63,10 +65,14 @@ public class MedicineController {
      * @return ResponseEntity with the updated MedicineService and HTTP status OK, or NOT_FOUND if not found.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MedicineService> updateMedicineService(@PathVariable Long id, @RequestBody MedicineService medicineServiceDetails) {
-        Optional<MedicineService> updatedService = medicineServices.updateMedicineService(id, medicineServiceDetails);
-        return updatedService.map(service -> new ResponseEntity<>(service, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        MedicineService updatedService = medicineServices.updateMedicineService(id, medicineServiceDetails);
+        if (updatedService != null) {
+            return new ResponseEntity<>(updatedService, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     /**
@@ -76,6 +82,7 @@ public class MedicineController {
      * @return ResponseEntity with HTTP status NO_CONTENT if deleted, or NOT_FOUND if not found.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteMedicineService(@PathVariable Long id) {
         boolean deleted = medicineServices.deleteMedicineService(id);
         if (deleted) {

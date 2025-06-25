@@ -27,6 +27,9 @@ public class Appointment {
     @JoinColumn(name = "account_id")
     Account account;
 
+    @ManyToOne
+    @JoinColumn(name = "coach_id")
+    Coach coach;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
