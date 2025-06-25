@@ -2,7 +2,7 @@ package com.smokingcessation.enums;
 
 public enum Role {
     ADMIN,
-    USER,
+    MEMBERS,
     GUEST,
     Coach,
 }

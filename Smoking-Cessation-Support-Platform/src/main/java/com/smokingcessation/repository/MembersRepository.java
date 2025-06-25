@@ -16,6 +16,4 @@ public interface MembersRepository extends JpaRepository<Members, Long> {
 
     // Kiểm tra email đã tồn tại trong hệ thống chưa
     boolean existsByEmail(String email);
-
-    List<Members> findByRole(Role role);
 }

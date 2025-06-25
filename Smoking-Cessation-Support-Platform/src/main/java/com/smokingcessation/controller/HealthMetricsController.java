@@ -33,4 +33,108 @@ public class HealthMetricsController {
         HealthMetricsDTO metrics = healthMetricsService.getOrCreateTodayMetrics(user);
         return ResponseEntity.ok(metrics);
     }
+
+    @GetMapping("/days-free")
+    public ResponseEntity getDaysSmokeFree(@RequestParam Long userId) {
+        Members user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
+        int days = healthMetricsService.getDaysSmokeFree(user);
+        return ResponseEntity.ok(days);
+    }
+
+    @GetMapping("/money-saved")
+    public ResponseEntity getMoneySaved(@RequestParam Long userId) {
+        Members user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
+        int money = healthMetricsService.getMoneySaved(user);
+        return ResponseEntity.ok(money);
+    }
+
+    @GetMapping("/total-cigarettes")
+    public ResponseEntity getTotalCigarettes(@RequestParam Long userId) {
+        Members user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
+        int cigarettes = healthMetricsService.getTotalCigarettesSmoked(user);
+        return ResponseEntity.ok(cigarettes);
+    }
+
+    @GetMapping("/percent/health-improved")
+    public ResponseEntity getHealthImproved(@RequestParam Long userId) {
+        Members user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
+        double percent = healthMetricsService.getHealthImprovedPercent(user);
+        return ResponseEntity.ok(percent);
+    }
+
+    @GetMapping("/risk/heart-attack")
+    public ResponseEntity getHeartAttackRisk(@RequestParam Long userId) {
+        Members user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
+        double risk = healthMetricsService.getHeartAttackRisk(user);
+        return ResponseEntity.ok(risk);
+    }
+
+    @GetMapping("/risk/lung-cancer")
+    public ResponseEntity getLungCancerRisk(@RequestParam Long userId) {
+        Members user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
+        double risk = healthMetricsService.getLungCancerRisk(user);
+        return ResponseEntity.ok(risk);
+    }
+
+    @GetMapping("/risk/heart-disease")
+    public ResponseEntity getHeartDiseaseRisk(@RequestParam Long userId) {
+        Members user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
+        double risk = healthMetricsService.getHeartDiseaseRisk(user);
+        return ResponseEntity.ok(risk);
+    }
+
+    @GetMapping("/percent/immune-function")
+    public ResponseEntity getImmuneFunction(@RequestParam Long userId) {
+        Members user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
+        double percent = healthMetricsService.getImmuneFunction(user);
+        return ResponseEntity.ok(percent);
+    }
+
+    @GetMapping("/percent/teeth-whitening")
+    public ResponseEntity getTeethWhitening(@RequestParam Long userId) {
+        Members user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
+        double percent = healthMetricsService.getTeethWhitening(user);
+        return ResponseEntity.ok(percent);
+    }
+
+    @GetMapping("/percent/breath-freshness")
+    public ResponseEntity getBreathFreshness(@RequestParam Long userId) {
+        Members user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
+        double percent = healthMetricsService.getBreathFreshness(user);
+        return ResponseEntity.ok(percent);
+    }
+
+    @GetMapping("/percent/taste-smell")
+    public ResponseEntity getTasteAndSmell(@RequestParam Long userId) {
+        Members user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
+        double percent = healthMetricsService.getTasteAndSmell(user);
+        return ResponseEntity.ok(percent);
+    }
+
+    @GetMapping("/percent/co-levels")
+    public ResponseEntity getCOLevels(@RequestParam Long userId) {
+        Members user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
+        double percent = healthMetricsService.getCOLvls(user);
+        return ResponseEntity.ok(percent);
+    }
+
+    @GetMapping("/percent/oxygen-levels")
+    public ResponseEntity getOxygenLevels(@RequestParam Long userId) {
+        Members user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
+        double percent = healthMetricsService.getOxygenLvls(user);
+        return ResponseEntity.ok(percent);
+    }
 }

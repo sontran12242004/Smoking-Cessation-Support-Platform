@@ -1,5 +1,6 @@
 package com.smokingcessation.controller;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smokingcessation.dto.RegisterSlotDTO;
 import com.smokingcessation.entity.AccountSlot;
 import com.smokingcessation.entity.Slot;
@@ -25,12 +26,14 @@ public class SlotController
     {
         slotService.generateSlots();
     }
+
     @GetMapping
     public ResponseEntity getSlots()
     {
         List<Slot> slots = slotService.get();
         return ResponseEntity.ok(slots);
     }
+
     @PostMapping("register")
     public ResponseEntity registerSlot(@RequestBody RegisterSlotDTO registerSlotDTO )
     {
@@ -40,10 +43,10 @@ public class SlotController
 
     @GetMapping("/registered")
     public ResponseEntity getRegisteredSlots(
-            @RequestParam Long doctorId,
+            @RequestParam Long Coach,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date)
     {
-        List<AccountSlot> slots = slotService.getRegisteredSlots(doctorId,date);
+        List<AccountSlot> slots = slotService.getRegisteredSlots(Coach,date);
 
         return ResponseEntity.ok(slots);
     }

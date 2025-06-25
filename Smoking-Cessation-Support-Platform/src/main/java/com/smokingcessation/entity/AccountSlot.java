@@ -1,5 +1,6 @@
 package com.smokingcessation.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +25,7 @@ public class AccountSlot
 
     @ManyToOne
     @JoinColumn(name ="slot_id")
+    @JsonIgnore
     Slot slot;
 
 }

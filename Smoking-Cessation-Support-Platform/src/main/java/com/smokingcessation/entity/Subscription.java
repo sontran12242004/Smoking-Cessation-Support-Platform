@@ -1,10 +1,11 @@
 package com.smokingcessation.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
-
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -18,10 +19,12 @@ public class Subscription {
 
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
+    @JsonIgnore
     private Members member;
 
     @ManyToOne
     @JoinColumn(name = "plan_id", nullable = false)
+    @JsonIgnore
     private MembershipPlan membershipPlan;
 
     private LocalDate startDate;
@@ -30,5 +33,16 @@ public class Subscription {
 
     private boolean isActive;
 
+    private String paymentMethod;
+    
+    private String notes;
+    
+    private LocalDateTime createdAt;
 
+    @PrePersist
+    protected void onCreate() {
+        if (createdAt == null) {
+            createdAt = LocalDateTime.now();
+        }
+    }
 }

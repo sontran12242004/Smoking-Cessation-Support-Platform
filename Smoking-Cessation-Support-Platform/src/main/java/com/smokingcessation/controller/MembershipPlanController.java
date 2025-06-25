@@ -16,6 +16,7 @@ public class MembershipPlanController {
     @Autowired
     private MembershipPlanService membershipPlanService;
 
+    // EXISTING ENDPOINTS
     @GetMapping
     public List<MembershipPlan> getAllPlans() {
         return membershipPlanService.getAllPlans();
@@ -36,5 +37,11 @@ public class MembershipPlanController {
     @PreAuthorize("hasRole('ADMIN')")
     public void deletePlan(@PathVariable Integer id) {
         membershipPlanService.deletePlan(id);
+    }
+
+    // NEW ENDPOINT
+    @GetMapping("/member/{memberId}/available")
+    public List<MembershipPlan> getAvailablePlansForMember(@PathVariable Long memberId) {
+        return membershipPlanService.getAvailablePlansForMember(memberId);
     }
 }

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 @Data
 @Entity
 public class MembershipPlan {
@@ -22,5 +24,11 @@ public class MembershipPlan {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
+    @Column(length = 500)
+    private String description;
+    
+    private boolean isActive = true;
+    
+    private LocalDateTime createdAt;
 
 }

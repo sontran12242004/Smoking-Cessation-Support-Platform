@@ -37,18 +37,17 @@ public class AppointmentService {
     @Transactional
     public Appointment create(AppointmentDTO appointmentRequest) {
 
-//        tim doctor
-        Account doctor = authenticationRepository.findById(appointmentRequest.getCoachId()).orElseThrow(()-> new BadRequestException("doctor not found"));
+        Account coach = authenticationRepository.findById(appointmentRequest.getCoachId()).orElseThrow(()-> new BadRequestException("coach not found"));
 
-        if(!doctor.getRole().equals(Role.Coach)){
-            throw new BadRequestException("account is not a doctor");
+        if(!coach.getRole().equals(Role.Coach)){
+            throw new BadRequestException("account is not a coach");
         }
 
 
 //        tim slot
         AccountSlot slot = accountSlotRepository.findAccountSlotBySlotIdAndAccountAndDate(
                 appointmentRequest.getSlotId(),
-                doctor,
+                coach,
                 appointmentRequest.getAppointmentDate()
         );
 //        check xem slot do da dat hay chua

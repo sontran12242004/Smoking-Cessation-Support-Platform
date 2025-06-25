@@ -58,26 +58,28 @@ public class SlotService
 
 
     public void generateSlots() {
-        //generate tu 7h sang toi 17h
-        LocalTime start = LocalTime.of(7, 0);
-        LocalTime end = LocalTime.of(17, 0);
+        // Bắt đầu từ 9:00 sáng đến 16:30 chiều
+        LocalTime start = LocalTime.of(9, 0);
+        LocalTime end = LocalTime.of(16, 30);
         List<Slot> slots = new ArrayList<>();
 
-        while(start.isBefore(end)) {
+        while (start.plusMinutes(45).isBefore(end) || start.plusMinutes(45).equals(end)) {
             Slot slot = new Slot();
             slot.setStart(start);
             slot.setLabel(start.toString());
-            slot.setEnd(start.plusHours(30));
+            slot.setEnd(start.plusMinutes(45));
 
             slots.add(slot);
-            start = start.plusMinutes(30);
+            start = start.plusMinutes(45); // Di chuyển sang slot kế tiếp
         }
+
         slotRepository.saveAll(slots);
     }
 
+
     public List<AccountSlot> getRegisteredSlots(Long doctorId, LocalDate date) {
         Account doctor = authenticationRepository.findById(doctorId)
-                .orElseThrow(() -> new BadRequestException("Doctor not found"));
+                .orElseThrow(() -> new BadRequestException("Coach not found"));
 
         List<AccountSlot> accountSlots = accountSlotRepository.findAccountSlotsByAccountAndDate(doctor,date);
         List<AccountSlot> slotsAvailable = new ArrayList<>();

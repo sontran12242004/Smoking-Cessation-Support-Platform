@@ -11,4 +11,5 @@ public class EmailDetail {
     private Account receiver;
     private String recipient;
     private String subject;
+    private String link;
 }

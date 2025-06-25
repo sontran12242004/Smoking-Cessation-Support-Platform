@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -25,11 +26,17 @@ public class Appointment {
     @JoinColumn(name = "account_id")
     Account account;
 
+
     @ManyToMany(cascade = CascadeType.ALL)
-            @JoinTable(
-                    name = "appointment_service",
-                    joinColumns = @JoinColumn(name = "appointment_id"),
-                    inverseJoinColumns = @JoinColumn(name = "service_id")
-            )
+    @JoinTable(
+            name = "appointment_services",
+            joinColumns = @JoinColumn(name = "appointment_id"),
+            inverseJoinColumns =@JoinColumn(name = "service_id")
+    )
     List<MedicineService> medicineServices;
+
+
+    @OneToMany(mappedBy = "appointment")
+    List<Report> reports;
+
 }

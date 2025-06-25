@@ -10,4 +10,5 @@ import lombok.Setter;
 @Data
 public class ForgotPassword {
     String email;
+
 }
