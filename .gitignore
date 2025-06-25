@@ -1,3 +1,5 @@
 Smoking-Cessation-Support-Platform/target/classes/application.properties
 .idea/dataSources.xml
 Smoking-Cessation-Support-Platform/src/main/resources/application.properties
+.idea/dataSources.local.xml
+.idea/workspace.xml
