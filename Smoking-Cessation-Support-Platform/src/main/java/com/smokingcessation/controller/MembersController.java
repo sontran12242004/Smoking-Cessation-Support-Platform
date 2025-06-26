@@ -36,8 +36,9 @@ public class MembersController {
         return ResponseEntity.ok(members);
     }
 
-    // PUBLIC - Guest có thể đăng ký thành viên mới
+    // AUTHENTICATED - Chỉ admin mới có thể tạo member mới
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Members> createMember(@Valid @RequestBody Members member) {
         Members newMember = membersService.createMember(member);
         return ResponseEntity.ok(newMember);

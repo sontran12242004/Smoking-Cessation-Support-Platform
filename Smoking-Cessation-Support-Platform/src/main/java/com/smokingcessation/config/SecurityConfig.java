@@ -4,9 +4,9 @@ import com.smokingcessation.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -21,7 +21,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
 @Configuration
-@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     @Autowired
@@ -43,7 +42,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .cors() // Kích hoạt CORS
+                .cors() //  Kích hoạt CORS
                 .and()
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
@@ -67,10 +66,7 @@ public class SecurityConfig {
                                         "/api/membership-plans/*",
                                         "/api/health-metrics/**",
                                         "/api/medicineService",
-                                        "/api/medicineService/*",
-                                        
-                                        // Member registration
-                                        "/api/members"
+                                        "/api/medicineService/*"
                                 ).permitAll()
                                 
                                 // Tất cả endpoints khác cần authentication
@@ -88,11 +84,10 @@ public class SecurityConfig {
         config.setAllowedOrigins(List.of("http://localhost:3000"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true);
+        config.setAllowCredentials(true); //  Cho phép gửi cookies/token từ FE
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
     }
 }
-
