@@ -1,17 +1,61 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link, NavLink } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import journeyPath from '../assets/journey_path.jpg';
+import axios from "axios";
 
-function EliteDashboard({
-  daysSmokeFree = "--",
-  daysToNext = "--",
-  moneySaved = "--",
-  healthImproved = "--",
-  lungsCapacity = "--",
-  heartRate = "--",
-}) {
+function EliteDashboard() {
   const navigate = useNavigate();
+  const [healthMetrics, setHealthMetrics] = useState({
+    daysSmokeFree: "--",
+    daysToNext: "--",
+    moneySaved: "--",
+    healthImproved: "--",
+    lungsCapacity: "--",
+    heartRate: "--",
+  });
+  const [lungCancerRisk, setLungCancerRisk] = useState("--");
+  const [heartDiseaseRisk, setHeartDiseaseRisk] = useState("--");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const userId = 1; // Replace with actual user ID from auth context
+  const [daysSmokeFree, setDaysSmokeFree] = useState("--");
+  const [moneySaved, setMoneySaved] = useState("--");
+  const [healthImproved, setHealthImproved] = useState("--");
+  const [healthImprovementData, setHealthImprovementData] = useState([]);
+
+  useEffect(() => {
+    axios.get(`http://localhost:8080/api/health-metrics/${userId}`)
+      .then(res => {
+        setHealthMetrics(res.data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        setLoading(false);
+      });
+    axios.get(`http://localhost:8080/api/health-metrics/risk/lung-cancer?userId=${userId}`)
+      .then(res => setLungCancerRisk(res.data))
+      .catch(err => console.error(err));
+    axios.get(`http://localhost:8080/api/health-metrics/risk/heart-disease?userId=${userId}`)
+      .then(res => setHeartDiseaseRisk(res.data))
+      .catch(err => console.error(err));
+    axios.get(`http://localhost:8080/api/health-metrics/days-free?userId=${userId}`)
+      .then(res => setDaysSmokeFree(res.data))
+      .catch(err => console.error(err));
+    axios.get(`http://localhost:8080/api/health-metrics/money-saved?userId=${userId}`)
+      .then(res => setMoneySaved(res.data))
+      .catch(err => console.error(err));
+    axios.get(`http://localhost:8080/api/health-metrics/percent/health-improved?userId=${userId}`)
+      .then(res => setHealthImproved(res.data))
+      .catch(err => console.error(err));
+    // Lấy dữ liệu động cho biểu đồ Health Improvement Rate
+    fetch(`http://localhost:8080/api/health-metrics/health-improvement-rate?userId=${userId}`)
+      .then(res => res.json())
+      .then(setHealthImprovementData)
+      .catch(() => setHealthImprovementData([]));
+  }, []);
+
   const styles = `
     html,
     body,
@@ -812,15 +856,46 @@ function EliteDashboard({
   const handleNotificationClick = () => {
     navigate("/elite/notification");
   };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="container">
+        <style>{styles}</style>
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'center', 
+          alignItems: 'center', 
+          height: '100vh',
+          fontSize: '18px',
+          color: '#4CAF50'
+        }}>
+          Loading dashboard data...
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="container">
+        <style>{styles}</style>
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'center', 
+          alignItems: 'center', 
+          height: '100vh',
+          fontSize: '18px',
+          color: '#D32F2F'
+        }}>
+          {error}
+        </div>
+      </div>
+    );
+  }
+
   // Mock data for charts
-  const healthImprovementData = [
-    { month: 'Jan', value: 20 },
-    { month: 'Feb', value: 35 },
-    { month: 'Mar', value: 50 },
-    { month: 'Apr', value: 65 },
-    { month: 'May', value: 80 },
-    { month: 'Jun', value: 90 },
-  ];
   const successRateData = [
     { month: 'Jan', value: 10 },
     { month: 'Feb', value: 25 },
@@ -902,24 +977,24 @@ function EliteDashboard({
         <div className="dashboard-cards-row">
           <div className="dashboard-card">
             <span className="dashboard-card-icon">📅</span>
+            <div className="dashboard-card-label"><b>Days Smoke-Free</b></div>
             <div className="dashboard-card-value">{daysSmokeFree}</div>
-            <div className="dashboard-card-label">Days Smoke-Free</div>
             <div className="dashboard-card-desc">
-              {daysToNext} days until next milestone
+              {healthMetrics.daysToNext} days until next milestone
             </div>
           </div>
           <div className="dashboard-card">
             <span className="dashboard-card-icon">💵</span>
+            <div className="dashboard-card-label"><b>Money Saved</b></div>
             <div className="dashboard-card-value">${moneySaved}</div>
-            <div className="dashboard-card-label">Money Saved</div>
             <div className="dashboard-card-desc">
               Based on 10 cigarettes/day
             </div>
           </div>
           <div className="dashboard-card">
             <span className="dashboard-card-icon">💚</span>
+            <div className="dashboard-card-label"><b>Health Improved</b></div>
             <div className="dashboard-card-value">{healthImproved}%</div>
-            <div className="dashboard-card-label">Health Improved</div>
             <div className="dashboard-card-desc">Lung function recovery</div>
           </div>
         </div>
@@ -929,20 +1004,20 @@ function EliteDashboard({
             <div className="dashboard-card-small-content">
               <div className="dashboard-card-small-title">Lungs Capacity</div>
               <div className="dashboard-card-small-value">
-                +{lungsCapacity}%
+                +{healthMetrics.lungCancerRisk}%
               </div>
               <div className="dashboard-card-small-description">
-                Your lung capacity has improved significantly since quitting.
+                Your lung capacity has improved significantly since quitting.<br/>
               </div>
             </div>
           </div>
           <div className="dashboard-card-small">
             <span className="dashboard-card-small-icon">💓</span>
             <div className="dashboard-card-small-content">
-              <div className="dashboard-card-small-title">Heart Rate</div>
-              <div className="dashboard-card-small-value">{heartRate} bpm</div>
+              <div className="dashboard-card-small-title">Heart Disease Risk</div>
+              <div className="dashboard-card-small-value">{heartDiseaseRisk}%</div>
               <div className="dashboard-card-small-description">
-                Resting heart rate has decreased to healthier levels.
+                Your heart disease risk has decreased significantly since quitting.
               </div>
             </div>
           </div>

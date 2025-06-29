@@ -12,7 +12,7 @@ const Login = () => {
     e.preventDefault();
     setError('');
     try {
-      const response = await axios.post('http://localhost:8085/api/login', {
+      const response = await axios.post('http://localhost:8080/api/login', {
         email,
         password
       }, { withCredentials: true });

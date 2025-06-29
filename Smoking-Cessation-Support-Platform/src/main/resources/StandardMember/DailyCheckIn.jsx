@@ -669,7 +669,7 @@ function DailyCheckIn() {
                 </div>
               </div>
 
-              <button className="save-responses-button" onClick={() => navigate('/standard/home')}>Save Responses</button>
+              <button className="save-responses-button" onClick={() => navigate('/standard/dashboard')}>Save Responses</button>
             </div>
           </div>
         </div>

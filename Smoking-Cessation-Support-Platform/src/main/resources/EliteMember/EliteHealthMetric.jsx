@@ -1,9 +1,79 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from "react-router-dom";
 import journeyPath from '../assets/journey_path.jpg';
 
 const EliteHealthMetric = () => {
   const navigate = useNavigate();
+  const userId = 1; // Replace with actual user ID from auth context
+
+  // State cho các chỉ số động
+  const [daysSmokeFree, setDaysSmokeFree] = useState('--');
+  const [moneySaved, setMoneySaved] = useState('--');
+  const [healthImproved, setHealthImproved] = useState('--');
+  const [lungCancerRisk, setLungCancerRisk] = useState('--');
+  const [heartDiseaseRisk, setHeartDiseaseRisk] = useState('--');
+  const [immuneFunction, setImmuneFunction] = useState('--');
+  const [teethWhitening, setTeethWhitening] = useState('--');
+  const [breathFreshness, setBreathFreshness] = useState('--');
+  const [tasteSmell, setTasteSmell] = useState('--');
+  const [coLevels, setCoLevels] = useState('--');
+  const [oxygenLevels, setOxygenLevels] = useState('--');
+
+  useEffect(() => {
+    // Days Smoke-Free
+    fetch(`http://localhost:8080/api/health-metrics/days-free?userId=${userId}`)
+      .then(res => res.json())
+      .then(setDaysSmokeFree)
+      .catch(() => setDaysSmokeFree('--'));
+    // Money Saved
+    fetch(`http://localhost:8080/api/health-metrics/money-saved?userId=${userId}`)
+      .then(res => res.json())
+      .then(setMoneySaved)
+      .catch(() => setMoneySaved('--'));
+    // Health Improved
+    fetch(`http://localhost:8080/api/health-metrics/percent/health-improved?userId=${userId}`)
+      .then(res => res.json())
+      .then(setHealthImproved)
+      .catch(() => setHealthImproved('--'));
+    // Lung Cancer Risk
+    fetch(`http://localhost:8080/api/health-metrics/risk/lung-cancer?userId=${userId}`)
+      .then(res => res.json())
+      .then(setLungCancerRisk)
+      .catch(() => setLungCancerRisk('--'));
+    // Heart Disease Risk
+    fetch(`http://localhost:8080/api/health-metrics/risk/heart-disease?userId=${userId}`)
+      .then(res => res.json())
+      .then(setHeartDiseaseRisk)
+      .catch(() => setHeartDiseaseRisk('--'));
+    // Immune Function
+    fetch(`http://localhost:8080/api/health-metrics/percent/immune-function?userId=${userId}`)
+      .then(res => res.json())
+      .then(setImmuneFunction)
+      .catch(() => setImmuneFunction('--'));
+    // Teeth Whitening
+    fetch(`http://localhost:8080/api/health-metrics/percent/teeth-whitening?userId=${userId}`)
+      .then(res => res.json())
+      .then(setTeethWhitening)
+      .catch(() => setTeethWhitening('--'));
+    // Breath Freshness
+    fetch(`http://localhost:8080/api/health-metrics/percent/breath-freshness?userId=${userId}`)
+      .then(res => res.json())
+      .then(setBreathFreshness)
+      .catch(() => setBreathFreshness('--'));
+    // Taste & Smell
+    fetch(`http://localhost:8080/api/health-metrics/percent/taste-smell?userId=${userId}`)
+      .then(res => res.json())
+      .then(setTasteSmell)
+      .catch(() => setTasteSmell('--'));
+    fetch(`http://localhost:8080/api/health-metrics/percent/co-levels?userId=${userId}`)
+      .then(res => res.json())
+      .then(setCoLevels)
+      .catch(() => setCoLevels('--'));
+    fetch(`http://localhost:8080/api/health-metrics/percent/oxygen-levels?userId=${userId}`)
+      .then(res => res.json())
+      .then(setOxygenLevels)
+      .catch(() => setOxygenLevels('--'));
+  }, []);
 
   const handleNotificationClick = () => {
     navigate("/elitenotificationcenter");
@@ -649,139 +719,68 @@ const EliteHealthMetric = () => {
 
   const metrics = [
     {
-      icon: (
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-          <rect x="4" y="4" width="16" height="16" rx="4" stroke="#43b649" strokeWidth="2" />
-          <path d="M8 10h8M8 14h5" stroke="#43b649" strokeWidth="2" />
-        </svg>
-      ),
-      value: "14",
+      icon: <span style={{fontSize: 40, display: 'block', textAlign: 'center'}}>📅</span>,
+      value: daysSmokeFree,
       label: "Days Smoke-Free",
-      desc: "19 days until next milestone",
+      desc: "Your total days smoke-free.",
     },
     {
-      icon: (
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-          <path d="M12 21c4.97 0 9-4.03 9-9s-4.03-9-9-9-9 4.03-9 9 4.03 9 9 9Z" stroke="#43b649" strokeWidth="2" />
-          <path d="M12 17v-2m0-8v2m-4 4h2m8 0h-2" stroke="#43b649" strokeWidth="2" />
-        </svg>
-      ),
-      value: "$155",
+      icon: <span style={{fontSize: 40, display: 'block', textAlign: 'center'}}>💵</span>,
+      value: `$${moneySaved}`,
       label: "Money Saved",
-      desc: "Based on 10 cigarettes/day",
+      desc: "Total money saved since quitting.",
     },
     {
-      icon: (
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="12" r="10" stroke="#43b649" strokeWidth="2" />
-          <path d="M8 12h8" stroke="#43b649" strokeWidth="2" />
-          <path d="M12 8v8" stroke="#43b649" strokeWidth="2" />
-        </svg>
-      ),
-      value: "38.5%",
+      icon: <span style={{fontSize: 40, display: 'block', textAlign: 'center'}}>💚</span>,
+      value: `${healthImproved}%`,
       label: "Health Improved",
-      desc: "Lung function recovery",
+      desc: "Lung function recovery.",
     },
     {
-      icon: (
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-          <path d="M12 21c4.97 0 9-4.03 9-9s-4.03-9-9-9-9 4.03-9 9 4.03 9 9 9Z" stroke="#43b649" strokeWidth="2" />
-          <path d="M12 8c-2.21 0-4 1.79-4 4" stroke="#43b649" strokeWidth="2" />
-          <path d="M12 16c2.21 0 4-1.79 4-4" stroke="#43b649" strokeWidth="2" />
-        </svg>
-      ),
-      value: "↓24%",
-      label: "Heart Attack Risk",
-      desc: "Reduction in heart attack probability",
-    },
-    {
-      icon: (
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-          <rect x="4" y="4" width="16" height="16" rx="8" stroke="#43b649" strokeWidth="2" />
-          <path d="M8 12h8" stroke="#43b649" strokeWidth="2" />
-        </svg>
-      ),
-      value: "↓31%",
+      icon: <span style={{fontSize: 40, display: 'block', textAlign: 'center'}}>🫁</span>,
+      value: `${lungCancerRisk}%`,
       label: "Lung Cancer Risk",
-      desc: "Decreased risk of lung cancer",
+      desc: "Current risk of lung cancer.",
     },
     {
-      icon: (
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-          <path d="M12 21c4.97 0 9-4.03 9-9s-4.03-9-9-9-9 4.03-9 9 4.03 9 9 9Z" stroke="#43b649" strokeWidth="2" />
-          <path d="M12 8c-2.21 0-4 1.79-4 4" stroke="#43b649" strokeWidth="2" />
-          <path d="M12 16c2.21 0 4-1.79 4-4" stroke="#43b649" strokeWidth="2" />
-        </svg>
-      ),
-      value: "↓27%",
+      icon: <span style={{fontSize: 40, display: 'block', textAlign: 'center'}}>❤️‍🩹</span>,
+      value: `${heartDiseaseRisk}%`,
       label: "Heart Disease Risk",
-      desc: "Reduction in cardiovascular risk",
+      desc: "Current risk of heart disease.",
     },
     {
-      icon: (
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="12" r="10" stroke="#43b649" strokeWidth="2" />
-          <path d="M12 8v8" stroke="#43b649" strokeWidth="2" />
-          <path d="M8 12h8" stroke="#43b649" strokeWidth="2" />
-        </svg>
-      ),
-      value: "+22%",
+      icon: <span style={{fontSize: 40, display: 'block', textAlign: 'center'}}>🛡️</span>,
+      value: `${immuneFunction}%`,
       label: "Immune Function",
       desc: "Improved immunity and lung function",
     },
     {
-      icon: (
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-          <path d="M12 21c4.97 0 9-4.03 9-9s-4.03-9-9-9-9 4.03-9 9 4.03 9 9 9Z" stroke="#43b649" strokeWidth="2" />
-          <path d="M8 12h8" stroke="#43b649" strokeWidth="2" />
-        </svg>
-      ),
-      value: "+19%",
+      icon: <span style={{fontSize: 40, display: 'block', textAlign: 'center'}}>😁</span>,
+      value: `${teethWhitening}%`,
       label: "Teeth Whitening",
       desc: "Reduction in tobacco staining",
     },
     {
-      icon: (
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="12" r="10" stroke="#43b649" strokeWidth="2" />
-          <path d="M12 8v8" stroke="#43b649" strokeWidth="2" />
-        </svg>
-      ),
-      value: "+38.5%",
+      icon: <span style={{fontSize: 40, display: 'block', textAlign: 'center'}}>😮‍💨</span>,
+      value: `${breathFreshness}%`,
       label: "Breath Freshness",
       desc: "Improvement in breath odor",
     },
     {
-      icon: (
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="12" r="10" stroke="#43b649" strokeWidth="2" />
-          <path d="M8 12h8" stroke="#43b649" strokeWidth="2" />
-        </svg>
-      ),
-      value: "+45%",
+      icon: <span style={{fontSize: 40, display: 'block', textAlign: 'center'}}>👃👅</span>,
+      value: `${tasteSmell}%`,
       label: "Taste & Smell",
       desc: "Recovery of sensory perception",
     },
     {
-      icon: (
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-          <rect x="6" y="10" width="12" height="4" rx="2" stroke="#43b649" strokeWidth="2" />
-          <line x1="9" y1="8" x2="9" y2="16" stroke="#43b649" strokeWidth="2" />
-          <line x1="15" y1="8" x2="15" y2="16" stroke="#43b649" strokeWidth="2" />
-        </svg>
-      ),
-      value: "↓83%",
+      icon: <span style={{fontSize: 40, display: 'block', textAlign: 'center'}}>🩸</span>,
+      value: `${coLevels}%`,
       label: "CO Levels",
       desc: "Reduction in blood carbon monoxide",
     },
     {
-      icon: (
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="12" r="10" stroke="#43b649" strokeWidth="2" />
-          <text x="12" y="16" textAnchor="middle" fontSize="12" fill="#43b649">O₂</text>
-        </svg>
-      ),
-      value: "+12%",
+      icon: <span style={{fontSize: 40, display: 'block', textAlign: 'center'}}>🫧</span>,
+      value: `${oxygenLevels}%`,
       label: "Oxygen Levels",
       desc: "Increase in blood oxygen",
     },
@@ -844,7 +843,7 @@ const EliteHealthMetric = () => {
           <div className="metrics-grid">
             {metrics.map((m, i) => (
               <div className="dashboard-card" key={i}>
-                <div className="dashboard-card-icon">{m.icon}</div>
+                <div className="dashboard-card-icon" style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%'}}>{m.icon}</div>
                 <div className="dashboard-card-value">{m.value}</div>
                 <div className="dashboard-card-label">{m.label}</div>
                 <div className="dashboard-card-desc">{m.desc}</div>

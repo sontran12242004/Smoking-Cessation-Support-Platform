@@ -681,7 +681,7 @@ function DailyCheckIn() {
             </div>
           </div>
 
-          <button className="save-responses-button" onClick={() => navigate('/elite/home')}>Save Responses</button>
+          <button className="save-responses-button" onClick={() => navigate('/elite/dashboard')}>Save Responses</button>
         </div>
       </main>
 
