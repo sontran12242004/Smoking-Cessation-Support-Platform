@@ -1,14 +1,15 @@
 package com.smokingcessation.service;
 
-import com.smokingcessation.dto.MemberProfileDTO;
-import com.smokingcessation.dto.MemberSubscriptionDTO;
+import com.smokingcessation.dto.MembersDTO;
 import com.smokingcessation.entity.Members;
+import com.smokingcessation.entity.Subscription;
 import com.smokingcessation.repository.MembersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MembersService {
@@ -37,27 +38,95 @@ public class MembersService {
         return membersRepository.save(member);
     }
 
-    public Members updateMember(Long memberId, Members member) {
-        Members existingMember = getMemberById(memberId);
-        existingMember.setName(member.getName());
-        existingMember.setEmail(member.getEmail());
-        existingMember.setPhone(member.getPhone());
-        existingMember.setDailyCost(member.getDailyCost());
-        existingMember.setQuitDate(member.getQuitDate());
-        existingMember.setAddress(member.getAddress());
-        existingMember.setDateOfBirth(member.getDateOfBirth());
-        existingMember.setGender(member.getGender());
-        return membersRepository.save(existingMember);
+    // Method cho trang quản lý members của admin - sử dụng MembersDTO
+    public List<MembersDTO> getAdminMemberList() {
+        List<Members> members = getAllMembers();
+        return members.stream()
+                .map(this::convertToAdminMemberListDTO)
+                .collect(Collectors.toList());
     }
 
-    public MemberProfileDTO getMemberProfile(Long memberId) {
+
+    // Method để cập nhật profile của member
+    public MembersDTO updateMemberProfile(Long memberId, MembersDTO profileDTO) {
         Members member = getMemberById(memberId);
-        MemberSubscriptionDTO subscriptionInfo = subscriptionService.getMemberSubscriptionInfo(memberId);
+        // Cập nhật thông tin từ DTO
+        member.setName(profileDTO.getFirstname() + " " + profileDTO.getLastname());
+        member.setEmail(profileDTO.getEmail());
+        member.setPrimaryMotivation(profileDTO.getPrimaryMotivation());
+        // Cập nhật dailyCost dựa trên formerDailyUsage
+        if (profileDTO.getFormerDailyUsage() != null) {
+            member.setDailyCost(profileDTO.getFormerDailyUsage() * 1000); // Giả sử 1 điếu = 1000 VND
+        }
+        Members updatedMember = membersRepository.save(member);
+        return convertToMemberEditProfileDTO(updatedMember);
+    }
 
-        MemberProfileDTO profile = new MemberProfileDTO();
-        profile.setMember(member);
-        profile.setSubscriptionInfo(subscriptionInfo);
 
-        return profile;
+    // Method cho admin quản lý member cụ thể - cập nhật thông tin
+    public MembersDTO updateAdminMemberManage(Long memberId, MembersDTO adminDTO) {
+        Members member = getMemberById(memberId);
+        
+        // Admin có thể cập nhật các trường cơ bản
+        if (adminDTO.getUsername() != null) {
+            member.setName(adminDTO.getUsername());
+        }
+        if (adminDTO.getEmail() != null) {
+            member.setEmail(adminDTO.getEmail());
+        }
+        
+        // Admin có thể thay đổi trạng thái active/inactive
+        if (adminDTO.getStatus() != null) {
+            member.setActive("Active".equalsIgnoreCase(adminDTO.getStatus()));
+        }
+        
+        // Admin có thể cập nhật createdAt nếu cần
+        if (adminDTO.getCreatedAt() != null) {
+            member.setCreatedAt(adminDTO.getCreatedAt());
+        }
+
+         if (adminDTO.getPackageType() != null) {
+         }
+        
+        Members updatedMember = membersRepository.save(member);
+        return convertToAdminMemberListDTO(updatedMember);
+    }
+    
+    // Helper method để convert Members sang MembersDTO cho admin list
+    private MembersDTO convertToAdminMemberListDTO(Members member) {
+        MembersDTO dto = new MembersDTO();
+        dto.setId(member.getMemberID().toString());
+        dto.setUsername(member.getName());
+        dto.setEmail(member.getEmail());
+        dto.setCreatedAt(member.getCreatedAt());
+        dto.setStatus(member.isActive() ? "Active" : "Inactive");
+        
+        Subscription activeSubscription = subscriptionService.getActiveSubscriptionForMember(member.getMemberID());
+        if (activeSubscription != null && activeSubscription.getMembershipPlan() != null) {
+            dto.setPackageType(activeSubscription.getMembershipPlan().getName());
+        } else {
+            dto.setPackageType(null);
+        }
+        return dto;
+    }
+    
+    // Helper method để convert Members sang MembersDTO cho edit profile
+    private MembersDTO convertToMemberEditProfileDTO(Members member) {
+        MembersDTO dto = new MembersDTO();
+        dto.setMemberID(member.getMemberID());
+        dto.setName(member.getName());
+        dto.setEmail(member.getEmail());
+        dto.setCreatedAt(member.getCreatedAt());
+        
+        // Tách tên thành firstname và lastname
+        String[] nameParts = member.getName() != null ? member.getName().split(" ", 2) : new String[]{"", ""};
+        dto.setFirstname(nameParts.length > 0 ? nameParts[0] : "");
+        dto.setLastname(nameParts.length > 1 ? nameParts[1] : "");
+        
+        // Chỉ giữ lại các trường mà updateMemberProfile thực sự cập nhật
+        dto.setPrimaryMotivation(member.getPrimaryMotivation());
+        dto.setFormerDailyUsage(member.getDailyCost() > 0 ? member.getDailyCost() / 1000 : 10);
+        
+        return dto;
     }
 }

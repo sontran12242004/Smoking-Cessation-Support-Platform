@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @SecurityRequirement(name = "api")
@@ -43,9 +44,9 @@ public class CoachController {
     // ADMIN - Chỉ admin mới có thể tạo coach mới
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public Coach createCoach(@RequestBody CoachDTO coachDTO) {
-        Coach coach = modelMapper.map(coachDTO, Coach.class);
-        return coachService.createCoach(coach);
+    public ResponseEntity<Coach> createCoach(@RequestBody CoachDTO coachDTO) {
+        Coach coach = coachService.createCoach(coachDTO);
+        return ResponseEntity.ok(coach);
     }
 
     // AUTHENTICATED - Coach (chỉ sửa profile của mình), Admin (sửa tất cả)
@@ -78,4 +79,31 @@ public class CoachController {
         Coach coach = coachService.assignCoach(assignRequest);
          return ResponseEntity.ok(coach);
     }
+
+    // ADMIN - Dashboard: summary + coach cards
+    @GetMapping("/dashboard")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Map<String, Object>> getCoachDashboardData() {
+        Map<String, Object> dashboardData = coachService.getCoachDashboardData();
+        return ResponseEntity.ok(dashboardData);
+    }
+    // ADMIN - Chỉ admin mới có thể sửa coach
+    @PutMapping("/admin/{id}/edit")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Coach> adminEditCoach(@PathVariable Long id, @RequestBody CoachDTO coachDTO) {
+        Coach updated = coachService.adminEditCoach(id, coachDTO);
+        if (updated != null) {
+            return ResponseEntity.ok(updated);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/{id}/profile")
+    @PreAuthorize("hasAnyRole('COACH')")
+    public ResponseEntity<CoachDTO> getCoachProfile(@PathVariable Long id) {
+        CoachDTO profile = coachService.getCoachProfile(id);
+        return ResponseEntity.ok(profile);
+    }
+
 }

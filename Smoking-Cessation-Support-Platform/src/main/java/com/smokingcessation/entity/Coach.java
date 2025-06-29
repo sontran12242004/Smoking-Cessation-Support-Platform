@@ -3,6 +3,7 @@ package com.smokingcessation.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.smokingcessation.enums.Role;
+import lombok.Data;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,32 +13,32 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Data
 @Table(name = "coach")
 public class Coach {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Chỉ giữ lại name, các field khác lấy từ Account
     private String name;
-    private String email;
-    private String phone;
-    private String password;
 
     @ManyToOne
     @JoinColumn(name = "admin_id")
     @JsonIgnore
     private Admin admin;
 
-    // Relationship với Account entity
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "account_id")
+    // Relationship với Account entity - sử dụng mappedBy để tránh circular cascade
+    @OneToOne(mappedBy = "coach")
     @JsonIgnore
     private Account account;
 
     private String specialization;
-    
     private String experience;
-    
+    private String title;
+    private String bio;
+    private String certifications;
+    private Double hourlyRate;
     private boolean isActive = true;
     
     private LocalDateTime createdAt;
@@ -49,19 +50,5 @@ public class Coach {
     // Helper method để kiểm tra coach có active không
     public boolean isCoachActive() {
         return this.isActive && this.account != null;
-    }
-
-    // Helper method để get account cho slot registration
-    public Account getAccount() {
-        if (this.account == null) {
-            // Tạo account nếu chưa có
-            this.account = new Account();
-            this.account.setEmail(this.email);
-            this.account.setPhone(this.phone);
-            this.account.setPassword(this.password);
-            this.account.setFullName(this.name);
-            this.account.setRole(Role.COACH);
-        }
-        return this.account;
     }
 }

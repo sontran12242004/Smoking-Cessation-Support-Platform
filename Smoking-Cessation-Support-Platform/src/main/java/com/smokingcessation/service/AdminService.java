@@ -34,9 +34,6 @@ public class AdminService {
 
     public Admin updateAdmin(Long id, Admin updatedAdmin) {
         return adminRepository.findById(id).map(admin -> {
-            admin.setEmail(updatedAdmin.getEmail());
-            admin.setPhone(updatedAdmin.getPhone());
-            admin.setPassword(updatedAdmin.getPassword());
             admin.setFullName(updatedAdmin.getFullName());
             return adminRepository.save(admin);
         }).orElse(null);

@@ -49,7 +49,8 @@ public class Filter extends OncePerRequestFilter {
             // Public data
             "/api/membership-plans",
             "/api/health-metrics",
-            "/api/medicineService"
+            "/api/medicineService",
+            "/api/{memberId}/edit-profile"
     );
 
     private boolean isPublicEndpoint(String uri) {

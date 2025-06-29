@@ -39,6 +39,8 @@ public class Members {
     
     private boolean isActive = true;
     
+    private String primaryMotivation;
+    
     @OneToMany(mappedBy = "member")
     @JsonIgnore
     private List<Subscription> subscriptions;
@@ -50,4 +52,14 @@ public class Members {
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     private List<CigaretteLog> cigaretteLogs;
+    
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private QuitPlans quitPlan;
+    
+    // Relationship với Account entity
+    @OneToOne
+    @JoinColumn(name = "account_id")
+    @JsonIgnore
+    private Account account;
 }

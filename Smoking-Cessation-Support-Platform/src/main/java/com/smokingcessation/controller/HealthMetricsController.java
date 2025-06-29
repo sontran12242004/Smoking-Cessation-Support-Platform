@@ -19,15 +19,13 @@ public class HealthMetricsController {
     @Autowired
     private HealthMetricsService healthMetricsService;
 
-    // PUBLIC - Guest, Members, Coach, Admin đều có thể xem health metrics
+    // AUTHENTICATED - Members (xem metrics của mình), Coach (xem assigned members), Admin (xem tất cả)
     @GetMapping("/{userId}")
+    @PreAuthorize("hasAnyRole('MEMBERS', 'COACH', 'ADMIN')")
     public ResponseEntity<HealthMetricsDTO> getHealthMetrics(@PathVariable Long userId) {
         Members user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
 
-        if (user.getQuitDate() == null) {
-            throw new RuntimeException("Người dùng chưa thiết lập ngày bắt đầu cai thuốc");
-        }
         if (user.getDailyCost() <= 0) {
             throw new RuntimeException("Người dùng chưa thiết lập số tiền hút thuốc mỗi ngày");
         }

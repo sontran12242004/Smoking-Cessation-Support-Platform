@@ -4,10 +4,16 @@ package com.smokingcessation.service;
 import com.smokingcessation.dto.*;
 import com.smokingcessation.entity.Account;
 import com.smokingcessation.entity.ForgotPassword;
+import com.smokingcessation.entity.Members;
+import com.smokingcessation.entity.Admin;
+import com.smokingcessation.entity.Coach;
 import com.smokingcessation.enums.Role;
 import com.smokingcessation.exception.exceptions.AuthenticationException;
 import com.smokingcessation.repository.AccountSlotRepository;
 import com.smokingcessation.repository.AuthenticationRepository;
+import com.smokingcessation.repository.MembersRepository;
+import com.smokingcessation.repository.AdminRepository;
+import com.smokingcessation.repository.CoachRepository;
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +25,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -28,6 +36,9 @@ public class AuthenticationService implements UserDetailsService {
 
     @Autowired
     AuthenticationRepository authenticationRepository;
+
+    @Autowired
+    MembersRepository membersRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -44,9 +55,53 @@ public class AuthenticationService implements UserDetailsService {
     @Autowired
     EmailService emailService;
 
+    @Autowired
+    AdminRepository adminRepository;
+
+    @Autowired
+    CoachRepository coachRepository;
+
+    @Transactional
     public Account register(Account account) {
         account.password = passwordEncoder.encode(account.getPassword());
         Account newAccount = authenticationRepository.save(account);
+
+        // Nếu role là MEMBERS thì tự động tạo Members entity và liên kết
+        if (account.getRole() == Role.MEMBERS) {
+            Members member = new Members();
+            member.setName(account.getFullName());
+            member.setEmail(account.getEmail());
+            member.setPhone(account.getPhone());
+            member.setPassword(account.getPassword());
+            member.setRole(Role.MEMBERS);
+            member.setCreatedAt(LocalDateTime.now());
+            member.setActive(true);
+            member.setAccount(newAccount);  // Liên kết với Account
+            
+            membersRepository.save(member);
+        }
+        
+        // Nếu role là ADMIN thì tự động tạo Admin entity và liên kết
+        if (account.getRole() == Role.ADMIN) {
+            Admin admin = new Admin();
+            admin.setFullName(account.getFullName());
+            
+            Admin savedAdmin = adminRepository.save(admin);
+            newAccount.setAdmin(savedAdmin);  // Liên kết với Account
+            authenticationRepository.save(newAccount);  // Cập nhật Account
+        }
+        
+        // Nếu role là COACH thì tự động tạo Coach entity và liên kết
+        if (account.getRole() == Role.COACH) {
+            Coach coach = new Coach();
+            coach.setName(account.getFullName());
+            coach.setActive(true);
+            coach.setCreatedAt(LocalDateTime.now());
+            
+            Coach savedCoach = coachRepository.save(coach);
+            newAccount.setCoach(savedCoach);  // Liên kết với Account
+            authenticationRepository.save(newAccount);  // Cập nhật Account
+        }
 
         EmailDetail emailDetail = new EmailDetail();
         emailDetail.setRecipient(account.email);
@@ -111,5 +166,37 @@ public class AuthenticationService implements UserDetailsService {
 
     public List<Account> getCoachs() {
         return authenticationRepository.findByRole(Role.COACH);
+    }
+    
+    // Method để lấy Members entity từ Account email
+    public Members getMemberByAccountEmail(String email) {
+        return membersRepository.findByEmail(email).orElse(null);
+    }
+    
+    // Method để lấy Members entity từ current Account
+    public Members getCurrentMember() {
+        Account currentAccount = getCurrentAccount();
+        if (currentAccount != null && currentAccount.getRole() == Role.MEMBERS) {
+            return currentAccount.getMember();  // Sử dụng relationship thay vì tìm theo email
+        }
+        return null;
+    }
+    
+    // Method để lấy Admin entity từ current Account
+    public Admin getCurrentAdmin() {
+        Account currentAccount = getCurrentAccount();
+        if (currentAccount != null && currentAccount.getRole() == Role.ADMIN) {
+            return currentAccount.getAdmin();  // Sử dụng relationship thay vì tìm theo email
+        }
+        return null;
+    }
+    
+    // Method để lấy Coach entity từ current Account
+    public Coach getCurrentCoach() {
+        Account currentAccount = getCurrentAccount();
+        if (currentAccount != null && currentAccount.getRole() == Role.COACH) {
+            return currentAccount.getCoach();  // Sử dụng relationship thay vì tìm theo account
+        }
+        return null;
     }
 }

@@ -27,7 +27,7 @@ public class MembershipPlan {
     @Column(length = 500)
     private String description;
     
-    private boolean isActive = true;
+    private boolean isActive;
     
     private LocalDateTime createdAt;
 

@@ -1,7 +1,21 @@
 package com.smokingcessation.repository;
 
 import com.smokingcessation.entity.Appointment;
+import com.smokingcessation.entity.Coach;
+import org.modelmapper.internal.util.Members;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 public interface    AppointmentRepository extends JpaRepository<Appointment, Long> {
+    @Query("SELECT COUNT(DISTINCT a.member.memberID) FROM Appointment a WHERE a.coach.id = :coachId")
+    int countDistinctMemberByCoachId(@Param("coachId") Long coachId);
+
+    @Query("SELECT a FROM Appointment a WHERE a.coach.id = :coachId AND a.createAt >= CURRENT_TIMESTAMP ORDER BY a.createAt ASC")
+    List<Appointment> findUpcomingByCoachId(@Param("coachId") Long coachId);
+
+
+
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smokingcessation.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -27,9 +28,19 @@ public class Account implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long id;
 
+    @NotBlank(message = "Email is required")
+    @Email(message = "Email should be valid")
     public String email;
+    
+    @Pattern(regexp = "^[0-9]{10,11}$", message = "Phone number should be 10-11 digits")
     public String phone;
+    
+    @NotBlank(message = "Password is required")
+    @Size(min = 6, message = "Password must be at least 6 characters")
     public String password;
+    
+    @NotBlank(message = "Full name is required")
+    @Size(min = 2, max = 100, message = "Full name must be between 2 and 100 characters")
     public String fullName;
 
     @Enumerated(EnumType.STRING)
@@ -93,29 +104,29 @@ public class Account implements UserDetails {
     @JsonIgnore
     List<Appointment> appointments;
 
+    // Relationship với Members entity
+    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Members member;
+    
+    // Relationship với Admin entity
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "admin_id")
+    @JsonIgnore
+    private Admin admin;
+    
+    // Relationship với Coach entity
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "coach_id")
+    @JsonIgnore
+    private Coach coach;
+
+
 //    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
 //    List<Rating> ratings;
 //
 //    @OneToMany(mappedBy = "account")
 //    List<Report> reports;
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }

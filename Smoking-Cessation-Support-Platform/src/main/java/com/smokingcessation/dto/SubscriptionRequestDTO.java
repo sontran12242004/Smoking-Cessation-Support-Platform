@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotNull;
 public class SubscriptionRequestDTO {
     @NotNull(message = "Plan ID is required")
     private Integer planId;
-
     private String paymentMethod;
     private String notes;
 }

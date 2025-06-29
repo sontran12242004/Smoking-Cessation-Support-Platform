@@ -1,24 +1,16 @@
 package com.smokingcessation.dto;
-import com.smokingcessation.entity.Members;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "health_metrics")
 public class HealthMetricsDTO {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private Members user;
-
+    private Long userId;
     private int daysSmokeFree;
     private int moneySaved;
     private double healthImprovedPercent;
@@ -31,5 +23,5 @@ public class HealthMetricsDTO {
     private double tasteAndSmell;
     private double coLevels;
     private double oxygenLevels;
-    private java.time.LocalDateTime createdAt = java.time.LocalDateTime.now();
+    private LocalDateTime createdAt;
 }

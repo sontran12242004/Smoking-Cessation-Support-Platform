@@ -4,13 +4,15 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import com.smokingcessation.dto.HealthMetricsDTO;
+import com.smokingcessation.entity.HealthMetrics;
 import com.smokingcessation.entity.Members;
 import com.smokingcessation.repository.HealthMetricsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDateTime;
 import java.util.Optional;
-import com.smokingcessation.entity.CigaretteLog;
+
 import com.smokingcessation.repository.CigaretteLogRepository;
+import com.smokingcessation.repository.DailyProcessRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -21,14 +23,16 @@ public class HealthMetricsService {
 
     @Autowired
     private CigaretteLogRepository cigaretteLogRepository;
+    
+    @Autowired
+    private DailyProcessRepository dailyProcessRepository;
 
     /**
-     * Tính số ngày không hút thuốc kể từ quitDate đến hiện tại
+     * Tính số ngày không hút thuốc dựa trên số lượng DailyProcess records
+     * Mỗi DailyProcess record đại diện cho 1 ngày smoke-free
      */
     public int getDaysSmokeFree(Members user) {
-        LocalDate quitDate = user.getQuitDate();
-        if (quitDate == null) return 0;
-        return (int) ChronoUnit.DAYS.between(quitDate, LocalDate.now());
+        return (int) dailyProcessRepository.countByMember_MemberID(user.getMemberID());
     }
 
     /**
@@ -36,9 +40,6 @@ public class HealthMetricsService {
      * Cộng dồn liên tục dựa trên dailyCost và số ngày
      */
     public int getMoneySaved(Members user) {
-        LocalDate quitDate = user.getQuitDate();
-        if (quitDate == null) return 0;
-        
         int days = getDaysSmokeFree(user);
         return days * user.getDailyCost();
     }
@@ -58,9 +59,6 @@ public class HealthMetricsService {
      * Kiểm tra dữ liệu đầu vào của user
      */
     private void validateUserData(Members user) {
-        if (user.getQuitDate() == null) {
-            throw new IllegalArgumentException("Người dùng chưa bắt đầu theo dõi sức khỏe");
-        }
         if (user.getDailyCost() < 0) {
             throw new IllegalArgumentException("Số tiền hút thuốc mỗi ngày không hợp lệ");
         }
@@ -189,12 +187,12 @@ public class HealthMetricsService {
     public HealthMetricsDTO getOrCreateTodayMetrics(Members user) {
         validateUserData(user);
         LocalDate today = LocalDate.now();
-        Optional<HealthMetricsDTO> existing = healthMetricsRepository.findByUserAndDate(user, today);
+        Optional<HealthMetrics> existing = healthMetricsRepository.findByUserAndDate(user, today);
         if (existing.isPresent()) {
-            return existing.get();
+            return convertToDTO(existing.get());
         }
         try {
-            HealthMetricsDTO metrics = new HealthMetricsDTO(
+            HealthMetrics metrics = new HealthMetrics(
                     null,
                     user,
                     getDaysSmokeFree(user),
@@ -211,9 +209,33 @@ public class HealthMetricsService {
                     getOxygenLvls(user),
                     LocalDateTime.now()
             );
-            return healthMetricsRepository.save(metrics);
+            HealthMetrics savedMetrics = healthMetricsRepository.save(metrics);
+            return convertToDTO(savedMetrics);
         } catch (Exception e) {
             throw new RuntimeException("Lưu chỉ số sức khỏe thất bại: " + e.getMessage());
         }
+    }
+
+    /**
+     * Convert Entity to DTO
+     */
+    private HealthMetricsDTO convertToDTO(HealthMetrics metrics) {
+        HealthMetricsDTO dto = new HealthMetricsDTO();
+        dto.setId(metrics.getId());
+        dto.setUserId(metrics.getUser().getMemberID());
+        dto.setDaysSmokeFree(metrics.getDaysSmokeFree());
+        dto.setMoneySaved(metrics.getMoneySaved());
+        dto.setHealthImprovedPercent(metrics.getHealthImprovedPercent());
+        dto.setHeartAttackRisk(metrics.getHeartAttackRisk());
+        dto.setLungCancerRisk(metrics.getLungCancerRisk());
+        dto.setHeartDiseaseRisk(metrics.getHeartDiseaseRisk());
+        dto.setImmuneFunction(metrics.getImmuneFunction());
+        dto.setTeethWhitening(metrics.getTeethWhitening());
+        dto.setBreathFreshness(metrics.getBreathFreshness());
+        dto.setTasteAndSmell(metrics.getTasteAndSmell());
+        dto.setCoLevels(metrics.getCoLevels());
+        dto.setOxygenLevels(metrics.getOxygenLevels());
+        dto.setCreatedAt(metrics.getCreatedAt());
+        return dto;
     }
 }

@@ -16,12 +16,15 @@ public class Admin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long id;
 
-    public String email;
-    public String phone;
-    public String password;
+    // Chỉ giữ lại fullName, các field khác lấy từ Account
     public String fullName;
 
     @OneToMany(mappedBy = "admin")
     @JsonIgnore
     List<Coach> coach;
+
+    // Relationship với Account entity - sử dụng mappedBy để tránh circular cascade
+    @OneToOne(mappedBy = "admin")
+    @JsonIgnore
+    private Account account;
 }

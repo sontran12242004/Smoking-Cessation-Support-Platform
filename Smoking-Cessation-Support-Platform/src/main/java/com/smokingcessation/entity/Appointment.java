@@ -20,6 +20,10 @@ public class Appointment {
 
     LocalDate createAt;
 
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Members member;
+
     @Enumerated(EnumType.STRING)
     AppointmentEnum status;
 
@@ -38,6 +42,8 @@ public class Appointment {
             inverseJoinColumns =@JoinColumn(name = "service_id")
     )
     List<MedicineService> medicineServices;
+
+    private String sessionType;
 
 
     @OneToMany(mappedBy = "appointment")

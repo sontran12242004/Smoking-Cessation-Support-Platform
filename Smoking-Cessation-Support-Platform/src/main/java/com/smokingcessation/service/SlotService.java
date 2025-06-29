@@ -2,6 +2,7 @@ package com.smokingcessation.service;
 import com.smokingcessation.dto.RegisterSlotDTO;
 import com.smokingcessation.entity.Account;
 import com.smokingcessation.entity.AccountSlot;
+import com.smokingcessation.entity.Coach;
 import com.smokingcessation.entity.Slot;
 import com.smokingcessation.exception.exceptions.BadRequestException;
 import com.smokingcessation.repository.AccountSlotRepository;
@@ -15,8 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class SlotService
-{
+public class SlotService {
     @Autowired
     SlotRepository slotRepository;
     @Autowired
@@ -25,24 +25,21 @@ public class SlotService
     AccountSlotRepository accountSlotRepository;
 
 
-    public List<Slot> get()
-    {
+    public List<Slot> get() {
         return slotRepository.findAll();
     }
-    public List<AccountSlot> registerSlot(RegisterSlotDTO registerSlotDTO)
-    {
-        Account  account = authenticationRepository.findById(registerSlotDTO.getAccountId()).get();
-        List<AccountSlot>  accountSlots = new ArrayList<>();
-        List<AccountSlot> oldAccountSlot= accountSlotRepository.findAccountSlotsByAccountAndDate(account,registerSlotDTO.getDate());
 
-        if(!oldAccountSlot.isEmpty())
-        {
+    public List<AccountSlot> registerSlot(RegisterSlotDTO registerSlotDTO) {
+        Account account = authenticationRepository.findById(registerSlotDTO.getAccountId()).get();
+        List<AccountSlot> accountSlots = new ArrayList<>();
+        List<AccountSlot> oldAccountSlot = accountSlotRepository.findAccountSlotsByAccountAndDate(account, registerSlotDTO.getDate());
+
+        if (!oldAccountSlot.isEmpty()) {
             //=> da co lich roi
             throw new BadRequestException("........");
         }
 
-        for(Slot slot : slotRepository.findAll())
-        {
+        for (Slot slot : slotRepository.findAll()) {
             AccountSlot accountSlot = new AccountSlot();
             accountSlot.setSlot(slot);
             accountSlot.setAccount(account);
@@ -50,9 +47,8 @@ public class SlotService
             accountSlots.add(accountSlot);
         }
 
-        return  accountSlotRepository.saveAll(accountSlots);
+        return accountSlotRepository.saveAll(accountSlots);
     }
-
 
 
     public void generateSlots() {
@@ -75,11 +71,11 @@ public class SlotService
     }
 
 
-    public List<AccountSlot> getRegisteredSlots(Long doctorId, LocalDate date) {
-        Account doctor = authenticationRepository.findById(doctorId)
+    public List<AccountSlot> getRegisteredSlots(Long coachId, LocalDate date) {
+        Account coach = authenticationRepository.findById(coachId)
                 .orElseThrow(() -> new BadRequestException("Coach not found"));
 
-        List<AccountSlot> accountSlots = accountSlotRepository.findAccountSlotsByAccountAndDate(doctor,date);
+        List<AccountSlot> accountSlots = accountSlotRepository.findAccountSlotsByAccountAndDate(coach,date);
         List<AccountSlot> slotsAvailable = new ArrayList<>();
         for(AccountSlot accountSlot : accountSlots){
             if(accountSlot.isAvailable()){
@@ -90,4 +86,5 @@ public class SlotService
         return  slotsAvailable;
     }
 }
+
 

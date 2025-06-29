@@ -11,10 +11,8 @@ import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -24,7 +22,6 @@ public class AuthenticationController {
     AuthenticationService authenticationService;
 
     // PUBLIC - Guest, Members, Coach, Admin đều có thể đăng ký
-    @CrossOrigin()
     @PostMapping("/api/register")
     public ResponseEntity register(@RequestBody Account account){
         Account newAccount = authenticationService.register(account);
@@ -33,7 +30,6 @@ public class AuthenticationController {
 
     // PUBLIC - Guest, Members, Coach, Admin đều có thể đăng nhập
     @PostMapping("/api/login")
-    @CrossOrigin(origins = "http://localhost:3005")
     public ResponseEntity login(@RequestBody LoginDTO loginDTO){
         AccountDTO account = authenticationService.login(loginDTO);
         return ResponseEntity.ok(account);

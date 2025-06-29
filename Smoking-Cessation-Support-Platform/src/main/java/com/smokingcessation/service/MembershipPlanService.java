@@ -80,9 +80,6 @@ public class MembershipPlanService {
         return membershipPlanRepository.save(plan);
     }
 
-    public void deletePlan(Integer id) {
-        membershipPlanRepository.deleteById(id);
-    }
 
     // NEW METHOD
     public List<MembershipPlan> getAvailablePlansForMember(Long memberId) {
@@ -105,5 +102,44 @@ public class MembershipPlanService {
 
         // If no active subscription, show all plans
         return allPlans;
+    }
+
+    // Method 1: Lấy tất cả các gói (cho admin)
+    public List<MembershipPlan> getAllPlansForAdmin() {
+        return membershipPlanRepository.findAll();
+    }
+
+    // Method 2: Edit gói
+    public MembershipPlan editPlan(Integer planId, MembershipPlan updatedPlan) {
+        MembershipPlan existingPlan = membershipPlanRepository.findById(planId)
+                .orElseThrow(() -> new RuntimeException("Plan not found with ID: " + planId));
+        
+        // Cập nhật thông tin gói
+        existingPlan.setName(updatedPlan.getName());
+        existingPlan.setDuration(updatedPlan.getDuration());
+        existingPlan.setPrice(updatedPlan.getPrice());
+        existingPlan.setDescription(updatedPlan.getDescription());
+        existingPlan.setActive(updatedPlan.isActive());
+        
+        return membershipPlanRepository.save(existingPlan);
+    }
+
+    // Method 3: Xóa gói
+    public boolean deletePlanById(Integer planId) {
+        MembershipPlan plan = membershipPlanRepository.findById(planId)
+                .orElseThrow(() -> new RuntimeException("Plan not found with ID: " + planId));
+        
+        // Kiểm tra xem có subscription nào đang sử dụng gói này không
+        List<Subscription> activeSubscriptions = subscriptionRepository.findByMembershipPlan_PlanID(planId);
+        boolean hasActiveSubscriptions = activeSubscriptions.stream()
+                .anyMatch(Subscription::isActive);
+        
+        if (hasActiveSubscriptions) {
+            throw new RuntimeException("Cannot delete plan. There are active subscriptions using this plan.");
+        }
+        
+        // Nếu không có subscription active, có thể xóa
+        membershipPlanRepository.delete(plan);
+        return true;
     }
 }

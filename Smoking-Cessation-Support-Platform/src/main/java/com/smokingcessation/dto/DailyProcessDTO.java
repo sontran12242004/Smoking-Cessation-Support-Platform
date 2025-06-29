@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -12,7 +12,7 @@ import java.time.LocalDate;
 public class DailyProcessDTO {
     private Long processId;
     private Long memberId;
-    private LocalDate date;
+    private LocalDateTime date;
     private int cigarettesNotSmoked;
     private int cigarettesSmokedToday;
     private double moneySaved;

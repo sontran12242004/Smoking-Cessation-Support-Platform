@@ -8,10 +8,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @SecurityRequirement(name = "api")
@@ -26,6 +25,13 @@ public class RatingController {
     public ResponseEntity createRating(@RequestBody RatingDTO ratingRequest) {
         Rating newRating = ratingService.create(ratingRequest);
         return ResponseEntity.ok(newRating);
+    }
+
+    @GetMapping("/admin/all")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<RatingDTO>> getAllRatingsForAdmin() {
+        List<RatingDTO> ratings = ratingService.getAllRatings();
+        return ResponseEntity.ok(ratings);
     }
 
 }

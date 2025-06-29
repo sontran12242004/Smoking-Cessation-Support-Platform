@@ -17,16 +17,21 @@ public class Rating {
 
     int rating;
 
-    String comment;
+    @Column(name = "feedback")
+    private String feedback;
 
     LocalDateTime createdAt;
 
-
+    @ManyToOne
+    @JoinColumn(name = "coach_id")
+    private Coach coach;
     @ManyToOne
     @JoinColumn(name = "account_id")
     @JsonIgnore
     Account account;
-
+    @ManyToOne
+    @JoinColumn(name = "member_id") // hoặc "account_id" tùy thiết kế
+    private Members member;
     @ManyToOne
     @JoinColumn(name = "medicine_service_id")
     @JsonIgnore

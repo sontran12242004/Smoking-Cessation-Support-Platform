@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/members")
+@SecurityRequirement(name = "api")
 public class MembersController {
 
     @Autowired
@@ -27,16 +28,23 @@ public class MembersController {
 
     @Autowired
     private MembershipPlanService membershipPlanService;
+    
+    @Autowired
+    private AuthenticationService authenticationService;
+
+    @Autowired
+    private DailyProcessService dailyProcessService;
 
     // ADMIN - Chỉ admin mới có thể xem tất cả members
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
+
     public ResponseEntity<List<Members>> getAllMembers() {
         List<Members> members = membersService.getAllMembers();
         return ResponseEntity.ok(members);
     }
 
-    // AUTHENTICATED - Chỉ admin mới có thể tạo member mới
+    // ADMIN - Chỉ admin mới có thể tạo member mới
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Members> createMember(@Valid @RequestBody Members member) {
@@ -44,33 +52,19 @@ public class MembersController {
         return ResponseEntity.ok(newMember);
     }
 
-    // AUTHENTICATED - Members (chỉ xem profile của mình), Coach (xem assigned members), Admin (xem tất cả)
+    // MEMBERS - Member chỉ xem profile của mình, Coach xem assigned members, Admin xem tất cả
     @GetMapping("/{memberId}")
-    @PreAuthorize("hasAnyRole('MEMBERS', 'COACH', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('MEMBERS')")
     public ResponseEntity<Members> getMemberById(@PathVariable Long memberId) {
         Members member = membersService.getMemberById(memberId);
         return ResponseEntity.ok(member);
     }
 
-    // AUTHENTICATED - Members (chỉ sửa profile của mình), Admin (sửa tất cả)
-    @PutMapping("/{memberId}")
-    @PreAuthorize("hasAnyRole('MEMBERS', 'ADMIN')")
-    public ResponseEntity<Members> updateMember(@PathVariable Long memberId, @RequestBody Members member) {
-        Members updatedMember = membersService.updateMember(memberId, member);
-        return ResponseEntity.ok(updatedMember);
-    }
-
-    // AUTHENTICATED - Members (chỉ xem profile của mình), Coach (xem assigned members), Admin (xem tất cả)
-    @GetMapping("/{memberId}/profile")
-    @PreAuthorize("hasAnyRole('MEMBERS', 'COACH', 'ADMIN')")
-    public ResponseEntity<MemberProfileDTO> getMemberProfile(@PathVariable Long memberId) {
-        MemberProfileDTO profile = membersService.getMemberProfile(memberId);
-        return ResponseEntity.ok(profile);
-    }
+    // MEMBERS - Member chỉ xem profile của mình, Coach xem assigned members, Admin xem tất cả
 
     // AUTHENTICATED - Members (chỉ xem subscription của mình), Coach (xem assigned members), Admin (xem tất cả)
     @GetMapping("/{memberId}/subscription")
-    @PreAuthorize("hasAnyRole('MEMBERS', 'COACH', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('MEMBERS')")
     public ResponseEntity<MemberSubscriptionDTO> getCurrentSubscription(@PathVariable Long memberId) {
         MemberSubscriptionDTO subscriptionInfo = subscriptionService.getMemberSubscriptionInfo(memberId);
         return ResponseEntity.ok(subscriptionInfo);
@@ -78,7 +72,7 @@ public class MembersController {
 
     // AUTHENTICATED - Members (chỉ xem history của mình), Coach (xem assigned members), Admin (xem tất cả)
     @GetMapping("/{memberId}/subscription/history")
-    @PreAuthorize("hasAnyRole('MEMBERS', 'COACH', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('MEMBERS')")
     public ResponseEntity<List<SubscriptionDTO>> getSubscriptionHistory(@PathVariable Long memberId) {
         List<Subscription> history = subscriptionService.getSubscriptionHistory(memberId);
         List<SubscriptionDTO> responseDTOs = history.stream()
@@ -89,7 +83,7 @@ public class MembersController {
 
     // AUTHENTICATED - Members (chỉ subscribe cho mình), Admin (subscribe cho bất kỳ ai)
     @PostMapping("/{memberId}/subscribe")
-    @PreAuthorize("hasAnyRole('MEMBERS', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('MEMBERS')")
     @SecurityRequirement(name = "api")
     public ResponseEntity<SubscriptionDTO> subscribeToPlan(
             @PathVariable Long memberId,
@@ -101,7 +95,7 @@ public class MembersController {
 
     // AUTHENTICATED - Members (chỉ renew cho mình), Admin (renew cho bất kỳ ai)
     @PutMapping("/{memberId}/subscription/renew")
-    @PreAuthorize("hasAnyRole('MEMBERS', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('MEMBERS')")
     public ResponseEntity<SubscriptionDTO> renewSubscription(
             @PathVariable Long memberId,
             @Valid @RequestBody SubscriptionRenewalDTO request) {
@@ -112,7 +106,7 @@ public class MembersController {
 
     // AUTHENTICATED - Members (chỉ cancel cho mình), Admin (cancel cho bất kỳ ai)
     @DeleteMapping("/{memberId}/subscription/cancel")
-    @PreAuthorize("hasAnyRole('MEMBERS', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('MEMBERS')")
     public ResponseEntity<Void> cancelSubscription(@PathVariable Long memberId) {
         subscriptionService.cancelSubscription(memberId);
         return ResponseEntity.noContent().build();
@@ -128,7 +122,7 @@ public class MembersController {
 
     // AUTHENTICATED - Members (chỉ check cho mình), Admin (check cho bất kỳ ai)
     @GetMapping("/{memberId}/subscription/can-renew")
-    @PreAuthorize("hasAnyRole('MEMBERS', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('MEMBERS')")
     public ResponseEntity<Boolean> canRenewSubscription(@PathVariable Long memberId) {
         boolean canRenew = subscriptionService.canRenewSubscription(memberId);
         return ResponseEntity.ok(canRenew);
@@ -136,7 +130,7 @@ public class MembersController {
 
     // AUTHENTICATED - Members (chỉ check cho mình), Admin (check cho bất kỳ ai)
     @GetMapping("/{memberId}/subscription/can-cancel")
-    @PreAuthorize("hasAnyRole('MEMBERS', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('MEMBERS')")
     @SecurityRequirement(name = "api")
     public ResponseEntity<Boolean> canCancelSubscription(@PathVariable Long memberId) {
         boolean canCancel = subscriptionService.canCancelSubscription(memberId);
@@ -149,4 +143,34 @@ public class MembersController {
         List<MembershipPlan> plans = membershipPlanService.getAvailablePlansForMember(memberId);
         return ResponseEntity.ok(plans);
     }
+
+    // ADMIN - Chỉ admin mới có thể xem danh sách members cho trang quản lý
+    @GetMapping("/admin/list")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<MembersDTO>> getAdminMemberList() {
+        List<MembersDTO> memberList = membersService.getAdminMemberList();
+        return ResponseEntity.ok(memberList);
+    }
+
+
+    // Lưu thông tin edit
+    @PutMapping("/{memberId}/edit-profile")
+    public ResponseEntity<MembersDTO> updateMemberProfile(
+            @PathVariable Long memberId,
+            @RequestBody MembersDTO memberDTO) {
+        MembersDTO updatedProfile = membersService.updateMemberProfile(memberId, memberDTO);
+        return ResponseEntity.ok(updatedProfile);
+    }
+
+
+    // ADMIN - Admin quản lý member cụ thể - cập nhật thông tin
+    @PutMapping("/admin/{memberId}/manage")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<MembersDTO> updateAdminMemberManage(
+            @PathVariable Long memberId,
+            @RequestBody MembersDTO memberDTO) {
+        MembersDTO updatedMember = membersService.updateAdminMemberManage(memberId, memberDTO);
+        return ResponseEntity.ok(updatedMember);
+    }
+
 }

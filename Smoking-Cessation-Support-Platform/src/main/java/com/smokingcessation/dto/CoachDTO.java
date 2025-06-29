@@ -12,4 +12,10 @@ public class CoachDTO {
     private String email;
     private String phone;
     private String password;
+    private String title;
+    private String bio;
+    private Double hourlyRate;
+    private String specialization;
+    private String certifications;
+    private String experience;
 }

@@ -19,7 +19,9 @@ public interface CoachRepository extends JpaRepository<Coach, Long> {
     
     // Tìm coach active
     List<Coach> findByIsActiveTrue();
-    
+
+    //
+
     // Tìm coach theo specialization
     List<Coach> findBySpecialization(String specialization);
     
