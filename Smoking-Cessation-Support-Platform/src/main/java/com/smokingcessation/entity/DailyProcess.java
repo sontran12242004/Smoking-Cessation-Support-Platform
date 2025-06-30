@@ -5,30 +5,25 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Getter
 @Setter
 public class DailyProcess {
+    public static Object getDate;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long processId;
-    
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Members member;
-    
     private LocalDateTime date;
-    
-    private String cigaretteStrength; // Độ mạnh của thuốc lá (Light/Medium/Strong)
-    
-    private int cigarettesSmokedToday; // Number of cigarettes smoked today
-    
-    private double moneySaved; // Money saved today by not smoking
-    
-    private int cravingIntensity; // On a scale of 1-10, how strong were cravings
-    
-    private String mood; // Member's mood for the day
-    
-    private String notes; // Any additional notes for the day
+    private boolean smoked; // Đã hút hôm nay chưa
+    private Integer cigaretteStrength; // Độ mạnh (1-10), null nếu không hút
+    private Integer priceSmoked;
+    private String mood; // Cảm xúc cuối ngày
+    private String cravingTrigger; // Tác nhân gây thèm
+    private String confidence; // Độ tự tin bỏ thuốc ngày mai
+    private int cigarettesSmokedToday; // Số điếu đã hút hôm nay
 }

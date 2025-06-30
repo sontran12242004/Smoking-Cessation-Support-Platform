@@ -6,9 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="ffc493ea-3553-487b-a91d-c3c0aacb3ac3" name="Changes" comment="Authorization">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/controller/QuitPlansController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/controller/QuitPlansController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/dto/DailyProcessDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/dto/DailyProcessDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/dto/MembersDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/dto/MembersDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/dto/QuitPlansDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/dto/QuitPlansDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/DailyProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/DailyProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/Members.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/Members.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/service/DailyProcessService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/service/DailyProcessService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/service/QuitPlansService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/service/QuitPlansService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/service/HealthMetricsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/service/HealthMetricsService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/service/MembersService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/service/MembersService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/service/MembershipPlanService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/service/MembershipPlanService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,7 +109,9 @@
       <workItem from="1750868129303" duration="4277000" />
       <workItem from="1751112583021" duration="28245000" />
       <workItem from="1751192967181" duration="2296000" />
-      <workItem from="1751271116003" duration="2483000" />
+      <workItem from="1751271116003" duration="6661000" />
+      <workItem from="1751283450383" duration="151000" />
+      <workItem from="1751294049832" duration="4121000" />
     </task>
     <task id="LOCAL-00001" summary="Authorization">
       <option name="closed" value="true" />

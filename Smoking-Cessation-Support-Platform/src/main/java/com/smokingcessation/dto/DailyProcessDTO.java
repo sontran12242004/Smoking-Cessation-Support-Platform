@@ -13,10 +13,11 @@ public class DailyProcessDTO {
     private Long processId;
     private Long memberId;
     private LocalDateTime date;
-    private String cigaretteStrength; // Độ mạnh của thuốc lá (Light/Medium/Strong)
-    private int cigarettesSmokedToday;
-    private double moneySaved;
-    private int cravingIntensity;
+    private Integer cigaretteStrength; // Độ mạnh (1-10), null nếu không hút
+    private Integer priceSmoked;
+    private boolean smoked;
     private String mood;
-    private String notes;
+    private String cravingTrigger;
+    private String confidence;
+    private int cigarettesSmokedToday; // Số điếu đã hút hôm nay
 }

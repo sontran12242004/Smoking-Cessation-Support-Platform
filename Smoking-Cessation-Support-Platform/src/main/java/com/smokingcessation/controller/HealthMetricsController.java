@@ -26,10 +26,6 @@ public class HealthMetricsController {
         Members user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
 
-        if (user.getDailyCost() <= 0) {
-            throw new RuntimeException("Người dùng chưa thiết lập số tiền hút thuốc mỗi ngày");
-        }
-
         HealthMetricsDTO metrics = healthMetricsService.getOrCreateTodayMetrics(user);
         return ResponseEntity.ok(metrics);
     }
@@ -48,7 +44,7 @@ public class HealthMetricsController {
     public ResponseEntity getMoneySaved(@RequestParam Long userId) {
         Members user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
-        int money = healthMetricsService.getMoneySaved(user);
+        int money = healthMetricsService.getMoneySaved(userId);
         return ResponseEntity.ok(money);
     }
 

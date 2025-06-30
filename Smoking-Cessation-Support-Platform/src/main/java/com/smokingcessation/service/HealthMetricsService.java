@@ -1,15 +1,20 @@
 package com.smokingcessation.service;
 
+import com.smokingcessation.dto.DailyProcessDTO;
+import com.smokingcessation.entity.DailyProcess;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import com.smokingcessation.dto.HealthMetricsDTO;
 import com.smokingcessation.entity.HealthMetrics;
 import com.smokingcessation.entity.Members;
 import com.smokingcessation.repository.HealthMetricsRepository;
+import com.smokingcessation.repository.MembersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import com.smokingcessation.repository.CigaretteLogRepository;
 import com.smokingcessation.repository.DailyProcessRepository;
@@ -27,6 +32,9 @@ public class HealthMetricsService {
     @Autowired
     private DailyProcessRepository dailyProcessRepository;
 
+    @Autowired
+    private MembersRepository membersRepository;
+
     /**
      * Tính số ngày không hút thuốc dựa trên số lượng DailyProcess records
      * Mỗi DailyProcess record đại diện cho 1 ngày smoke-free
@@ -37,146 +45,216 @@ public class HealthMetricsService {
 
     /**
      * Tính tổng số tiền tiết kiệm được từ ngày bắt đầu đến hiện tại
-     * Cộng dồn liên tục dựa trên dailyCost và số ngày
+     * Dựa trên priceSmoked từ DailyProcess records
      */
-    public int getMoneySaved(Members user) {
-        int days = getDaysSmokeFree(user);
-        return days * user.getDailyCost();
+    public int getMoneySaved(Long memberId) {
+        Members member = membersRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("Member not found"));
+        
+        // Lấy tổng priceSmoked từ tất cả DailyProcess records của member
+        List<DailyProcess> dailyProcesses = dailyProcessRepository.findByMember_MemberID(memberId);
+        int totalMoneySaved = dailyProcesses.stream()
+                .mapToInt(process -> process.getPriceSmoked() != null ? process.getPriceSmoked() : 0)
+                .sum();
+        
+        return totalMoneySaved;
     }
-
     /**
-     * Lấy tổng số điếu thuốc đã hút từ quitDate đến hiện tại
+     * Lấy tổng số điếu thuốc đã hút từ DailyProcess records
      */
     public int getTotalCigarettesSmoked(Members user) {
-        LocalDate quitDate = user.getQuitDate();
-        if (quitDate == null) return 0;
-        
-        // Sử dụng query tối ưu thay vì loop
-        return cigaretteLogRepository.sumCigarettesByUserAndDateRange(user, quitDate, LocalDate.now());
+        List<DailyProcess> dailyProcesses = dailyProcessRepository.findByMember_MemberID(user.getMemberID());
+        return dailyProcesses.stream()
+                .mapToInt(process -> process.getCigarettesSmokedToday())
+                .sum();
     }
 
     /**
      * Kiểm tra dữ liệu đầu vào của user
      */
     private void validateUserData(Members user) {
-        if (user.getDailyCost() < 0) {
+        if (user.getCigarettesPer() < 0) {
             throw new IllegalArgumentException("Số tiền hút thuốc mỗi ngày không hợp lệ");
         }
     }
 
     /**
+     * Helper method để tính tổng cigaretteStrength và cigarettesSmokedToday từ DailyProcess
+     */
+    private Map<String, Object> calculateDailyProcessTotals(Long memberId) {
+        List<DailyProcess> dailyProcesses = dailyProcessRepository.findByMember_MemberID(memberId);
+        
+        double totalStrength = dailyProcesses.stream()
+                .mapToDouble(process -> process.getCigaretteStrength() != null ? process.getCigaretteStrength() : 0)
+                .sum();
+        
+        int totalCigarettesSmoked = dailyProcesses.stream()
+                .mapToInt(process -> process.getCigarettesSmokedToday())
+                .sum();
+        
+        Map<String, Object> result = new HashMap<>();
+        result.put("totalStrength", totalStrength);
+        result.put("totalCigarettesSmoked", totalCigarettesSmoked);
+        return result;
+    }
+
+    /**
      * Tính % cải thiện sức khỏe tổng thể
-     * Dựa trên số ngày và số điếu thuốc hút
+     * Dựa trên cigaretteStrength và cigarettesSmokedToday từ DailyProcess
      */
     public double getHealthImprovedPercent(Members user) {
         int days = getDaysSmokeFree(user);
-        int cigarettes = getTotalCigarettesSmoked(user);
+        Map<String, Object> totals = calculateDailyProcessTotals(user.getMemberID());
         
-        // Công thức: 100% + (số ngày * 2%) - (số điếu thuốc * 1%)
-        double percent = 100.0 + (days * 2.0) - (cigarettes * 1.0);
+        double totalStrength = (Double) totals.get("totalStrength");
+        int totalCigarettesSmoked = (Integer) totals.get("totalCigarettesSmoked");
+        
+        // Công thức mới: 100% + (số ngày * 2%) - (tổng strength * 0.5%) - (tổng điếu * 1%)
+        double percent = 100.0 + (days * 2.0) - (totalStrength * 0.5) - (totalCigarettesSmoked * 1.0);
         return Math.max(0, Math.min(100, percent));
     }
 
     /**
      * Tính % giảm nguy cơ đau tim
-     * Dựa trên số ngày và số điếu thuốc hút
+     * Dựa trên cigaretteStrength và cigarettesSmokedToday từ DailyProcess
      */
     public double getHeartAttackRisk(Members user) {
         int days = getDaysSmokeFree(user);
-        int cigarettes = getTotalCigarettesSmoked(user);
+        Map<String, Object> totals = calculateDailyProcessTotals(user.getMemberID());
         
-        // Công thức: 100% - (số ngày * 1.2%) - (số điếu thuốc * 0.8%)
-        double percent = 100.0 - (days * 1.2) - (cigarettes * 0.8);
+        double totalStrength = (Double) totals.get("totalStrength");
+        int totalCigarettesSmoked = (Integer) totals.get("totalCigarettesSmoked");
+        
+        // Công thức mới: 100% - (số ngày * 1.2%) - (tổng strength * 0.3%) - (tổng điếu * 0.8%)
+        double percent = 100.0 - (days * 1.2) - (totalStrength * 0.3) - (totalCigarettesSmoked * 0.8);
         return Math.max(0, Math.min(100, percent));
     }
 
     /**
      * Tính % giảm nguy cơ ung thư phổi
-     * Dựa trên số ngày và số điếu thuốc hút
+     * Dựa trên cigaretteStrength và cigarettesSmokedToday từ DailyProcess
      */
     public double getLungCancerRisk(Members user) {
         int days = getDaysSmokeFree(user);
-        int cigarettes = getTotalCigarettesSmoked(user);
+        Map<String, Object> totals = calculateDailyProcessTotals(user.getMemberID());
         
-        // Công thức: 100% - (số ngày * 1.1%) - (số điếu thuốc * 0.7%)
-        double percent = 100.0 - (days * 1.1) - (cigarettes * 0.7);
+        double totalStrength = (Double) totals.get("totalStrength");
+        int totalCigarettesSmoked = (Integer) totals.get("totalCigarettesSmoked");
+        
+        // Công thức mới: 100% - (số ngày * 1.1%) - (tổng strength * 0.4%) - (tổng điếu * 0.7%)
+        double percent = 100.0 - (days * 1.1) - (totalStrength * 0.4) - (totalCigarettesSmoked * 0.7);
         return Math.max(0, Math.min(100, percent));
     }
 
     /**
      * Tính % giảm nguy cơ bệnh tim
-     * Dựa trên số ngày
+     * Dựa trên cigaretteStrength và cigarettesSmokedToday từ DailyProcess
      */
     public double getHeartDiseaseRisk(Members user) {
         int days = getDaysSmokeFree(user);
-        // Công thức: 100% - (số ngày * 1.9%), tối đa giảm 27%
-        double percent = 100.0 - Math.min(27, days * 1.9);
+        Map<String, Object> totals = calculateDailyProcessTotals(user.getMemberID());
+        
+        double totalStrength = (Double) totals.get("totalStrength");
+        int totalCigarettesSmoked = (Integer) totals.get("totalCigarettesSmoked");
+        
+        // Công thức mới: 100% - (số ngày * 1.9%) - (tổng strength * 0.2%) - (tổng điếu * 0.5%), tối đa giảm 27%
+        double percent = 100.0 - Math.min(27, (days * 1.9) + (totalStrength * 0.2) + (totalCigarettesSmoked * 0.5));
         return Math.max(0, Math.min(100, percent));
     }
 
     /**
      * Tính % cải thiện hệ miễn dịch
-     * Dựa trên số ngày
+     * Dựa trên cigaretteStrength và cigarettesSmokedToday từ DailyProcess
      */
     public double getImmuneFunction(Members user) {
         int days = getDaysSmokeFree(user);
-        // Công thức: số ngày * 1.6%, tối đa 22%
-        double percent = Math.min(22, days * 1.6);
+        Map<String, Object> totals = calculateDailyProcessTotals(user.getMemberID());
+        
+        double totalStrength = (Double) totals.get("totalStrength");
+        int totalCigarettesSmoked = (Integer) totals.get("totalCigarettesSmoked");
+        
+        // Công thức mới: (số ngày * 1.6%) - (tổng strength * 0.1%) - (tổng điếu * 0.2%), tối đa 22%
+        double percent = Math.min(22, (days * 1.6) - (totalStrength * 0.1) - (totalCigarettesSmoked * 0.2));
         return Math.max(0, Math.min(100, percent));
     }
 
     /**
      * Tính % trắng răng
-     * Dựa trên số ngày
+     * Dựa trên cigaretteStrength và cigarettesSmokedToday từ DailyProcess
      */
     public double getTeethWhitening(Members user) {
         int days = getDaysSmokeFree(user);
-        // Công thức: số ngày * 1.3%, tối đa 19%
-        double percent = Math.min(19, days * 1.3);
+        Map<String, Object> totals = calculateDailyProcessTotals(user.getMemberID());
+        
+        double totalStrength = (Double) totals.get("totalStrength");
+        int totalCigarettesSmoked = (Integer) totals.get("totalCigarettesSmoked");
+        
+        // Công thức mới: (số ngày * 1.3%) - (tổng strength * 0.08%) - (tổng điếu * 0.15%), tối đa 19%
+        double percent = Math.min(19, (days * 1.3) - (totalStrength * 0.08) - (totalCigarettesSmoked * 0.15));
         return Math.max(0, Math.min(100, percent));
     }
 
     /**
      * Tính % cải thiện hơi thở thơm mát
-     * Dựa trên số ngày
+     * Dựa trên cigaretteStrength và cigarettesSmokedToday từ DailyProcess
      */
     public double getBreathFreshness(Members user) {
         int days = getDaysSmokeFree(user);
-        // Công thức: số ngày * 2.75%, tối đa 38.5%
-        double percent = Math.min(38.5, days * 2.75);
+        Map<String, Object> totals = calculateDailyProcessTotals(user.getMemberID());
+        
+        double totalStrength = (Double) totals.get("totalStrength");
+        int totalCigarettesSmoked = (Integer) totals.get("totalCigarettesSmoked");
+        
+        // Công thức mới: (số ngày * 2.75%) - (tổng strength * 0.15%) - (tổng điếu * 0.3%), tối đa 38.5%
+        double percent = Math.min(38.5, (days * 2.75) - (totalStrength * 0.15) - (totalCigarettesSmoked * 0.3));
         return Math.max(0, Math.min(100, percent));
     }
 
     /**
      * Tính % cải thiện vị giác/khứu giác
-     * Dựa trên số ngày
+     * Dựa trên cigaretteStrength và cigarettesSmokedToday từ DailyProcess
      */
     public double getTasteAndSmell(Members user) {
         int days = getDaysSmokeFree(user);
-        // Công thức: số ngày * 3.2%, tối đa 45%
-        double percent = Math.min(45, days * 3.2);
+        Map<String, Object> totals = calculateDailyProcessTotals(user.getMemberID());
+        
+        double totalStrength = (Double) totals.get("totalStrength");
+        int totalCigarettesSmoked = (Integer) totals.get("totalCigarettesSmoked");
+        
+        // Công thức mới: (số ngày * 3.2%) - (tổng strength * 0.2%) - (tổng điếu * 0.4%), tối đa 45%
+        double percent = Math.min(45, (days * 3.2) - (totalStrength * 0.2) - (totalCigarettesSmoked * 0.4));
         return Math.max(0, Math.min(100, percent));
     }
 
     /**
      * Tính % giảm CO trong máu
-     * Dựa trên số ngày
+     * Dựa trên cigaretteStrength và cigarettesSmokedToday từ DailyProcess
      */
     public double getCOLvls(Members user) {
         int days = getDaysSmokeFree(user);
-        // Công thức: số ngày * 5.9%, tối đa 83%
-        double percent = Math.min(83, days * 5.9);
+        Map<String, Object> totals = calculateDailyProcessTotals(user.getMemberID());
+        
+        double totalStrength = (Double) totals.get("totalStrength");
+        int totalCigarettesSmoked = (Integer) totals.get("totalCigarettesSmoked");
+        
+        // Công thức mới: (số ngày * 5.9%) - (tổng strength * 0.3%) - (tổng điếu * 0.6%), tối đa 83%
+        double percent = Math.min(83, (days * 5.9) - (totalStrength * 0.3) - (totalCigarettesSmoked * 0.6));
         return Math.max(0, Math.min(100, percent));
     }
 
     /**
      * Tính % tăng lượng Oxy trong máu
-     * Dựa trên số ngày
+     * Dựa trên cigaretteStrength và cigarettesSmokedToday từ DailyProcess
      */
     public double getOxygenLvls(Members user) {
         int days = getDaysSmokeFree(user);
-        // Công thức: số ngày * 0.85%, tối đa 12%
-        double percent = Math.min(12, days * 0.85);
+        Map<String, Object> totals = calculateDailyProcessTotals(user.getMemberID());
+        
+        double totalStrength = (Double) totals.get("totalStrength");
+        int totalCigarettesSmoked = (Integer) totals.get("totalCigarettesSmoked");
+        
+        // Công thức mới: (số ngày * 0.85%) - (tổng strength * 0.05%) - (tổng điếu * 0.1%), tối đa 12%
+        double percent = Math.min(12, (days * 0.85) - (totalStrength * 0.05) - (totalCigarettesSmoked * 0.1));
         return Math.max(0, Math.min(100, percent));
     }
 
@@ -196,7 +274,7 @@ public class HealthMetricsService {
                     null,
                     user,
                     getDaysSmokeFree(user),
-                    getMoneySaved(user),
+                    getMoneySaved(user.getMemberID()),
                     getHealthImprovedPercent(user),
                     getHeartAttackRisk(user),
                     getLungCancerRisk(user),

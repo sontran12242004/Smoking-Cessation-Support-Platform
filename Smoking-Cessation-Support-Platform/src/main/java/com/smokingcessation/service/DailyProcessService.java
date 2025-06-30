@@ -79,20 +79,17 @@ public class DailyProcessService {
             dailyProcess.setDate(dailyProcessDTO.getDate());
             isFirstEntry = true;
         }
-        
         // Không còn tính moneySaved dựa trên cigarettesNotSmoked nữa
+        dailyProcess.setSmoked(dailyProcessDTO.isSmoked());
         dailyProcess.setCigaretteStrength(dailyProcessDTO.getCigaretteStrength());
-        dailyProcess.setCigarettesSmokedToday(dailyProcessDTO.getCigarettesSmokedToday());
-        dailyProcess.setMoneySaved(dailyProcessDTO.getMoneySaved()); // Nếu cần tính lại thì FE gửi lên hoặc tính lại theo logic mới
-        dailyProcess.setCravingIntensity(dailyProcessDTO.getCravingIntensity());
         dailyProcess.setMood(dailyProcessDTO.getMood());
-        dailyProcess.setNotes(dailyProcessDTO.getNotes());
-        
+        dailyProcess.setCravingTrigger(dailyProcessDTO.getCravingTrigger());
+        dailyProcess.setConfidence(dailyProcessDTO.getConfidence());
+        dailyProcess.setCigarettesSmokedToday(dailyProcessDTO.getCigarettesSmokedToday());
+        dailyProcess.setPriceSmoked(dailyProcessDTO.getPriceSmoked());
         dailyProcess = dailyProcessRepository.save(dailyProcess);
-        
         // Save cigarette log for today (số điếu thuốc đã hút hôm nay)
         saveCigaretteLog(member, dailyProcessDTO.getDate().toLocalDate(), dailyProcessDTO.getCigarettesSmokedToday());
-        
         // Update health metrics
         try {
             healthMetricsService.getOrCreateTodayMetrics(member);
@@ -100,18 +97,22 @@ public class DailyProcessService {
             // Log error but don't fail the process
             System.err.println("Error updating health metrics: " + e.getMessage());
         }
-        
         // Convert back to DTO
         dailyProcessDTO.setProcessId(dailyProcess.getProcessId());
-        dailyProcessDTO.setMoneySaved(dailyProcess.getMoneySaved());
+        dailyProcessDTO.setSmoked(dailyProcess.isSmoked());
+        dailyProcess.setCigaretteStrength(dailyProcessDTO.getCigaretteStrength());
+        dailyProcess.setMood(dailyProcessDTO.getMood());
+        dailyProcess.setCravingTrigger(dailyProcessDTO.getCravingTrigger());
+        dailyProcess.setPriceSmoked(dailyProcessDTO.getPriceSmoked());
+        dailyProcess.setConfidence(dailyProcessDTO.getConfidence());
+        dailyProcess.setDate(dailyProcessDTO.getDate());
+        dailyProcess.setCigarettesSmokedToday(dailyProcessDTO.getCigarettesSmokedToday());
         
         return dailyProcessDTO;
     }
-    
     // Save cigarette log for the day
     private void saveCigaretteLog(Members member, LocalDate date, int cigarettesSmoked) {
         Optional<CigaretteLog> existingLog = cigaretteLogRepository.findByUserAndLogDate(member, date);
-        
         CigaretteLog log;
         if (existingLog.isPresent()) {
             log = existingLog.get();
@@ -120,20 +121,16 @@ public class DailyProcessService {
             log.setUser(member);
             log.setLogDate(date);
         }
-        
         log.setCigarettesSmoked(cigarettesSmoked);
         cigaretteLogRepository.save(log);
     }
-    
     // Get all daily processes for a member
     public List<DailyProcessDTO> getAllProcessesForMember(Long memberId) {
         List<DailyProcess> processes = dailyProcessRepository.findByMember_MemberID(memberId);
-        
         return processes.stream()
             .map(this::convertToDTO)
             .collect(Collectors.toList());
     }
-    
     // Get daily process for a specific date
     public Optional<DailyProcessDTO> getProcessForDate(Long memberId, LocalDateTime date) {
         Optional<DailyProcess> processOpt = 
@@ -162,16 +159,17 @@ public class DailyProcessService {
         DailyProcessDTO dto = new DailyProcessDTO();
         dto.setProcessId(dailyProcess.getProcessId());
         dto.setMemberId(dailyProcess.getMember().getMemberID());
-        dto.setDate(dailyProcess.getDate());
+        dto.setSmoked(dailyProcess.isSmoked());
         dto.setCigaretteStrength(dailyProcess.getCigaretteStrength());
-        dto.setCigarettesSmokedToday(dailyProcess.getCigarettesSmokedToday());
-        dto.setMoneySaved(dailyProcess.getMoneySaved());
-        dto.setCravingIntensity(dailyProcess.getCravingIntensity());
         dto.setMood(dailyProcess.getMood());
-        dto.setNotes(dailyProcess.getNotes());
+        dto.setCravingTrigger(dailyProcess.getCravingTrigger());
+        dto.setConfidence(dailyProcess.getConfidence());
+        dto.setDate(dailyProcess.getDate());
+        dto.setPriceSmoked(dailyProcess.getPriceSmoked());
+        dto.setCigarettesSmokedToday(dailyProcess.getCigarettesSmokedToday());
         return dto;
     }
-    
+
     // Get member by ID
     public Members getMemberById(Long memberId) {
         return membersRepository.findById(memberId).orElse(null);
@@ -233,36 +231,6 @@ public class DailyProcessService {
         return milestoneInfo;
     }
 
-    /**
-     * Lấy thông tin tổng quan về tiến độ cai thuốc của member
-     */
-    public Map<String, Object> getProgressOverview(Long memberId) {
-        Members member = getMemberById(memberId);
-        if (member == null) {
-            throw new RuntimeException("Member not found");
-        }
-        
-        int daysSmokeFree = getDaysSmokeFree(memberId);
-        int totalMoneySaved = daysSmokeFree * member.getDailyCost();
-        
-        // Tính % thành công (giả sử mục tiêu là 365 ngày)
-        double percentSuccess = Math.min(100.0, (daysSmokeFree / 365.0) * 100.0);
-        
-        // Lấy milestone hiện tại và tiếp theo
-        Map<String, Object> milestoneInfo = getCurrentMilestone(daysSmokeFree);
-        
-        Map<String, Object> progressOverview = new HashMap<>();
-        progressOverview.put("memberId", memberId);
-        progressOverview.put("daysSmokeFree", daysSmokeFree);
-        progressOverview.put("totalMoneySaved", totalMoneySaved);
-        progressOverview.put("percentSuccess", percentSuccess);
-        progressOverview.put("currentMilestone", milestoneInfo.get("currentMilestone"));
-        progressOverview.put("nextMilestone", milestoneInfo.get("nextMilestone"));
-        progressOverview.put("daysToNextMilestone", milestoneInfo.get("daysToNext"));
-        
-        return progressOverview;
-    }
-    
     /**
      * Lấy thông tin chi tiết về milestone progress
      */
@@ -366,7 +334,7 @@ public class DailyProcessService {
         
         // Lấy danh sách ngày DailyProcess đã sort tăng dần
         List<LocalDate> processDates = dailyProcessRepository.findByMember_MemberIDOrderByDateAsc(memberId)
-            .stream().map(p -> p.getDate().toLocalDate()).collect(Collectors.toList());
+                .stream().map(p -> p.getDate().toLocalDate()).collect(Collectors.toList());
         
         // Tái sử dụng logic từ getMilestonesForFE
         return getMilestonesForFE(daysSmokeFree, processDates);

@@ -54,10 +54,8 @@ public class MembersService {
         member.setName(profileDTO.getFirstname() + " " + profileDTO.getLastname());
         member.setEmail(profileDTO.getEmail());
         member.setPrimaryMotivation(profileDTO.getPrimaryMotivation());
-        // Cập nhật dailyCost dựa trên formerDailyUsage
-        if (profileDTO.getFormerDailyUsage() != null) {
-            member.setDailyCost(profileDTO.getFormerDailyUsage() * 1000); // Giả sử 1 điếu = 1000 VND
-        }
+        member.setCreatedAt(LocalDateTime.now());
+        member.setFormerDailyUsage(profileDTO.getFormerDailyUsage());
         Members updatedMember = membersRepository.save(member);
         return convertToMemberEditProfileDTO(updatedMember);
     }
@@ -100,7 +98,6 @@ public class MembersService {
         dto.setEmail(member.getEmail());
         dto.setCreatedAt(member.getCreatedAt());
         dto.setStatus(member.isActive() ? "Active" : "Inactive");
-        
         Subscription activeSubscription = subscriptionService.getActiveSubscriptionForMember(member.getMemberID());
         if (activeSubscription != null && activeSubscription.getMembershipPlan() != null) {
             dto.setPackageType(activeSubscription.getMembershipPlan().getName());
@@ -111,21 +108,19 @@ public class MembersService {
     }
     
     // Helper method để convert Members sang MembersDTO cho edit profile
-    private MembersDTO convertToMemberEditProfileDTO(Members member) {
+    public MembersDTO convertToMemberEditProfileDTO(Members member) {
         MembersDTO dto = new MembersDTO();
         dto.setMemberID(member.getMemberID());
         dto.setName(member.getName());
         dto.setEmail(member.getEmail());
         dto.setCreatedAt(member.getCreatedAt());
-        
         // Tách tên thành firstname và lastname
         String[] nameParts = member.getName() != null ? member.getName().split(" ", 2) : new String[]{"", ""};
         dto.setFirstname(nameParts.length > 0 ? nameParts[0] : "");
         dto.setLastname(nameParts.length > 1 ? nameParts[1] : "");
-        
         // Chỉ giữ lại các trường mà updateMemberProfile thực sự cập nhật
         dto.setPrimaryMotivation(member.getPrimaryMotivation());
-        dto.setFormerDailyUsage(member.getDailyCost() > 0 ? member.getDailyCost() / 1000 : 10);
+        dto.setFormerDailyUsage(member.getCigarettesPer() > 0 ? member.getCigarettesPer() / 1000 : 10);
         
         return dto;
     }
