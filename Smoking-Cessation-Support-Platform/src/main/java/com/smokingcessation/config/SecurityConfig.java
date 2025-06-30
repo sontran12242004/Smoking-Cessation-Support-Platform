@@ -61,7 +61,8 @@ public class SecurityConfig {
                                         "/api/medicineService/*",
                                         "/api/quit-plans",
                                         "/api/members/*/edit-profile",
-                                        "/api/members/*/available-plans"
+                                        "/api/members/*/available-plans",
+                                        "/member/{memberId}/submit"
                                 ).permitAll()
                                 
                                 // Tất cả endpoints khác cần authentication

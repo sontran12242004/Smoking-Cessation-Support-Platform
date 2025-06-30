@@ -80,12 +80,10 @@ public class DailyProcessService {
             isFirstEntry = true;
         }
         
-        // Calculate money saved based on member's daily cost
-        double moneySaved = member.getDailyCost() * dailyProcessDTO.getCigarettesNotSmoked();
-        
-        dailyProcess.setCigarettesNotSmoked(dailyProcessDTO.getCigarettesNotSmoked());
+        // Không còn tính moneySaved dựa trên cigarettesNotSmoked nữa
+        dailyProcess.setCigaretteStrength(dailyProcessDTO.getCigaretteStrength());
         dailyProcess.setCigarettesSmokedToday(dailyProcessDTO.getCigarettesSmokedToday());
-        dailyProcess.setMoneySaved(moneySaved);
+        dailyProcess.setMoneySaved(dailyProcessDTO.getMoneySaved()); // Nếu cần tính lại thì FE gửi lên hoặc tính lại theo logic mới
         dailyProcess.setCravingIntensity(dailyProcessDTO.getCravingIntensity());
         dailyProcess.setMood(dailyProcessDTO.getMood());
         dailyProcess.setNotes(dailyProcessDTO.getNotes());
@@ -94,23 +92,6 @@ public class DailyProcessService {
         
         // Save cigarette log for today (số điếu thuốc đã hút hôm nay)
         saveCigaretteLog(member, dailyProcessDTO.getDate().toLocalDate(), dailyProcessDTO.getCigarettesSmokedToday());
-        
-        // If this is the first entry, initialize health tracking and create QuitPlans
-        if (isFirstEntry && member.getQuitDate() == null) {
-            member.setQuitDate(dailyProcessDTO.getDate().toLocalDate());
-            membersRepository.save(member);
-            
-            // Tạo QuitPlans tự động nếu chưa có
-            try {
-                if (member.getQuitPlan() == null) {
-                    // Tạo QuitPlans mặc định
-                    quitPlansService.createDefaultQuitPlan(member);
-                }
-            } catch (Exception e) {
-                // Log error but don't fail the process
-                System.err.println("Error creating default quit plan: " + e.getMessage());
-            }
-        }
         
         // Update health metrics
         try {
@@ -182,7 +163,7 @@ public class DailyProcessService {
         dto.setProcessId(dailyProcess.getProcessId());
         dto.setMemberId(dailyProcess.getMember().getMemberID());
         dto.setDate(dailyProcess.getDate());
-        dto.setCigarettesNotSmoked(dailyProcess.getCigarettesNotSmoked());
+        dto.setCigaretteStrength(dailyProcess.getCigaretteStrength());
         dto.setCigarettesSmokedToday(dailyProcess.getCigarettesSmokedToday());
         dto.setMoneySaved(dailyProcess.getMoneySaved());
         dto.setCravingIntensity(dailyProcess.getCravingIntensity());

@@ -20,7 +20,7 @@ public class DailyProcess {
     
     private LocalDateTime date;
     
-    private int cigarettesNotSmoked; // Number of cigarettes avoided today
+    private String cigaretteStrength; // Độ mạnh của thuốc lá (Light/Medium/Strong)
     
     private int cigarettesSmokedToday; // Number of cigarettes smoked today
     

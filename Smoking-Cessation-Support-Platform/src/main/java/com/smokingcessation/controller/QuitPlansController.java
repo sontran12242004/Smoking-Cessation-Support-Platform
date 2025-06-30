@@ -16,20 +16,24 @@ public class QuitPlansController {
     @Autowired
     private QuitPlansService quitPlansService;
 
-    // AUTHENTICATED - Members (tạo quit plan cho mình), Admin (tạo cho bất kỳ ai)
+    // Tạo quit plan (chỉ 1 lần/1 member)
     @PostMapping("/member/{memberId}")
     @PreAuthorize("hasAnyRole('MEMBERS', 'ADMIN')")
-    public ResponseEntity<QuitPlansDTO> createQuitPlanForMember(
+    public ResponseEntity<?> createQuitPlanForMember(
             @PathVariable Long memberId,
             @RequestBody QuitPlansDTO quitPlanDTO) {
-        QuitPlansDTO createdPlan = quitPlansService.createQuitPlanForMember(memberId, quitPlanDTO);
-        return ResponseEntity.ok(createdPlan);
+        try {
+            QuitPlansDTO createdPlan = quitPlansService.createQuitPlanForMember(memberId, quitPlanDTO);
+            return ResponseEntity.ok(createdPlan);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
-    // AUTHENTICATED - Members (xem quit plan của mình), Coach (xem assigned members), Admin (xem tất cả)
+    // Lấy quit plan của member
     @GetMapping("/member/{memberId}")
     @PreAuthorize("hasAnyRole('MEMBERS', 'COACH', 'ADMIN')")
-    public ResponseEntity<QuitPlansDTO> getQuitPlan(@PathVariable Long memberId) {
+    public ResponseEntity<?> getQuitPlan(@PathVariable Long memberId) {
         QuitPlansDTO quitPlan = quitPlansService.getQuitPlan(memberId);
         if (quitPlan == null) {
             return ResponseEntity.notFound().build();
@@ -37,21 +41,29 @@ public class QuitPlansController {
         return ResponseEntity.ok(quitPlan);
     }
 
-    // AUTHENTICATED - Members (cập nhật quit plan của mình), Admin (cập nhật tất cả)
+    // Cập nhật quit plan (nếu cho phép)
     @PutMapping("/member/{memberId}")
     @PreAuthorize("hasAnyRole('MEMBERS', 'ADMIN')")
-    public ResponseEntity<QuitPlansDTO> updateQuitPlan(
+    public ResponseEntity<?> updateQuitPlan(
             @PathVariable Long memberId,
             @RequestBody QuitPlansDTO quitPlanDTO) {
-        QuitPlansDTO updatedPlan = quitPlansService.updateQuitPlan(memberId, quitPlanDTO);
-        return ResponseEntity.ok(updatedPlan);
+        try {
+            QuitPlansDTO updatedPlan = quitPlansService.updateQuitPlan(memberId, quitPlanDTO);
+            return ResponseEntity.ok(updatedPlan);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
-    // AUTHENTICATED - Members (xóa quit plan của mình), Admin (xóa tất cả)
+    // Xóa quit plan
     @DeleteMapping("/member/{memberId}")
     @PreAuthorize("hasAnyRole('MEMBERS', 'ADMIN')")
-    public ResponseEntity<Void> deleteQuitPlan(@PathVariable Long memberId) {
-        quitPlansService.deleteQuitPlan(memberId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteQuitPlan(@PathVariable Long memberId) {
+        try {
+            quitPlansService.deleteQuitPlan(memberId);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

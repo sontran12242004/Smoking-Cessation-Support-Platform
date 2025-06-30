@@ -28,6 +28,16 @@ public class QuitPlansService {
     private ObjectMapper objectMapper;
     
     /**
+     * Danh sách các lựa chọn hợp lệ cho từng trường (theo UI)
+     */
+    private static final List<String> ALLOWED_DAILY_CIGARETTES = List.of("1-5", "6-10", "11-20", "More than 20");
+    private static final List<String> ALLOWED_FIRST_CIGARETTE = List.of("Within 5 minutes", "6-30 minutes", "31-60 minutes", "After 60 minutes");
+    private static final List<String> ALLOWED_MOTIVATION = List.of("Health reasons", "Family/relationships", "Financial savings", "Appearance/smell");
+    private static final List<String> ALLOWED_TRIED_BEFORE = List.of("No, this is my first time", "Yes, once", "Yes, multiple times");
+    private static final List<String> ALLOWED_WEEKLY_SPENDING = List.of("Under $10", "$10 - $25", "$26 - $50", "Over $50");
+    private static final List<String> ALLOWED_TRIGGERS = List.of("Morning coffee", "Stressful situations", "Social gatherings", "After meals", "When bored");
+    
+    /**
      * Tạo quit plan cho member cụ thể
      */
     @Transactional
@@ -39,16 +49,28 @@ public class QuitPlansService {
         if (quitPlanDTO == null) {
             throw new RuntimeException("Quit plan data is required");
         }
-        
-        // Validate required fields in DTO
-        if (quitPlanDTO.getDailyCigarettes() == null || quitPlanDTO.getDailyCigarettes().trim().isEmpty()) {
-            throw new RuntimeException("Daily cigarettes information is required");
+        // Validate các trường chỉ nhận giá trị hợp lệ
+        if (!ALLOWED_DAILY_CIGARETTES.contains(quitPlanDTO.getDailyCigarettes())) {
+            throw new RuntimeException("Invalid daily cigarettes value");
         }
-        if (quitPlanDTO.getWeeklySpending() == null || quitPlanDTO.getWeeklySpending().trim().isEmpty()) {
-            throw new RuntimeException("Weekly spending information is required");
+        if (!ALLOWED_FIRST_CIGARETTE.contains(quitPlanDTO.getFirstCigaretteAfterWaking())) {
+            throw new RuntimeException("Invalid first cigarette after waking value");
         }
-        if (quitPlanDTO.getMotivation() == null || quitPlanDTO.getMotivation().trim().isEmpty()) {
-            throw new RuntimeException("Motivation is required");
+        if (!ALLOWED_WEEKLY_SPENDING.contains(quitPlanDTO.getWeeklySpending())) {
+            throw new RuntimeException("Invalid weekly spending value");
+        }
+        if (!ALLOWED_MOTIVATION.contains(quitPlanDTO.getMotivation())) {
+            throw new RuntimeException("Invalid motivation value");
+        }
+        if (!ALLOWED_TRIED_BEFORE.contains(quitPlanDTO.getTriedBefore())) {
+            throw new RuntimeException("Invalid tried before value");
+        }
+        if (quitPlanDTO.getTriggers() != null) {
+            for (String trigger : quitPlanDTO.getTriggers()) {
+                if (!ALLOWED_TRIGGERS.contains(trigger)) {
+                    throw new RuntimeException("Invalid trigger: " + trigger);
+                }
+            }
         }
         
         Members member = membersRepository.findById(memberId)
@@ -112,6 +134,30 @@ public class QuitPlansService {
         
         QuitPlans quitPlan = quitPlansRepository.findByMember(member)
                 .orElseThrow(() -> new RuntimeException("Quit plan not found"));
+        
+        // Validate các trường nếu có cập nhật
+        if (quitPlanDTO.getDailyCigarettes() != null && !ALLOWED_DAILY_CIGARETTES.contains(quitPlanDTO.getDailyCigarettes())) {
+            throw new RuntimeException("Invalid daily cigarettes value");
+        }
+        if (quitPlanDTO.getFirstCigaretteAfterWaking() != null && !ALLOWED_FIRST_CIGARETTE.contains(quitPlanDTO.getFirstCigaretteAfterWaking())) {
+            throw new RuntimeException("Invalid first cigarette after waking value");
+        }
+        if (quitPlanDTO.getWeeklySpending() != null && !ALLOWED_WEEKLY_SPENDING.contains(quitPlanDTO.getWeeklySpending())) {
+            throw new RuntimeException("Invalid weekly spending value");
+        }
+        if (quitPlanDTO.getMotivation() != null && !ALLOWED_MOTIVATION.contains(quitPlanDTO.getMotivation())) {
+            throw new RuntimeException("Invalid motivation value");
+        }
+        if (quitPlanDTO.getTriedBefore() != null && !ALLOWED_TRIED_BEFORE.contains(quitPlanDTO.getTriedBefore())) {
+            throw new RuntimeException("Invalid tried before value");
+        }
+        if (quitPlanDTO.getTriggers() != null) {
+            for (String trigger : quitPlanDTO.getTriggers()) {
+                if (!ALLOWED_TRIGGERS.contains(trigger)) {
+                    throw new RuntimeException("Invalid trigger: " + trigger);
+                }
+            }
+        }
         
         // Update fields if provided
         if (quitPlanDTO.getDailyCigarettes() != null) {
@@ -202,38 +248,5 @@ public class QuitPlansService {
         
         return dto;
     }
-    
-    /**
-     * Tạo quit plan mặc định cho member khi bắt đầu tracking
-     */
-    @Transactional
-    public void createDefaultQuitPlan(Members member) {
-        // Kiểm tra xem member đã có quit plan chưa
-        Optional<QuitPlans> existingPlan = quitPlansRepository.findByMember(member);
-        if (existingPlan.isPresent()) {
-            return; // Đã có quit plan rồi
-        }
-        
-        // Tạo quit plan mặc định
-        QuitPlans quitPlan = new QuitPlans();
-        quitPlan.setMember(member);
-        quitPlan.setDailyCigarettes("10"); // Mặc định 10 điếu/ngày
-        quitPlan.setFirstCigaretteAfterWaking("30 minutes");
-        quitPlan.setWeeklySpending("70000"); // Mặc định 70k/tuần
-        quitPlan.setMotivation("Health improvement");
-        quitPlan.setTriedBefore("No");
-        quitPlan.setQuitGoal("Quit completely");
-        quitPlan.setTargetDays(365);
-        quitPlan.setTriggers("[]"); // Empty triggers array
-        quitPlan.setActive(true);
-        quitPlan.setCreatedAt(LocalDateTime.now());
-        
-        quitPlansRepository.save(quitPlan);
-        
-        // Cập nhật dailyCost trong Members dựa trên weeklySpending
-        int weeklySpending = Integer.parseInt(quitPlan.getWeeklySpending());
-        int dailyCost = weeklySpending / 7; // Chia 7 ngày
-        member.setDailyCost(dailyCost);
-        membersRepository.save(member);
-    }
+
 }
