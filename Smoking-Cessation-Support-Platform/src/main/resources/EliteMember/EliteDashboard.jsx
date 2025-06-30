@@ -1,11 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link, NavLink } from "react-router-dom";
+import { useNavigate, Link, NavLink, useLocation } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import journeyPath from '../assets/journey_path.jpg';
 import axios from "axios";
-
 function EliteDashboard() {
   const navigate = useNavigate();
+  const location = useLocation();
+  let checkinData = location.state && location.state.checkinData;
+
+  if (!checkinData) {
+    const local = localStorage.getItem('elite_checkin_data');
+    if (local) {
+      checkinData = JSON.parse(local);
+    }
+  }
+  const userId = 1; // Lấy từ auth thực tế
   const [healthMetrics, setHealthMetrics] = useState({
     daysSmokeFree: "--",
     daysToNext: "--",
@@ -18,43 +27,134 @@ function EliteDashboard() {
   const [heartDiseaseRisk, setHeartDiseaseRisk] = useState("--");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const userId = 1; // Replace with actual user ID from auth context
   const [daysSmokeFree, setDaysSmokeFree] = useState("--");
   const [moneySaved, setMoneySaved] = useState("--");
   const [healthImproved, setHealthImproved] = useState("--");
   const [healthImprovementData, setHealthImprovementData] = useState([]);
 
+  // Define constants for calculations
+  const expectedPerDay = 10;
+  const pricePerCigarette = 2; // $2 per cigarette
+
+  // Calculate daysSmokeFreeDisplay based on lastCheckinDate
+  let daysSmokeFreeCalc = '--';
+  if (checkinData) {
+    if (checkinData.smokedToday === 'no' && checkinData.lastCheckinDate) {
+      const lastCheckin = new Date(checkinData.lastCheckinDate);
+      const today = new Date();
+      // Calculate difference in days (including today)
+      const diffDays = Math.floor((today - lastCheckin) / (1000 * 60 * 60 * 24));
+      daysSmokeFreeCalc = diffDays + 1;
+    } else {
+      daysSmokeFreeCalc = 0;
+    }
+  }
+
+  // Calculate metrics from checkinData if present
+  let daysToNextCalc = '--';
+  let moneySavedCalc = '--';
+  let healthImprovedCalc = '--';
+  let lungsCapacityCalc = '--';
+  let heartDiseaseRiskCalc = '--';
+
+  if (checkinData) {
+    daysToNextCalc = daysSmokeFreeCalc < 7 ? 7 - daysSmokeFreeCalc : '--';
+    const avoided = checkinData.smokedToday === 'yes' ? (expectedPerDay - Number(checkinData.cigarettesCount || 0)) : expectedPerDay;
+    moneySavedCalc = avoided * pricePerCigarette;
+    healthImprovedCalc = checkinData.smokedToday === 'no' ? 100 : Math.max(0, 100 - Math.round((Number(checkinData.cigarettesCount || 0) / expectedPerDay) * 100));
+    lungsCapacityCalc = healthImprovedCalc;
+    heartDiseaseRiskCalc = healthImprovedCalc;
+  }
+
+  // Display variables: use calc if checkinData, else API state
+  const daysSmokeFreeDisplay = checkinData ? daysSmokeFreeCalc : healthMetrics.daysSmokeFree;
+  const moneySavedDisplay = checkinData ? moneySavedCalc : healthMetrics.moneySaved;
+  const healthImprovedDisplay = checkinData ? healthImprovedCalc : healthMetrics.healthImproved;
+  const lungsCapacityDisplay = checkinData ? lungsCapacityCalc : healthMetrics.lungsCapacity;
+  const heartDiseaseRiskDisplay = heartDiseaseRiskValue;
+  const daysToNextDisplay = checkinData ? daysToNextCalc : healthMetrics.daysToNext;
+
+  // Simulate health improvement rate data for chart
+  if (typeof healthImprovedDisplay === 'number' && !isNaN(healthImprovedDisplay)) {
+    for (let i = 0; i < daysSmokeFreeDisplay; i++) {
+      healthImprovementData.push({ day: `Day ${i + 1}`, value: Math.min(100, 100 + (i * 2)) });
+    }
+    healthImprovementData.push({ day: `Now`, value: healthImprovedDisplay });
+  }
+
+  // Money Saved Over Time chart data
+  let moneySavedHistory = [];
+  let totalSaved = 0;
+  const history = JSON.parse(localStorage.getItem('elite_checkin_history') || '[]');
+  moneySavedHistory = history
+    .sort((a, b) => new Date(a.date) - new Date(b.date))
+    .map(entry => {
+      totalSaved += entry.moneySavedToday;
+      return { date: entry.date, saved: totalSaved };
+    });
+  // If only one entry, add a starting point with value 0
+  if (moneySavedHistory.length === 1) {
+    const firstDate = new Date(moneySavedHistory[0].date);
+    const prevDate = new Date(firstDate.getTime() - 24*60*60*1000);
+    const prevDateStr = prevDate.toISOString().slice(0, 10);
+    moneySavedHistory.unshift({ date: prevDateStr, saved: 0 });
+  }
+  const moneySavedTotal = history.reduce((sum, entry) => sum + (entry.moneySavedToday || 0), 0);
+
+  // Tính streak và heart disease risk đồng bộ với EliteHealthMetric
+  const smokeFreeStreak = getSmokeFreeStreak(history);
+  const heartDiseaseRiskValue = Math.max(0, Math.min(100, 100 - Math.min(27, smokeFreeStreak * 1.9)));
+
+  console.log('moneySavedHistory', moneySavedHistory);
+
+  console.log('checkinData:', checkinData);
+
   useEffect(() => {
-    axios.get(`http://localhost:8080/api/health-metrics/${userId}`)
-      .then(res => {
-        setHealthMetrics(res.data);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error(err);
-        setLoading(false);
-      });
-    axios.get(`http://localhost:8080/api/health-metrics/risk/lung-cancer?userId=${userId}`)
-      .then(res => setLungCancerRisk(res.data))
-      .catch(err => console.error(err));
-    axios.get(`http://localhost:8080/api/health-metrics/risk/heart-disease?userId=${userId}`)
-      .then(res => setHeartDiseaseRisk(res.data))
-      .catch(err => console.error(err));
-    axios.get(`http://localhost:8080/api/health-metrics/days-free?userId=${userId}`)
-      .then(res => setDaysSmokeFree(res.data))
-      .catch(err => console.error(err));
-    axios.get(`http://localhost:8080/api/health-metrics/money-saved?userId=${userId}`)
-      .then(res => setMoneySaved(res.data))
-      .catch(err => console.error(err));
-    axios.get(`http://localhost:8080/api/health-metrics/percent/health-improved?userId=${userId}`)
-      .then(res => setHealthImproved(res.data))
-      .catch(err => console.error(err));
-    // Lấy dữ liệu động cho biểu đồ Health Improvement Rate
-    fetch(`http://localhost:8080/api/health-metrics/health-improvement-rate?userId=${userId}`)
-      .then(res => res.json())
-      .then(setHealthImprovementData)
-      .catch(() => setHealthImprovementData([]));
-  }, []);
+    if (!checkinData) {
+      axios.get(`http://localhost:8080/api/health-metrics/${userId}`)
+        .then(res => {
+          setHealthMetrics(res.data);
+          setLoading(false);
+        })
+        .catch(err => {
+          console.error(err);
+          setLoading(false);
+        });
+      axios.get(`http://localhost:8080/api/health-metrics/risk/lung-cancer?userId=${userId}`)
+        .then(res => setLungCancerRisk(res.data))
+        .catch(err => console.error(err));
+      axios.get(`http://localhost:8080/api/health-metrics/risk/heart-disease?userId=${userId}`)
+        .then(res => setHeartDiseaseRisk(res.data))
+        .catch(err => console.error(err));
+      axios.get(`http://localhost:8080/api/health-metrics/days-free?userId=${userId}`)
+        .then(res => setDaysSmokeFree(res.data))
+        .catch(() => setDaysSmokeFree("--"));
+      axios.get(`http://localhost:8080/api/health-metrics/money-saved?userId=${userId}`)
+        .then(res => setMoneySaved(res.data))
+        .catch(() => setMoneySaved("--"));
+      axios.get(`http://localhost:8080/api/health-metrics/percent/health-improved?userId=${userId}`)
+        .then(res => setHealthImproved(res.data))
+        .catch(() => setHealthImproved("--"));
+      // Lấy dữ liệu động cho biểu đồ Health Improvement Rate
+      fetch(`http://localhost:8080/api/health-metrics/health-improvement-rate?userId=${userId}`)
+        .then(res => res.json())
+        .then(setHealthImprovementData)
+        .catch(() => setHealthImprovementData([]));
+    }
+  }, [checkinData, userId]);
+
+  // Hàm tính số ngày liên tiếp không hút thuốc
+  function getSmokeFreeStreak(history) {
+    let streak = 0;
+    for (let i = history.length - 1; i >= 0; i--) {
+      if (history[i].smokedToday === 'no') {
+        streak++;
+      } else {
+        break;
+      }
+    }
+    return streak;
+  }
 
   const styles = `
     html,
@@ -852,39 +952,23 @@ function EliteDashboard() {
   const handleHealthMetric = () => {
     window.location.href = "/elitehealthmetric";
   };
-  
+
   const handleNotificationClick = () => {
     navigate("/elite/notification");
   };
 
-  // Loading state
-  if (loading) {
-    return (
-      <div className="container">
-        <style>{styles}</style>
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'center', 
-          alignItems: 'center', 
-          height: '100vh',
-          fontSize: '18px',
-          color: '#4CAF50'
-        }}>
-          Loading dashboard data...
-        </div>
-      </div>
-    );
-  }
+  // Only show loading if not using checkinData
+  if (!checkinData && loading) return <div>Loading dashboard data...</div>;
 
   // Error state
   if (error) {
     return (
       <div className="container">
         <style>{styles}</style>
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'center', 
-          alignItems: 'center', 
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
           height: '100vh',
           fontSize: '18px',
           color: '#D32F2F'
@@ -918,182 +1002,184 @@ function EliteDashboard() {
         zIndex: 0
       }} />
       <div style={{ position: 'relative', zIndex: 1 }}>
-      <div className="welcome-header">
-        <div className="header-left">
-          <div className="profile-section">
-            <button
-              className="profile-btn"
-              onClick={() => navigate('/elite/edit-profile')}
-            >
-              Elite Member
-            </button>
+        <div className="welcome-header">
+          <div className="header-left">
+            <div className="profile-section">
+              <button
+                className="profile-btn"
+                onClick={() => navigate('/elite/edit-profile')}
+              >
+                Elite Member
+              </button>
+            </div>
+          </div>
+          <div className="header-center">
+            <div className="app-name">
+              <h1>NicOff</h1>
+              <p>Turn Off Nicotine, Turn On Life!</p>
+            </div>
+          </div>
+          <div className="header-right">
+            <span className="notification-icon" onClick={handleNotificationClick}>
+              🔔
+            </span>
+            <button className="logout-button" onClick={() => navigate('/login')}>Logout</button>
           </div>
         </div>
-        <div className="header-center">
-          <div className="app-name">
-            <h1>NicOff</h1>
-            <p>Turn Off Nicotine, Turn On Life!</p>
-          </div>
-        </div>
-        <div className="header-right">
-          <span className="notification-icon" onClick={handleNotificationClick}>
-            🔔
-          </span>
-          <button className="logout-button" onClick={() => navigate('/login')}>Logout</button>
-        </div>
-      </div>
-      <nav className="welcome-nav">
-        <ul>
-          <li>
-            <a href="/elite/home">Home</a>
-          </li>
-          <li>
-            <a href="/elite/dashboard" className="active">Dashboard</a>
-          </li>
-          <li>
-            <a href="/elite/achievement">Achievement</a>
-          </li>
-          <li>
-            <a href="/elite/coach">Coach</a>
-          </li>
-          <li>
-            <a href="/elite/community">Community</a>
-          </li>
-          <li>
-            <a href="/elite/feedback">Feedback</a>
-          </li>
-        </ul>
-      </nav>
-      <div className="dashboard-main">
-        <div className="dashboard-welcome">
-          <div className="dashboard-welcome-title">
+        <nav className="welcome-nav">
+          <ul>
+            <li>
+              <a href="/elite/home">Home</a>
+            </li>
+            <li>
+              <a href="/elite/dashboard" className="active">Dashboard</a>
+            </li>
+            <li>
+              <a href="/elite/achievement">Achievement</a>
+            </li>
+            <li>
+              <a href="/elite/coach">Coach</a>
+            </li>
+            <li>
+              <a href="/elite/community">Community</a>
+            </li>
+            <li>
+              <a href="/elite/feedback">Feedback</a>
+            </li>
+          </ul>
+        </nav>
+        <div className="dashboard-main">
+          <div className="dashboard-welcome">
+            <div className="dashboard-welcome-title">
               Welcome back, <span className="welcome-name">John!</span> 👋
-          </div>
-          <div className="dashboard-welcome-quote">
-            "Every cigarette not smoked is a victory. Be proud of your
-            progress!"
-          </div>
-        </div>
-        <div className="dashboard-cards-row">
-          <div className="dashboard-card">
-            <span className="dashboard-card-icon">📅</span>
-            <div className="dashboard-card-label"><b>Days Smoke-Free</b></div>
-            <div className="dashboard-card-value">{daysSmokeFree}</div>
-            <div className="dashboard-card-desc">
-              {healthMetrics.daysToNext} days until next milestone
+            </div>
+            <div className="dashboard-welcome-quote">
+              "Every cigarette not smoked is a victory. Be proud of your
+              progress!"
             </div>
           </div>
-          <div className="dashboard-card">
-            <span className="dashboard-card-icon">💵</span>
-            <div className="dashboard-card-label"><b>Money Saved</b></div>
-            <div className="dashboard-card-value">${moneySaved}</div>
-            <div className="dashboard-card-desc">
-              Based on 10 cigarettes/day
-            </div>
-          </div>
-          <div className="dashboard-card">
-            <span className="dashboard-card-icon">💚</span>
-            <div className="dashboard-card-label"><b>Health Improved</b></div>
-            <div className="dashboard-card-value">{healthImproved}%</div>
-            <div className="dashboard-card-desc">Lung function recovery</div>
-          </div>
-        </div>
-        <div className="dashboard-cards-row-small">
-          <div className="dashboard-card-small">
-            <span className="dashboard-card-small-icon">🫁</span>
-            <div className="dashboard-card-small-content">
-              <div className="dashboard-card-small-title">Lungs Capacity</div>
-              <div className="dashboard-card-small-value">
-                +{healthMetrics.lungCancerRisk}%
-              </div>
-              <div className="dashboard-card-small-description">
-                Your lung capacity has improved significantly since quitting.<br/>
+          <div className="dashboard-cards-row">
+            <div className="dashboard-card">
+              <span className="dashboard-card-icon">📅</span>
+              <div className="dashboard-card-label"><b>Days Smoke-Free</b></div>
+              <div className="dashboard-card-value">{daysSmokeFreeDisplay}</div>
+              <div className="dashboard-card-desc">
+                {daysToNextDisplay} days until next milestone
               </div>
             </div>
+            <div className="dashboard-card">
+              <span className="dashboard-card-icon">💵</span>
+              <div className="dashboard-card-label"><b>Money Saved</b></div>
+              <div className="dashboard-card-value">${moneySavedTotal}</div>
+              <div className="dashboard-card-desc">
+                Based on 10 cigarettes/day
+              </div>
+            </div>
+            <div className="dashboard-card">
+              <span className="dashboard-card-icon">💚</span>
+              <div className="dashboard-card-label"><b>Health Improved</b></div>
+              <div className="dashboard-card-value">{healthImprovedDisplay}%</div>
+              <div className="dashboard-card-desc">Lung function recovery</div>
+            </div>
           </div>
-          <div className="dashboard-card-small">
-            <span className="dashboard-card-small-icon">💓</span>
-            <div className="dashboard-card-small-content">
-              <div className="dashboard-card-small-title">Heart Disease Risk</div>
-              <div className="dashboard-card-small-value">{heartDiseaseRisk}%</div>
-              <div className="dashboard-card-small-description">
-                Your heart disease risk has decreased significantly since quitting.
+          <div className="dashboard-cards-row-small">
+            <div className="dashboard-card-small">
+              <span className="dashboard-card-small-icon">🫁</span>
+              <div className="dashboard-card-small-content">
+                <div className="dashboard-card-small-title">Lungs Capacity</div>
+                <div className="dashboard-card-small-value">
+                  +{lungsCapacityDisplay}%
+                </div>
+                <div className="dashboard-card-small-description">
+                  Your lung capacity has improved significantly since quitting.<br />
+                </div>
+              </div>
+            </div>
+            <div className="dashboard-card-small">
+              <span className="dashboard-card-small-icon">💓</span>
+              <div className="dashboard-card-small-content">
+                <div className="dashboard-card-small-title">Heart Disease Risk</div>
+                <div className="dashboard-card-small-value">{heartDiseaseRiskDisplay}%</div>
+                <div className="dashboard-card-small-description">
+                  Your heart disease risk has decreased significantly since quitting.
+                </div>
               </div>
             </div>
           </div>
+          <button className="dashboard-explore-btn" onClick={handleHealthMetric}>
+            Explore more →
+          </button>
         </div>
-        <button className="dashboard-explore-btn" onClick={handleHealthMetric}>
-          Explore more →
-        </button>
-      </div>
-      {/* Analytics Section */}
-      <section className="analytics-section">
-        <h2 className="analytics-title">Analytics</h2>
-        <div className="analytics-cards-row">
-          <div className="analytics-card">
-            <h3 className="analytics-card-title">Health Improvement Rate</h3>
-            <div className="analytics-card-content" style={{ width: '100%', height: 220 }}>
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={healthImprovementData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Line type="monotone" dataKey="value" stroke="#4CAF50" strokeWidth={3} />
-                </LineChart>
-              </ResponsiveContainer>
+        {/* Analytics Section */}
+        <section className="analytics-section">
+          <h2 className="analytics-title">Analytics</h2>
+          <div className="analytics-cards-row">
+            {/* Health Improvement Rate Chart */}
+            <div className="analytics-card" style={{ maxWidth: 500 }}>
+              <div className="analytics-card-title">Health Improvement Rate</div>
+              <div className="analytics-card-content" style={{ width: '100%', height: 220 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={healthImprovementData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="day" />
+                    <YAxis domain={[0, 100]} />
+                    <Tooltip />
+                    <Line type="monotone" dataKey="value" stroke="#4CAF50" strokeWidth={3} dot={{ r: 5 }} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+            {/* Money Saved Over Time Chart */}
+            <div className="analytics-card" style={{ maxWidth: 500 }}>
+              <div className="analytics-card-title">Money Saved Over Time</div>
+              <div className="analytics-card-content" style={{ width: '100%', height: 220 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={moneySavedHistory} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="date" />
+                    <YAxis />
+                    <Tooltip />
+                    <Line type="monotone" dataKey="saved" stroke="#388E3C" strokeWidth={3} dot={{ r: 5 }} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </div>
-          <div className="analytics-card">
-            <h3 className="analytics-card-title">Success Rate</h3>
-            <div className="analytics-card-content" style={{ width: '100%', height: 220 }}>
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={successRateData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Line type="monotone" dataKey="value" stroke="#388E3C" strokeWidth={3} />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-        </div>
-      </section>
-      {/* Footer */}
+        </section>
+        {/* Footer */}
         <footer className="elite-footer">
-        <div className="footer-content">
+          <div className="footer-content">
             <div className="footer-column">
-            <h3>NicOff</h3>
+              <h3>NicOff</h3>
               <p>We're dedicated to helping you break free from smoking addiction through science-backed methods and community support</p>
-          </div>
+            </div>
             <div className="footer-column">
-            <h3>Quick Links</h3>
+              <h3>Quick Links</h3>
               <Link to="/about-us">About Us</Link>
               <Link to="/our-programs">Our Programs</Link>
               <Link to="/success-stories">Success Stories</Link>
               <Link to="/blog">Blog</Link>
               <Link to="/contact">Contact</Link>
-          </div>
+            </div>
             <div className="footer-column">
-            <h3>Support</h3>
+              <h3>Support</h3>
               <Link to="/faq">FAQ</Link>
               <Link to="/help-center">Help Center</Link>
               <Link to="/privacy-policy">Privacy Policy</Link>
               <Link to="/terms-of-service">Term Of Service</Link>
               <Link to="/cookie-policy">Cookie Policy</Link>
-          </div>
+            </div>
             <div className="footer-column">
-            <h3>NewsLetter</h3>
+              <h3>NewsLetter</h3>
               <input type="email" placeholder="Your Email Address..." className="newsletter-input" />
               <button className="newsletter-button">Subscribe</button>
-              <p style={{fontSize: '0.8em', color: '#ccc', marginTop: '10px'}}>Get the latest tips and motivation to stay smoke-free delivered to your inbox</p>
+              <p style={{ fontSize: '0.8em', color: '#ccc', marginTop: '10px' }}>Get the latest tips and motivation to stay smoke-free delivered to your inbox</p>
+            </div>
           </div>
-        </div>
           <div className="copyright">
             <p>© 2025 NicOff. All rights reserved</p>
           </div>
-      </footer>
+        </footer>
       </div>
     </div>
   );

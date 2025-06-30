@@ -4,12 +4,17 @@ import { Link, useNavigate } from 'react-router-dom';
 
 function DailyCheckIn() {
   const [smokedToday, setSmokedToday] = useState(null);
-  const [cigaretteStrength, setCigaretteStrength] = useState(0);
-  const [feeling, setFeeling] = useState(null);
-  const [cravingTrigger, setCravingTrigger] = useState(null);
-  const [confidence, setConfidence] = useState(null);
+  const [cigarettesCount, setCigarettesCount] = useState('');
+  const [healthToday, setHealthToday] = useState(null);
+  const [cravingLevel, setCravingLevel] = useState(null);
+  const [breathFreshness, setBreathFreshness] = useState(null);
+  const [tasteSmellChange, setTasteSmellChange] = useState(null);
+  const [physicalActivity, setPhysicalActivity] = useState(null);
+  const [moodToday, setMoodToday] = useState(null);
   const [showEditProfile, setShowEditProfile] = useState(false);
   const navigate = useNavigate();
+  const expectedPerDay = 10;
+  const pricePerCigarette = 2;
 
   const styles = `
     html,
@@ -319,7 +324,7 @@ function DailyCheckIn() {
       width: 100%;
       height: 10px;
       border-radius: 5px;
-      background: linear-gradient(to right, #8BC34A 0%, #8BC34A ${cigaretteStrength * 10}%, #ddd ${cigaretteStrength * 10}%, #ddd 100%);
+      background: linear-gradient(to right, #8BC34A 0%, #8BC34A ${cigarettesCount ? cigarettesCount * 10 : 0}% #ddd ${cigarettesCount ? cigarettesCount * 10 : 0}% #ddd 100%);
       outline: none;
       transition: background 0.2s ease;
     }
@@ -498,6 +503,42 @@ function DailyCheckIn() {
     }
   `;
 
+  const handleSave = () => {
+    // Validation: require smokedToday and healthToday
+    if (!smokedToday) {
+      alert('Please answer: Did you smoke any cigarettes today?');
+      return;
+    }
+    if (!healthToday) {
+      alert('Please answer: How do you feel about your overall health today?');
+      return;
+    }
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const moneySavedToday = (expectedPerDay - (smokedToday === 'yes' ? Number(cigarettesCount || 0) : 0)) * pricePerCigarette;
+    const checkinEntry = {
+      date: todayStr,
+      smokedToday,
+      cigarettesCount: smokedToday === 'yes' ? cigarettesCount : 0,
+      moneySavedToday,
+      healthToday,
+      cravingLevel,
+      breathFreshness,
+      tasteSmellChange,
+      physicalActivity,
+      moodToday,
+      lastCheckinDate: new Date().toISOString(),
+    };
+    // Save single checkin for dashboard as before
+    localStorage.setItem('elite_checkin_data', JSON.stringify(checkinEntry));
+    // Save history array
+    let history = JSON.parse(localStorage.getItem('elite_checkin_history') || '[]');
+    // Remove any entry with the same date (overwrite today's check-in)
+    history = history.filter(entry => entry.date !== todayStr);
+    history.push(checkinEntry);
+    localStorage.setItem('elite_checkin_history', JSON.stringify(history));
+    navigate('/elite/dashboard', { state: { checkinData: checkinEntry } });
+  };
+
   return (
     <div className="container">
       <style>{styles}</style>
@@ -541,147 +582,95 @@ function DailyCheckIn() {
         <div className="check-in-card-container">
           <div className="check-in-header">
             <h2>Daily Check-In</h2>
-            <p>May 31, 2025</p>
+            <p>{new Date().toLocaleDateString()}</p>
           </div>
 
-          {/* Did you smoke today? */}
+          {/* 1. Did you smoke any cigarettes today? */}
           <div className="question-group">
-            <label>Did you smoke today?</label>
+            <label>Did you smoke any cigarettes today?</label>
             <div className="button-options">
-              <button
-                className={`option-button ${smokedToday === 'no' ? 'selected' : ''}`}
-                onClick={() => setSmokedToday('no')}
-              >
-                No, I stayed strong!
-              </button>
-              <button
-                className={`option-button ${smokedToday === 'yes' ? 'selected red' : ''}`}
-                onClick={() => setSmokedToday('yes')}
-              >
-                Yes, I slipped up
-              </button>
+              <button className={`option-button ${smokedToday === 'no' ? 'selected' : ''}`} onClick={() => setSmokedToday('no')}>No</button>
+              <button className={`option-button ${smokedToday === 'yes' ? 'selected' : ''}`} onClick={() => setSmokedToday('yes')}>Yes</button>
             </div>
           </div>
 
-          {/* How strong were the cigarettes you smoked? */}
-          <div className="slider-group">
-            <label>How strong were the cigarettes you smoked? (on a scale of 10)</label>
-            <div className="slider-container">
+          {/* 2. If yes, how many cigarettes did you smoke today? */}
+          {smokedToday === 'yes' && (
+            <div className="question-group">
+              <label>If yes, how many cigarettes did you smoke today?</label>
               <input
-                type="range"
-                min="0"
-                max="10"
-                value={cigaretteStrength}
-                onChange={(e) => setCigaretteStrength(parseInt(e.target.value))}
+                type="number"
+                min="1"
+                value={cigarettesCount}
+                onChange={e => setCigarettesCount(e.target.value)}
+                className="option-input"
+                placeholder="Enter number of cigarettes"
               />
             </div>
-            <div className="slider-labels">
-              <span>1 (Very Mild)</span>
-              <span className="current-strength">Current: {cigaretteStrength}/10</span>
-              <span>10 (Extremely Strong)</span>
-            </div>
-          </div>
+          )}
 
-          {/* After a day without smoking, how do you feel? */}
+          {/* 3. How do you feel about your overall health today? */}
           <div className="question-group">
-            <label>After a day without smoking, how do you feel?</label>
+            <label>How do you feel about your overall health today?</label>
             <div className="button-options">
-              <button
-                className={`option-button ${feeling === 'unbearable' ? 'selected red' : ''}`}
-                onClick={() => setFeeling('unbearable')}
-              >
-                Feel unbearable
-              </button>
-              <button
-                className={`option-button ${feeling === 'tolerable' ? 'selected' : ''}`}
-                onClick={() => setFeeling('tolerable')}
-              >
-                I feel uncomfortable but still tolerable
-              </button>
-              <button
-                className={`option-button ${feeling === 'okay' ? 'selected' : ''}`}
-                onClick={() => setFeeling('okay')}
-              >
-                Feel okay
-              </button>
-              <button
-                className={`option-button ${feeling === 'great' ? 'selected' : ''}`}
-                onClick={() => setFeeling('great')}
-              >
-                Feel great!
-              </button>
+              <button className={`option-button ${healthToday === 'very_good' ? 'selected' : ''}`} onClick={() => setHealthToday('very_good')}>Very Good</button>
+              <button className={`option-button ${healthToday === 'good' ? 'selected' : ''}`} onClick={() => setHealthToday('good')}>Good</button>
+              <button className={`option-button ${healthToday === 'normal' ? 'selected' : ''}`} onClick={() => setHealthToday('normal')}>Normal</button>
+              <button className={`option-button ${healthToday === 'bad' ? 'selected' : ''}`} onClick={() => setHealthToday('bad')}>Bad</button>
             </div>
           </div>
 
-          {/* What was your biggest craving trigger today? */}
+          {/* 4. Did you feel cravings for cigarettes today? */}
           <div className="question-group">
-            <label>What was your biggest craving trigger today?</label>
+            <label>Did you feel cravings for cigarettes today?</label>
             <div className="button-options">
-              <button
-                className={`option-button ${cravingTrigger === 'stress' ? 'selected' : ''}`}
-                onClick={() => setCravingTrigger('stress')}
-              >
-                Stress
-              </button>
-              <button
-                className={`option-button ${cravingTrigger === 'social_situation' ? 'selected' : ''}`}
-                onClick={() => setCravingTrigger('social_situation')}
-              >
-                Social Situation
-              </button>
-              <button
-                className={`option-button ${cravingTrigger === 'after_meals' ? 'selected' : ''}`}
-                onClick={() => setCravingTrigger('after_meals')}
-              >
-                After meals
-              </button>
-              <button
-                className={`option-button ${cravingTrigger === 'boredom' ? 'selected' : ''}`}
-                onClick={() => setCravingTrigger('boredom')}
-              >
-                Boredom
-              </button>
-              <button
-                className={`option-button ${cravingTrigger === 'other' ? 'selected' : ''}`}
-                onClick={() => setCravingTrigger('other')}
-              >
-                Other
-              </button>
+              <button className={`option-button ${cravingLevel === 'none' ? 'selected' : ''}`} onClick={() => setCravingLevel('none')}>Not at all</button>
+              <button className={`option-button ${cravingLevel === 'controlled' ? 'selected' : ''}`} onClick={() => setCravingLevel('controlled')}>Yes, but I managed</button>
+              <button className={`option-button ${cravingLevel === 'strong' ? 'selected' : ''}`} onClick={() => setCravingLevel('strong')}>Very strong cravings</button>
             </div>
           </div>
 
-          {/* How confident are you about staying smoke-free tomorrow? */}
+          {/* 5. Did you feel your breath was fresher today? */}
           <div className="question-group">
-            <label>How confident are you about staying smoke-free tomorrow?</label>
+            <label>Did you feel your breath was fresher today?</label>
             <div className="button-options">
-              <button
-                className={`option-button ${confidence === 'not_confident' ? 'selected red' : ''}`}
-                onClick={() => setConfidence('not_confident')}
-              >
-                Not Confident
-              </button>
-              <button
-                className={`option-button ${confidence === 'stress' ? 'selected' : ''}`}
-                onClick={() => setConfidence('stress')}
-              >
-                Stress
-              </button>
-              <button
-                className={`option-button ${confidence === 'confident' ? 'selected' : ''}`}
-                onClick={() => setConfidence('confident')}
-              >
-                Confident
-              </button>
-              <button
-                className={`option-button ${confidence === 'very_confident' ? 'selected' : ''}`}
-                onClick={() => setConfidence('very_confident')}
-              >
-                Very Confident
-              </button>
+              <button className={`option-button ${breathFreshness === 'yes' ? 'selected' : ''}`} onClick={() => setBreathFreshness('yes')}>Yes</button>
+              <button className={`option-button ${breathFreshness === 'not_sure' ? 'selected' : ''}`} onClick={() => setBreathFreshness('not_sure')}>Not sure</button>
+              <button className={`option-button ${breathFreshness === 'no' ? 'selected' : ''}`} onClick={() => setBreathFreshness('no')}>No</button>
             </div>
           </div>
 
-          <button className="save-responses-button" onClick={() => navigate('/elite/dashboard')}>Save Responses</button>
+          {/* 6. Did you notice any changes in your taste or smell today? */}
+          <div className="question-group">
+            <label>Did you notice any changes in your taste or smell today?</label>
+            <div className="button-options">
+              <button className={`option-button ${tasteSmellChange === 'better' ? 'selected' : ''}`} onClick={() => setTasteSmellChange('better')}>Better</button>
+              <button className={`option-button ${tasteSmellChange === 'no_change' ? 'selected' : ''}`} onClick={() => setTasteSmellChange('no_change')}>No change</button>
+              <button className={`option-button ${tasteSmellChange === 'worse' ? 'selected' : ''}`} onClick={() => setTasteSmellChange('worse')}>Worse</button>
+            </div>
+          </div>
+
+          {/* 7. Did you exercise or do any physical activity today? */}
+          <div className="question-group">
+            <label>Did you exercise or do any physical activity today?</label>
+            <div className="button-options">
+              <button className={`option-button ${physicalActivity === 'yes' ? 'selected' : ''}`} onClick={() => setPhysicalActivity('yes')}>Yes</button>
+              <button className={`option-button ${physicalActivity === 'no' ? 'selected' : ''}`} onClick={() => setPhysicalActivity('no')}>No</button>
+            </div>
+          </div>
+
+          {/* 8. What was your overall mood today? */}
+          <div className="question-group">
+            <label>What was your overall mood today?</label>
+            <div className="button-options">
+              <button className={`option-button ${moodToday === 'happy' ? 'selected' : ''}`} onClick={() => setMoodToday('happy')}>Happy</button>
+              <button className={`option-button ${moodToday === 'normal' ? 'selected' : ''}`} onClick={() => setMoodToday('normal')}>Normal</button>
+              <button className={`option-button ${moodToday === 'stress' ? 'selected' : ''}`} onClick={() => setMoodToday('stress')}>Stressed</button>
+              <button className={`option-button ${moodToday === 'sad' ? 'selected' : ''}`} onClick={() => setMoodToday('sad')}>Sad</button>
+            </div>
+          </div>
+
+          <button className="save-responses-button" onClick={handleSave}>Save Responses</button>
         </div>
       </main>
 

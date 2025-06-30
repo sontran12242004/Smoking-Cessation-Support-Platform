@@ -24,8 +24,11 @@ const Login = () => {
           case 'ADMIN':
             navigate('/admin/dashboard');
             break;
-          case 'USER':
+          case 'MEMBERS':
             navigate('/elite/home'); // Chuyển đến trang của member
+            break;
+          case 'GUEST':
+            navigate('/standard/home'); // Về trang chủ nếu là guest
             break;
           case 'Coach':
             navigate('/coach/dashboard'); // Chuyển đến trang của coach

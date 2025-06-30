@@ -6,73 +6,112 @@ const EliteHealthMetric = () => {
   const navigate = useNavigate();
   const userId = 1; // Replace with actual user ID from auth context
 
+  // Try to load checkinData from localStorage
+  let checkinData = null;
+  const local = localStorage.getItem('elite_checkin_data');
+  if (local) {
+    checkinData = JSON.parse(local);
+  }
+
+  // Always use total from elite_checkin_history for money saved
+  const history = JSON.parse(localStorage.getItem('elite_checkin_history') || '[]');
+  const moneySavedTotal = history.reduce((sum, entry) => sum + (entry.moneySavedToday || 0), 0);
+
+  // Tính streak và heart disease risk đồng bộ với EliteDashboard
+  const smokeFreeStreak = getSmokeFreeStreak(history);
+  const heartDiseaseRisk = Math.max(0, Math.min(100, 100 - Math.min(27, smokeFreeStreak * 1.9)));
+
   // State cho các chỉ số động
   const [daysSmokeFree, setDaysSmokeFree] = useState('--');
   const [moneySaved, setMoneySaved] = useState('--');
   const [healthImproved, setHealthImproved] = useState('--');
   const [lungCancerRisk, setLungCancerRisk] = useState('--');
-  const [heartDiseaseRisk, setHeartDiseaseRisk] = useState('--');
+  const [heartAttackRisk, setHeartAttackRisk] = useState('--');
   const [immuneFunction, setImmuneFunction] = useState('--');
   const [teethWhitening, setTeethWhitening] = useState('--');
   const [breathFreshness, setBreathFreshness] = useState('--');
   const [tasteSmell, setTasteSmell] = useState('--');
   const [coLevels, setCoLevels] = useState('--');
   const [oxygenLevels, setOxygenLevels] = useState('--');
+  const [cigarettesCount, setCigarettesCount] = useState(0);
+
+  // Constants for calculation
+  const expectedPerDay = 10;
+  const pricePerCigarette = 2;
 
   useEffect(() => {
-    // Days Smoke-Free
-    fetch(`http://localhost:8080/api/health-metrics/days-free?userId=${userId}`)
-      .then(res => res.json())
-      .then(setDaysSmokeFree)
-      .catch(() => setDaysSmokeFree('--'));
-    // Money Saved
-    fetch(`http://localhost:8080/api/health-metrics/money-saved?userId=${userId}`)
-      .then(res => res.json())
-      .then(setMoneySaved)
-      .catch(() => setMoneySaved('--'));
-    // Health Improved
-    fetch(`http://localhost:8080/api/health-metrics/percent/health-improved?userId=${userId}`)
-      .then(res => res.json())
-      .then(setHealthImproved)
-      .catch(() => setHealthImproved('--'));
-    // Lung Cancer Risk
-    fetch(`http://localhost:8080/api/health-metrics/risk/lung-cancer?userId=${userId}`)
-      .then(res => res.json())
-      .then(setLungCancerRisk)
-      .catch(() => setLungCancerRisk('--'));
-    // Heart Disease Risk
-    fetch(`http://localhost:8080/api/health-metrics/risk/heart-disease?userId=${userId}`)
-      .then(res => res.json())
-      .then(setHeartDiseaseRisk)
-      .catch(() => setHeartDiseaseRisk('--'));
-    // Immune Function
-    fetch(`http://localhost:8080/api/health-metrics/percent/immune-function?userId=${userId}`)
-      .then(res => res.json())
-      .then(setImmuneFunction)
-      .catch(() => setImmuneFunction('--'));
-    // Teeth Whitening
-    fetch(`http://localhost:8080/api/health-metrics/percent/teeth-whitening?userId=${userId}`)
-      .then(res => res.json())
-      .then(setTeethWhitening)
-      .catch(() => setTeethWhitening('--'));
-    // Breath Freshness
-    fetch(`http://localhost:8080/api/health-metrics/percent/breath-freshness?userId=${userId}`)
-      .then(res => res.json())
-      .then(setBreathFreshness)
-      .catch(() => setBreathFreshness('--'));
-    // Taste & Smell
-    fetch(`http://localhost:8080/api/health-metrics/percent/taste-smell?userId=${userId}`)
-      .then(res => res.json())
-      .then(setTasteSmell)
-      .catch(() => setTasteSmell('--'));
-    fetch(`http://localhost:8080/api/health-metrics/percent/co-levels?userId=${userId}`)
-      .then(res => res.json())
-      .then(setCoLevels)
-      .catch(() => setCoLevels('--'));
-    fetch(`http://localhost:8080/api/health-metrics/percent/oxygen-levels?userId=${userId}`)
-      .then(res => res.json())
-      .then(setOxygenLevels)
-      .catch(() => setOxygenLevels('--'));
+    if (checkinData) {
+      // Calculate metrics from checkinData
+      const days = checkinData.smokedToday === 'no' ? 1 : 0;
+      const cigarettes = checkinData.smokedToday === 'yes' ? Number(checkinData.cigarettesCount || 0) : 0;
+      setDaysSmokeFree(days);
+      setCigarettesCount(cigarettes);
+      setMoneySaved(moneySavedTotal);
+      // Health Improved: 100 + (days*2) - (cigarettes*1)
+      setHealthImproved(Math.max(0, Math.min(100, 100 + (days * 2) - (cigarettes * 1))));
+      // Heart Attack Risk: 100 - (days*1.2) - (cigarettes*0.8)
+      setHeartAttackRisk(Math.max(0, Math.min(100, 100 - (days * 1.2) - (cigarettes * 0.8))));
+      // Lung Cancer Risk: 100 - (days*1.1) - (cigarettes*0.7)
+      setLungCancerRisk(Math.max(0, Math.min(100, 100 - (days * 1.1) - (cigarettes * 0.7))));
+      // Immune Function: min(22, days*1.6)
+      setImmuneFunction(Math.max(0, Math.min(100, Math.min(22, days * 1.6))));
+      // Teeth Whitening: min(19, days*1.3)
+      setTeethWhitening(Math.max(0, Math.min(100, Math.min(19, days * 1.3))));
+      // Breath Freshness: min(38.5, days*2.75)
+      setBreathFreshness(Math.max(0, Math.min(100, Math.min(38.5, days * 2.75))));
+      // Taste & Smell: min(45, days*3.2)
+      setTasteSmell(Math.max(0, Math.min(100, Math.min(45, days * 3.2))));
+      // CO Levels: min(83, days*5.9)
+      setCoLevels(Math.max(0, Math.min(100, Math.min(83, days * 5.9))));
+      // Oxygen Levels: min(12, days*0.85)
+      setOxygenLevels(Math.max(0, Math.min(100, Math.min(12, days * 0.85))));
+    } else {
+      // Fallback to API as before
+      fetch(`http://localhost:8080/api/health-metrics/days-free?userId=${userId}`)
+        .then(res => res.json())
+        .then(setDaysSmokeFree)
+        .catch(() => setDaysSmokeFree('--'));
+      fetch(`http://localhost:8080/api/health-metrics/money-saved?userId=${userId}`)
+        .then(res => res.json())
+        .then(setMoneySaved)
+        .catch(() => setMoneySaved('--'));
+      fetch(`http://localhost:8080/api/health-metrics/percent/health-improved?userId=${userId}`)
+        .then(res => res.json())
+        .then(setHealthImproved)
+        .catch(() => setHealthImproved('--'));
+      fetch(`http://localhost:8080/api/health-metrics/risk/lung-cancer?userId=${userId}`)
+        .then(res => res.json())
+        .then(setLungCancerRisk)
+        .catch(() => setLungCancerRisk('--'));
+      fetch(`http://localhost:8080/api/health-metrics/risk/heart-disease?userId=${userId}`)
+        .then(res => res.json())
+        .then(setHeartDiseaseRisk)
+        .catch(() => setHeartDiseaseRisk('--'));
+      fetch(`http://localhost:8080/api/health-metrics/percent/immune-function?userId=${userId}`)
+        .then(res => res.json())
+        .then(setImmuneFunction)
+        .catch(() => setImmuneFunction('--'));
+      fetch(`http://localhost:8080/api/health-metrics/percent/teeth-whitening?userId=${userId}`)
+        .then(res => res.json())
+        .then(setTeethWhitening)
+        .catch(() => setTeethWhitening('--'));
+      fetch(`http://localhost:8080/api/health-metrics/percent/breath-freshness?userId=${userId}`)
+        .then(res => res.json())
+        .then(setBreathFreshness)
+        .catch(() => setBreathFreshness('--'));
+      fetch(`http://localhost:8080/api/health-metrics/percent/taste-smell?userId=${userId}`)
+        .then(res => res.json())
+        .then(setTasteSmell)
+        .catch(() => setTasteSmell('--'));
+      fetch(`http://localhost:8080/api/health-metrics/percent/co-levels?userId=${userId}`)
+        .then(res => res.json())
+        .then(setCoLevels)
+        .catch(() => setCoLevels('--'));
+      fetch(`http://localhost:8080/api/health-metrics/percent/oxygen-levels?userId=${userId}`)
+        .then(res => res.json())
+        .then(setOxygenLevels)
+        .catch(() => setOxygenLevels('--'));
+    }
   }, []);
 
   const handleNotificationClick = () => {
@@ -726,7 +765,7 @@ const EliteHealthMetric = () => {
     },
     {
       icon: <span style={{fontSize: 40, display: 'block', textAlign: 'center'}}>💵</span>,
-      value: `$${moneySaved}`,
+      value: `$${moneySavedTotal}`,
       label: "Money Saved",
       desc: "Total money saved since quitting.",
     },
@@ -784,11 +823,30 @@ const EliteHealthMetric = () => {
       label: "Oxygen Levels",
       desc: "Increase in blood oxygen",
     },
+    {
+      icon: <span style={{fontSize: 40, display: 'block', textAlign: 'center'}}>💔</span>,
+      value: `${heartAttackRisk}%`,
+      label: "Heart Attack Risk",
+      desc: "Current risk of heart attack.",
+    },
   ];
 
   const handleBack = () => {
     window.location.href = "/elite/dashboard";
   };
+
+  // Hàm tính số ngày liên tiếp không hút thuốc
+  function getSmokeFreeStreak(history) {
+    let streak = 0;
+    for (let i = history.length - 1; i >= 0; i--) {
+      if (history[i].smokedToday === 'no') {
+        streak++;
+      } else {
+        break;
+      }
+    }
+    return streak;
+  }
 
   return (
     <div className="elite-home-container">
