@@ -24,7 +24,7 @@ public class AppointmentController {
      AppointmentService appointmentService;
 
     // AUTHENTICATED - Members (tạo appointment cho mình), Admin (tạo cho bất kỳ ai)
-    @PostMapping
+    @PostMapping("/api/members/appoiment/")
     @PreAuthorize("hasAnyRole('MEMBERS', 'ADMIN')")
     public ResponseEntity<Appointment> create(@RequestBody AppointmentDTO appointmentDTO){
         Appointment appointment = appointmentService.create(appointmentDTO);

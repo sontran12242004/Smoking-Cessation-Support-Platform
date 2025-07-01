@@ -42,10 +42,10 @@ public class Appointment {
             inverseJoinColumns =@JoinColumn(name = "service_id")
     )
     List<MedicineService> medicineServices;
-
+    private LocalDate appointmentDate;
     private String sessionType;
 
-
+    private Long slotId;
     @OneToMany(mappedBy = "appointment")
     List<Report> reports;
 

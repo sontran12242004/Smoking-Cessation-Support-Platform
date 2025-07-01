@@ -38,48 +38,37 @@ public class AppointmentService {
     @Autowired
     MedicineServiceRepository medicineServiceRepository;
 
-
     @Transactional
     public Appointment create(AppointmentDTO appointmentRequest) {
-
         // Tìm coach theo ID
         Coach coach = coachRepository.findById(appointmentRequest.getCoachId())
                 .orElseThrow(() -> new BadRequestException("Coach not found"));
-
         if (!coach.isCoachActive()) {
             throw new BadRequestException("Coach is not active");
         }
-
         // Tìm slot
         AccountSlot slot = accountSlotRepository.findAccountSlotBySlotIdAndAccountAndDate(
                 appointmentRequest.getSlotId(),
                 coach.getAccount(),
                 appointmentRequest.getAppointmentDate()
         );
-        
         // Check xem slot do da dat hay chua
         if (!slot.isAvailable()) {
             throw new BadRequestException("Slot is not available");
         }
-
-        // Lay Services
-        List<MedicineService> services = medicineServiceRepository.findByIdIn(appointmentRequest.getServicesId());
-
-        // Lay tai khoan hien tai
+        // Lấy tài khoản hiện tại
         Account currentAccount = authenticationService.getCurrentAccount();
-
         // Tạo appointment
         Appointment appointment = new Appointment();
         appointment.setCreateAt(LocalDate.now());
         appointment.setStatus(AppointmentEnum.PENDING);
         appointment.setAccount(currentAccount);
         appointment.setCoach(coach);
-        appointment.setMedicineServices(services);
+        appointment.setSlotId(appointmentRequest.getSlotId());
+        appointment.setAppointmentDate(appointmentRequest.getAppointmentDate());
         appointmentRepository.save(appointment);
-        
         // Set slot do thanh da dat
         slot.setAvailable(false);
-
         return appointment;
     }
 
@@ -95,5 +84,6 @@ public class AppointmentService {
         }
         return result;
     }
+
 
 }
