@@ -1,21 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useUser } from '../UserContext';
 import journeyPath from '../assets/journey_path.jpg';
 
 function EliteEditProfile() {
   const navigate = useNavigate();
+  const { user } = useUser();
+  const userId = user?.id;
+
   const [profile, setProfile] = useState({
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'john.doe@example.com',
-    quitDate: '2025-05-21',
-    dailyUsage: 10,
-    motivation: 'Better Health',
+    firstname: '',
+    lastname: '',
+    email: '',
+    quitDate: '',
+    formerDailyUsage: '',
+    primaryMotivation: '',
   });
+
+  useEffect(() => {
+    if (!userId) return;
+    fetch(`http://localhost:8080/api/members/${userId}/edit-profile`)
+      .then(res => res.json())
+      .then(data => setProfile(data))
+      .catch(() => {});
+  }, [userId]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setProfile(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!userId) return;
+    try {
+      const response = await fetch(`http://localhost:8080/api/members/${userId}/edit-profile`, {
+        method: 'PUT', // hoặc 'POST' nếu backend yêu cầu
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(profile),
+      });
+      if (response.ok) {
+        alert('Profile updated successfully!');
+        navigate('/elite/home');
+      } else {
+        alert('Failed to update profile');
+      }
+    } catch (error) {
+      alert('Error updating profile');
+    }
   };
 
   const styles = `
@@ -32,15 +66,17 @@ function EliteEditProfile() {
       flex-direction: column;
     }
     .overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: #DFF5DE;
-        opacity: 0.7;
-        z-index: 0;
-    }
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #DFF5DE;
+    opacity: 0.7;
+    z-index: 0;
+    pointer-events: none; /* <-- thêm dòng này */
+}
+
     .content-wrap {
         position: relative;
         z-index: 1;
@@ -296,16 +332,16 @@ function EliteEditProfile() {
         </nav>
 
         <main className="form-container">
-          <form className="edit-profile-form">
+          <form className="edit-profile-form" onSubmit={handleSubmit}> 
             <h2 className="form-title">Edit Your Profile</h2>
             <div className="form-row">
               <div className="form-group">
-                <label htmlFor="firstName">First Name</label>
-                <input type="text" id="firstName" name="firstName" value={profile.firstName} onChange={handleInputChange} />
+                <label htmlFor="firstname">First Name</label>
+                <input type="text" id="firstname" name="firstname" value={profile.firstname} onChange={handleInputChange} />
               </div>
               <div className="form-group">
-                <label htmlFor="lastName">Last Name</label>
-                <input type="text" id="lastName" name="lastName" value={profile.lastName} onChange={handleInputChange} />
+                <label htmlFor="lastname">Last Name</label>
+                <input type="text" id="lastname" name="lastname" value={profile.lastname} onChange={handleInputChange} />
               </div>
             </div>
             <div className="form-group" style={{marginBottom: '20px'}}>
@@ -318,14 +354,14 @@ function EliteEditProfile() {
                 <input type="date" id="quitDate" name="quitDate" value={profile.quitDate} onChange={handleInputChange} />
               </div>
               <div className="form-group">
-                <label htmlFor="dailyUsage">Former Daily Usage</label>
-                <input type="number" id="dailyUsage" name="dailyUsage" value={profile.dailyUsage} onChange={handleInputChange} min="1" />
+                <label htmlFor="formerDailyUsage">Former Daily Usage</label>
+                <input type="number" id="formerDailyUsage" name="formerDailyUsage" value={profile.formerDailyUsage} onChange={handleInputChange} min="1" />
                 <span className="usage-note">cigarettes per day</span>
               </div>
             </div>
             <div className="form-group">
-              <label htmlFor="motivation">Primary Motivation</label>
-              <select id="motivation" name="motivation" value={profile.motivation} onChange={handleInputChange}>
+              <label htmlFor="primaryMotivation">Primary Motivation</label>
+              <select id="primaryMotivation" name="primaryMotivation" value={profile.primaryMotivation} onChange={handleInputChange}>
                 <option>Better Health</option>
                 <option>Save Money</option>
                 <option>Family</option>

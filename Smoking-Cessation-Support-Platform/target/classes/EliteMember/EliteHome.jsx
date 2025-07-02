@@ -4,16 +4,24 @@ import cigaretteHouse from '../assets/cigarette_house.png';
 import journeyPath from '../assets/journey_path.jpg';
 import stayImage from '../assets/stay.png';
 import quitImage from '../assets/quit.png';
+import { useUser } from '../UserContext';
+import UserWelcome from '../components/UserWelcome';
 
 const EliteHome = () => {
   const navigate = useNavigate();
+  const { logout } = useUser();
   const sectionsRef = useRef([]);
 
   const handleNotificationClick = () => {
     navigate('/elite/notification');
   };
 
-  // Refs for scroll animation
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
+  //hiện animations khi phần tử xuất hiện trong viewport
   const checkinSectionRef = useRef(null);
   const planButtonRef = useRef(null);
   const communityUpdateRef = useRef(null);
@@ -30,7 +38,7 @@ const EliteHome = () => {
         });
       },
       {
-        threshold: 0.1, // Animate when 10% of the element is visible
+        threshold: 0.1, //animation hiện dần lên khi 10% phần tử xuất hiện trong viewport
       }
     );
 
@@ -616,7 +624,7 @@ const EliteHome = () => {
         </div>
         <div className="header-right">
           <span className="notification-icon" onClick={handleNotificationClick}>🔔</span>
-          <button className="logout-button" onClick={() => navigate('/login')}>Logout</button>
+          <button className="logout-button" onClick={handleLogout}>Logout</button>
         </div>
       </header>
       <nav className="elite-nav">
@@ -632,7 +640,7 @@ const EliteHome = () => {
 
       <main className="main-content-elite">
         <section className="hero-section-elite" style={{ backgroundImage: `linear-gradient(rgba(223, 245, 222, 0.7), rgba(223, 245, 222, 0.7)), url(${journeyPath})` }}>
-          <h2>Welcome back, <span className="welcome-name">jason!</span> 👋</h2>
+          <h2><UserWelcome /></h2>
           <p>How are you feeling today?</p>
           <p>-remember to-</p>
           <div className="stay-quit-text">
@@ -649,12 +657,16 @@ const EliteHome = () => {
               <button className="checkin-button-green">Yes, I slipped up</button>
               <button className="checkin-button-yellow">No, I stayed strong!</button>
             </div>
+
+
             <p className="checkin-question">After a day without smoking, how do you feel?</p>
             <div className="checkin-buttons">
+
+
               <button className="checkin-button-green">I feel unbearable</button>
               <button className="checkin-button-yellow">I feel uncomfortable but still tolerable</button>
             </div>
-            <button className="diary-button" onClick={() => navigate('/elite/daily-checkin')}>Go To My Diary</button>
+            <button className="diary-button" onClick={() =>  navigate('/elite/daily-checkin')}>Go To My Diary</button>
           </div>
           <div className="checkin-right-column">
             <img src={cigaretteHouse} alt="Cigarette House" />
@@ -684,6 +696,7 @@ const EliteHome = () => {
             <h3>NicOff</h3>
             <p>We're dedicated to helping you break free from smoking addiction through science-backed methods and community support</p>
           </div>
+
           <div className="footer-column">
             <h3>Quick Links</h3>
             <Link to="/about-us">About Us</Link>
@@ -692,6 +705,7 @@ const EliteHome = () => {
             <Link to="/blog">Blog</Link>
             <Link to="/contact">Contact</Link>
           </div>
+
           <div className="footer-column">
             <h3>Support</h3>
             <Link to="/faq">FAQ</Link>
@@ -700,6 +714,7 @@ const EliteHome = () => {
             <Link to="/terms-of-service">Term Of Service</Link>
             <Link to="/cookie-policy">Cookie Policy</Link>
           </div>
+
           <div className="footer-column">
             <h3>NewsLetter</h3>
             <input type="email" placeholder="Your Email Address..." className="newsletter-input" />
@@ -707,6 +722,8 @@ const EliteHome = () => {
             <p style={{fontSize: '0.8em', color: '#ccc', marginTop: '10px'}}>Get the latest tips and motivation to stay smoke-free delivered to your inbox</p>
           </div>
         </div>
+
+
         <div className="copyright">
           <p>© 2025 NicOff. All rights reserved</p>
         </div>
@@ -714,5 +731,7 @@ const EliteHome = () => {
     </div>
   );
 }
+
+
 
 export default EliteHome; 

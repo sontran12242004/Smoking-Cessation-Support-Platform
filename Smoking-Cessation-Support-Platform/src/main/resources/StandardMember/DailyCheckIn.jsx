@@ -8,6 +8,8 @@ function DailyCheckIn() {
   const [feeling, setFeeling] = useState(null);
   const [cravingTrigger, setCravingTrigger] = useState(null);
   const [confidence, setConfidence] = useState(null);
+  const [cigaretteCount, setCigaretteCount] = useState('');
+  const [cigarettePrice, setCigarettePrice] = useState('');
   const navigate = useNavigate();
 
   const styles = `
@@ -568,6 +570,36 @@ function DailyCheckIn() {
                   <span className="current-strength">Current: {cigaretteStrength}/10</span>
                   <span>10 (Extremely Strong)</span>
                 </div>
+                {smokedToday === 'yes' && (
+                  <div style={{ marginTop: 20 }}>
+                    <div style={{ marginBottom: 12 }}>
+                      <label style={{ display: 'block', color: '#4CAF50', fontWeight: 'bold', fontSize: 20, marginBottom: 15 }}>
+                        How many cigarettes did you smoke today?
+                      </label>
+                      <input
+                        type="number"
+                        min="1"
+                        value={cigaretteCount}
+                        onChange={e => setCigaretteCount(e.target.value)}
+                        placeholder="Enter number of cigarettes"
+                        style={{ width: '100%', padding: 8, borderRadius: 6, border: '1px solid #ccc', fontSize: 16, fontFamily: 'inherit' }}
+                      />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', color: '#4CAF50', fontWeight: 'bold', fontSize: 20, marginBottom: 15 }}>
+                        Price of the cigarette pack
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        value={cigarettePrice}
+                        onChange={e => setCigarettePrice(e.target.value)}
+                        placeholder="Enter price of the pack"
+                        style={{ width: '100%', padding: 8, borderRadius: 6, border: '1px solid #ccc', fontSize: 16, fontFamily: 'inherit' }}
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* After a day without smoking, how do you feel? */}

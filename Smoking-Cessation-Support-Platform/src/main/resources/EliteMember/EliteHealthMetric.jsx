@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from "react-router-dom";
 import journeyPath from '../assets/journey_path.jpg';
+import { useUser } from '../UserContext';
 
 const EliteHealthMetric = () => {
   const navigate = useNavigate();
-  const userId = 1; // Replace with actual user ID from auth context
+  const { user } = useUser();
+  const userId = user?.id;
 
   // State cho các chỉ số động
   const [daysSmokeFree, setDaysSmokeFree] = useState('--');
@@ -20,18 +22,19 @@ const EliteHealthMetric = () => {
   const [oxygenLevels, setOxygenLevels] = useState('--');
 
   useEffect(() => {
+    if (!userId) return;
     // Days Smoke-Free
     fetch(`http://localhost:8080/api/health-metrics/days-free?userId=${userId}`)
       .then(res => res.json())
       .then(setDaysSmokeFree)
       .catch(() => setDaysSmokeFree('--'));
     // Money Saved
-    fetch(`http://localhost:8080/api/health-metrics/money-saved?userId=${userId}`)
+    fetch(`http://localhost:8080/api/health-metrics/money-saved?userId`)
       .then(res => res.json())
       .then(setMoneySaved)
       .catch(() => setMoneySaved('--'));
     // Health Improved
-    fetch(`http://localhost:8080/api/health-metrics/percent/health-improved?userId=${userId}`)
+    fetch(`http://localhost:8080/api/health-metrics/percent/health-improved?userId`)
       .then(res => res.json())
       .then(setHealthImproved)
       .catch(() => setHealthImproved('--'));
@@ -73,7 +76,7 @@ const EliteHealthMetric = () => {
       .then(res => res.json())
       .then(setOxygenLevels)
       .catch(() => setOxygenLevels('--'));
-  }, []);
+  }, [userId]);
 
   const handleNotificationClick = () => {
     navigate("/elitenotificationcenter");

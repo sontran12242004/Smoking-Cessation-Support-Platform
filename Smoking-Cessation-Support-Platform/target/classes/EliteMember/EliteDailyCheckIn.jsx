@@ -8,6 +8,8 @@ function DailyCheckIn() {
   const [feeling, setFeeling] = useState(null);
   const [cravingTrigger, setCravingTrigger] = useState(null);
   const [confidence, setConfidence] = useState(null);
+  const [cigaretteCount, setCigaretteCount] = useState('');
+  const [cigarettePrice, setCigarettePrice] = useState('');
   const [showEditProfile, setShowEditProfile] = useState(false);
   const navigate = useNavigate();
 
@@ -541,7 +543,7 @@ function DailyCheckIn() {
         <div className="check-in-card-container">
           <div className="check-in-header">
             <h2>Daily Check-In</h2>
-            <p>May 31, 2025</p>
+            <p>{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
           </div>
 
           {/* Did you smoke today? */}
@@ -580,6 +582,36 @@ function DailyCheckIn() {
               <span className="current-strength">Current: {cigaretteStrength}/10</span>
               <span>10 (Extremely Strong)</span>
             </div>
+            {smokedToday === 'yes' && (
+              <div style={{ marginTop: 20 }}>
+                <div style={{ marginBottom: 12 }}>
+                  <label style={{ display: 'block', color: '#4CAF50', fontWeight: 'bold', fontSize: 20, marginBottom: 15 }}>
+                    How many cigarettes did you smoke today?
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={cigaretteCount}
+                    onChange={e => setCigaretteCount(e.target.value)}
+                    placeholder="Enter number of cigarettes"
+                    style={{ width: '100%', padding: 8, borderRadius: 6, border: '1px solid #ccc', fontSize: 16, fontFamily: 'inherit' }}
+                  />
+                </div>
+                <div>
+                  <label style={{ display: 'block', color: '#4CAF50', fontWeight: 'bold', fontSize: 20, marginBottom: 15 }}>
+                    Price of the cigarette pack
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={cigarettePrice}
+                    onChange={e => setCigarettePrice(e.target.value)}
+                    placeholder="Enter price of the pack"
+                    style={{ width: '100%', padding: 8, borderRadius: 6, border: '1px solid #ccc', fontSize: 16, fontFamily: 'inherit' }}
+                  />
+                </div>
+              </div>
+            )}
           </div>
 
           {/* After a day without smoking, how do you feel? */}
@@ -650,41 +682,10 @@ function DailyCheckIn() {
             </div>
           </div>
 
-          {/* How confident are you about staying smoke-free tomorrow? */}
-          <div className="question-group">
-            <label>How confident are you about staying smoke-free tomorrow?</label>
-            <div className="button-options">
-              <button
-                className={`option-button ${confidence === 'not_confident' ? 'selected red' : ''}`}
-                onClick={() => setConfidence('not_confident')}
-              >
-                Not Confident
-              </button>
-              <button
-                className={`option-button ${confidence === 'stress' ? 'selected' : ''}`}
-                onClick={() => setConfidence('stress')}
-              >
-                Stress
-              </button>
-              <button
-                className={`option-button ${confidence === 'confident' ? 'selected' : ''}`}
-                onClick={() => setConfidence('confident')}
-              >
-                Confident
-              </button>
-              <button
-                className={`option-button ${confidence === 'very_confident' ? 'selected' : ''}`}
-                onClick={() => setConfidence('very_confident')}
-              >
-                Very Confident
-              </button>
-            </div>
-          </div>
-
-          <button className="save-responses-button" onClick={() => navigate('/elite/dashboard')}>Save Responses</button>
+          {/* Save Responses Button */}
+          <button className="save-responses-button" onClick={() => navigate('/elite/home')}>Save Responses</button>
         </div>
       </main>
-
       {/* Footer */}
       <footer className="elite-footer">
         <div className="footer-content">
@@ -724,4 +725,3 @@ function DailyCheckIn() {
 }
 
 export default DailyCheckIn;
- 

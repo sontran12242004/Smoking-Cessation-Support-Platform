@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useUser } from './UserContext';
+import ApiService from './apiService';
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login } = useUser();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -12,32 +14,29 @@ const Login = () => {
     e.preventDefault();
     setError('');
     try {
-      const response = await axios.post('http://localhost:8080/api/login', {
-        email,
-        password
-      }, { withCredentials: true });
-      console.log('Full response:', response);
-      // Nếu login thành công, chuyển hướng theo vai trò (role)
-      if (response.status === 200 && response.data) {
-        const user = response.data;
-        switch (user.role) {
-          case 'ADMIN':
-            navigate('/admin/dashboard');
-            break;
-          case 'USER':
-            navigate('/elite/home'); // Chuyển đến trang của member
-            break;
-          case 'Coach':
-            navigate('/coach/dashboard'); // Chuyển đến trang của coach
-            break;
-          default:
-            // Nếu không có role hoặc role là GUEST, về trang chủ
-            navigate('/');
-        }
-      } else {
-        setError('Login failed: Invalid response from server.');
+      const user = await ApiService.login({ email, password });
+      console.log('Login response:', user);
+      
+      // Lưu thông tin user vào context
+      login(user);
+      
+      // Chuyển hướng theo vai trò (role)
+      switch (user.role) {
+        case 'ADMIN':
+          navigate('/admin/dashboard');
+          break;
+        case 'MEMBERS':
+          navigate('/elite/home'); // Chuyển đến trang của member
+          break;
+        case 'COACH':
+          navigate('/coach/dashboard'); // Chuyển đến trang của coach
+          break;
+        default:
+          // Nếu không có role hoặc role là GUEST, về trang chủ
+          navigate('/');
       }
     } catch (err) {
+      console.error('Login error:', err);
       setError('Incorrect email or password.');
     }
   };

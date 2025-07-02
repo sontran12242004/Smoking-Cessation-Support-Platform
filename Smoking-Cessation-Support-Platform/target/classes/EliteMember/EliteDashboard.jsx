@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, Link, NavLink } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import journeyPath from '../assets/journey_path.jpg';
-import axios from "axios";
+import { useUser } from '../UserContext';
+import ApiService from '../apiService';
+import UserWelcome from '../components/UserWelcome';
 
 function EliteDashboard() {
   const navigate = useNavigate();
+  const { getUserName, logout } = useUser();
   const [healthMetrics, setHealthMetrics] = useState({
     daysSmokeFree: "--",
     daysToNext: "--",
@@ -18,43 +21,50 @@ function EliteDashboard() {
   const [heartDiseaseRisk, setHeartDiseaseRisk] = useState("--");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const userId = 1; // Replace with actual user ID from auth context
+  const userId = 4; // Replace with actual user ID from auth context
   const [daysSmokeFree, setDaysSmokeFree] = useState("--");
   const [moneySaved, setMoneySaved] = useState("--");
   const [healthImproved, setHealthImproved] = useState("--");
   const [healthImprovementData, setHealthImprovementData] = useState([]);
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/api/health-metrics/${userId}`)
-      .then(res => {
-        setHealthMetrics(res.data);
+    const fetchData = async () => {
+      try {
+        // Fetch all health metrics data
+        const [
+          healthMetricsData,
+          lungCancerRiskData,
+          heartDiseaseRiskData,
+          daysSmokeFreeData,
+          moneySavedData,
+          healthImprovedData,
+          healthImprovementRateData
+        ] = await Promise.all([
+          ApiService.getHealthMetrics(userId),
+          ApiService.getLungCancerRisk(userId),
+          ApiService.getHeartDiseaseRisk(userId),
+          ApiService.getDaysSmokeFree(userId),
+          ApiService.getMoneySaved(userId),
+          ApiService.getHealthImproved(userId),
+          ApiService.getHealthImprovementRate(userId)
+        ]);
+
+        setHealthMetrics(healthMetricsData);
+        setLungCancerRisk(lungCancerRiskData);
+        setHeartDiseaseRisk(heartDiseaseRiskData);
+        setDaysSmokeFree(daysSmokeFreeData);
+        setMoneySaved(moneySavedData);
+        setHealthImproved(healthImprovedData);
+        setHealthImprovementData(healthImprovementRateData);
         setLoading(false);
-      })
-      .catch(err => {
-        console.error(err);
+      } catch (error) {
+        console.error('Error fetching health metrics:', error);
         setLoading(false);
-      });
-    axios.get(`http://localhost:8080/api/health-metrics/risk/lung-cancer?userId=${userId}`)
-      .then(res => setLungCancerRisk(res.data))
-      .catch(err => console.error(err));
-    axios.get(`http://localhost:8080/api/health-metrics/risk/heart-disease?userId=${userId}`)
-      .then(res => setHeartDiseaseRisk(res.data))
-      .catch(err => console.error(err));
-    axios.get(`http://localhost:8080/api/health-metrics/days-free?userId=${userId}`)
-      .then(res => setDaysSmokeFree(res.data))
-      .catch(err => console.error(err));
-    axios.get(`http://localhost:8080/api/health-metrics/money-saved?userId=${userId}`)
-      .then(res => setMoneySaved(res.data))
-      .catch(err => console.error(err));
-    axios.get(`http://localhost:8080/api/health-metrics/percent/health-improved?userId=${userId}`)
-      .then(res => setHealthImproved(res.data))
-      .catch(err => console.error(err));
-    // Lấy dữ liệu động cho biểu đồ Health Improvement Rate
-    fetch(`http://localhost:8080/api/health-metrics/health-improvement-rate?userId=${userId}`)
-      .then(res => res.json())
-      .then(setHealthImprovementData)
-      .catch(() => setHealthImprovementData([]));
-  }, []);
+      }
+    };
+
+    fetchData();
+  }, [userId]);
 
   const styles = `
     html,
@@ -857,6 +867,11 @@ function EliteDashboard() {
     navigate("/elite/notification");
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
   // Loading state
   if (loading) {
     return (
@@ -939,7 +954,7 @@ function EliteDashboard() {
           <span className="notification-icon" onClick={handleNotificationClick}>
             🔔
           </span>
-          <button className="logout-button" onClick={() => navigate('/login')}>Logout</button>
+          <button className="logout-button" onClick={handleLogout}>Logout</button>
         </div>
       </div>
       <nav className="welcome-nav">
@@ -967,7 +982,7 @@ function EliteDashboard() {
       <div className="dashboard-main">
         <div className="dashboard-welcome">
           <div className="dashboard-welcome-title">
-              Welcome back, <span className="welcome-name">John!</span> 👋
+            <UserWelcome />
           </div>
           <div className="dashboard-welcome-quote">
             "Every cigarette not smoked is a victory. Be proud of your

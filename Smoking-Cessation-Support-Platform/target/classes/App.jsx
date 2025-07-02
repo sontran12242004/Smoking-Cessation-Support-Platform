@@ -1,5 +1,6 @@
 import React from 'react'
 import { Routes, Route } from 'react-router-dom'
+import { UserProvider } from './UserContext'
 import LandingPage from './LandingPage'
 import Login from './Login'
 import SignUp from './SignUp'
@@ -63,7 +64,8 @@ import CookiePolicy from './Footer/CookiePolicy';
 
 function App() {
   return (
-    <Routes>
+    <UserProvider>
+      <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />
@@ -128,7 +130,8 @@ function App() {
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/terms-of-service" element={<TermsOfService />} />
       <Route path="/cookie-policy" element={<CookiePolicy />} />
-    </Routes>
+      </Routes>
+    </UserProvider>
   )
 }
 
