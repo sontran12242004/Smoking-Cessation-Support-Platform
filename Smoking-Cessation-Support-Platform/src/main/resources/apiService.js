@@ -1,5 +1,4 @@
 import axios from 'axios';
-
 const API_BASE_URL = 'http://localhost:8080/api';
 
 // Create axios instance with default config
@@ -43,6 +42,9 @@ class ApiService {
   // Authentication
   static async login(credentials) {
     const response = await apiClient.post('/login', credentials);
+    if (response.data.token) {
+      localStorage.setItem('token', response.data.token);
+    }
     return response.data;
   }
 
@@ -70,37 +72,37 @@ class ApiService {
 
   // Health Metrics
   static async getHealthMetrics(userId) {
-    const response = await apiClient.get(`/health-metrics/${userId}`);
+    const response = await apiClient.get(`/health-metrics`);
     return response.data;
   }
 
-  static async getLungCancerRisk(userId) {
-    const response = await apiClient.get(`/health-metrics/risk/lung-cancer?userId=${userId}`);
+  static async getLungCancerRisk() {
+    const response = await apiClient.get(`/health-metrics/risk/lung-cancer`);
     return response.data;
   }
 
-  static async getHeartDiseaseRisk(userId) {
-    const response = await apiClient.get(`/health-metrics/risk/heart-disease?userId=${userId}`);
+  static async getHeartDiseaseRisk() {
+    const response = await apiClient.get(`/health-metrics/risk/heart-disease`);
     return response.data;
   }
 
-  static async getDaysSmokeFree(userId) {
-    const response = await apiClient.get(`/health-metrics/days-free?userId=${userId}`);
+  static async getDaysSmokeFree() {
+    const response = await apiClient.get(`/health-metrics/days-free`);
     return response.data;
   }
 
-  static async getMoneySaved(userId) {
-    const response = await apiClient.get(`/health-metrics/money-saved?userId=${userId}`);
+  static async getMoneySaved() {
+    const response = await apiClient.get(`/health-metrics/money-saved`);
     return response.data;
   }
 
-  static async getHealthImproved(userId) {
-    const response = await apiClient.get(`/health-metrics/percent/health-improved?userId=${userId}`);
+  static async getHealthImproved() {
+    const response = await apiClient.get(`/health-metrics/percent/health-improved`);
     return response.data;
   }
 
-  static async getHealthImprovementRate(userId) {
-    const response = await apiClient.get(`/health-metrics/health-improvement-rate?userId=${userId}`);
+  static async getHealthImprovementRate() {
+    const response = await apiClient.get(`/health-metrics/health-improvement-rate`);
     return response.data;
   }
 
@@ -116,12 +118,26 @@ class ApiService {
   // Forgot Password
   static async forgotPassword(email) {
     const response = await apiClient.post('/forgot-password', { email });
+    if (response.data.token) {
+      localStorage.setItem('token', response.data.token);
+    }
     return response.data;
   }
 
   // Reset Password
   static async resetPassword(token, newPassword) {
     const response = await apiClient.post('/reset-password', { token, newPassword });
+    if (response.data.token) {
+      localStorage.setItem('token', response.data.token);
+    }
+    return response.data;
+  }
+
+  static async getAdminList() {
+    const response = await apiClient.get('/members/admin/list');
+    if (response.data.token) {
+      localStorage.setItem('token', response.data.token);
+    }
     return response.data;
   }
 }

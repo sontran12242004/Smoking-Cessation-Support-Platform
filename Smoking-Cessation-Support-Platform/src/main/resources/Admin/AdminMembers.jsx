@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import ApiService from '../apiService';
 
 const AdminMembers = () => {
   const [activeMenu, setActiveMenu] = useState('Members');
@@ -9,131 +10,20 @@ const AdminMembers = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showContentsDropdown, setShowContentsDropdown] = useState(false);
 
-  // Sample data
-  const initialMembersData = [
-    {
-      id: '#001',
-      name: 'Ho Minh Quan',
-      email: 'quanho17082005@gmail.com',
-      package: 'Basic',
-      status: 'Active',
-      date: '01/01/2025'
-    },
-    {
-      id: '#002',
-      name: 'Duong Thanh Viet Anh',
-      email: 'dtvanh@gmail.com',
-      package: 'Premium',
-      status: 'Active',
-      date: '13/02/2025'
-    },
-    {
-      id: '#003',
-      name: 'Tran Le Khoi Nguyen',
-      email: 'tikholnguyen@gmail.com',
-      package: 'Basic',
-      status: 'Expired',
-      date: '15/01/2025'
-    },
-    {
-      id: '#004',
-      name: 'Tran Dinh Son',
-      email: 'trandinhson@gmail.com',
-      package: 'Elite',
-      status: 'Active',
-      date: '22/01/2025'
-    },
-    {
-      id: '#005',
-      name: 'Vo Dong Dang Khoa',
-      email: 'vddkhoa@gmail.com',
-      package: 'Premium',
-      status: 'Expired',
-      date: '11/03/2025'
-    },
-    {
-      id: '#006',
-      name: 'Nguyen Van A',
-      email: 'nguyenvana@gmail.com',
-      package: 'Basic',
-      status: 'Active',
-      date: '05/03/2025'
-    },
-    {
-      id: '#007',
-      name: 'Tran Thi B',
-      email: 'tranthib@gmail.com',
-      package: 'Premium',
-      status: 'Active',
-      date: '10/03/2025'
-    },
-    {
-      id: '#008',
-      name: 'Le Van C',
-      email: 'levanc@gmail.com',
-      package: 'Elite',
-      status: 'Expired',
-      date: '15/03/2025'
-    },
-    {
-      id: '#009',
-      name: 'Pham Thi D',
-      email: 'phamthid@gmail.com',
-      package: 'Basic',
-      status: 'Active',
-      date: '20/03/2025'
-    },
-    {
-      id: '#010',
-      name: 'Hoang Van E',
-      email: 'hoangvane@gmail.com',
-      package: 'Premium',
-      status: 'Active',
-      date: '25/03/2025'
-    },
-    {
-      id: '#011',
-      name: 'Vu Thi F',
-      email: 'vuthif@gmail.com',
-      package: 'Elite',
-      status: 'Expired',
-      date: '30/03/2025'
-    },
-    {
-      id: '#012',
-      name: 'Dang Van G',
-      email: 'dangvang@gmail.com',
-      package: 'Basic',
-      status: 'Active',
-      date: '01/04/2025'
-    },
-    {
-      id: '#013',
-      name: 'Bui Thi H',
-      email: 'buithih@gmail.com',
-      package: 'Premium',
-      status: 'Active',
-      date: '05/04/2025'
-    },
-    {
-      id: '#014',
-      name: 'Do Van I',
-      email: 'dovani@gmail.com',
-      package: 'Elite',
-      status: 'Expired',
-      date: '10/04/2025'
-    },
-    {
-      id: '#015',
-      name: 'Ngo Thi K',
-      email: 'ngothik@gmail.com',
-      package: 'Basic',
-      status: 'Active',
-      date: '15/04/2025'
-    }
-  ];
+  // Xoá data mẫu, thay bằng fetch API
+  const [membersData, setMembersData] = useState([]);
 
-  const [membersData, setMembersData] = useState(initialMembersData);
+  useEffect(() => {
+    const fetchAdmins = async () => {
+      try {
+        const data = await ApiService.getAdminList();
+        setMembersData(data);
+      } catch (err) {
+        setMembersData([]);
+      }
+    };
+    fetchAdmins();
+  }, []);
 
   // Pagination logic
   const itemsPerPage = 5;
@@ -327,7 +217,7 @@ const AdminMembers = () => {
                       {member.status}
                     </span>
                   </td>
-                  <td style={styles.tableCell}>{member.date}</td>
+                  <td style={styles.tableCell}>{member.registrationDate}</td>
                   <td style={styles.tableCell}>
                     <div style={styles.actionButtons}>
                       <button style={styles.editButton} onClick={() => handleEditClick(member)}>Edit</button>
@@ -773,7 +663,7 @@ function EditMemberModal({ onClose, member, onSave }) {
   const [email, setEmail] = useState(member?.email || '');
   const [packageType, setPackageType] = useState(member?.package || '');
   const [status, setStatus] = useState(member?.status || 'Active');
-  const [registrationDate, setRegistrationDate] = useState(member?.date || '');
+  const [registrationDate, setRegistrationDate] = useState(member?.registrationDate || '');
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -788,7 +678,7 @@ function EditMemberModal({ onClose, member, onSave }) {
       email,
       package: packageType,
       status,
-      date: registrationDate,
+      registrationDate: registrationDate,
     });
   };
 
@@ -842,7 +732,7 @@ function AddMemberModal({ onClose, onSave }) {
     email: '',
     package: '',
     status: 'Active',
-    date: '',
+    registrationDate: '',
   });
 
   const handleChange = (e) => {
@@ -855,7 +745,7 @@ function AddMemberModal({ onClose, onSave }) {
 
   const handleSubmit = () => {
     // Basic validation
-    if (!newMemberData.name || !newMemberData.email || !newMemberData.package || !newMemberData.status || !newMemberData.date) {
+    if (!newMemberData.name || !newMemberData.email || !newMemberData.package || !newMemberData.status || !newMemberData.registrationDate) {
       alert('Please fill in all fields.');
       return;
     }
@@ -898,8 +788,8 @@ function AddMemberModal({ onClose, onSave }) {
           </div>
 
           <div style={modalStyles.formField}>
-            <label htmlFor="date" style={modalStyles.label}>Registration Date</label>
-            <input type="text" id="date" style={modalStyles.input} value={newMemberData.date} onChange={handleChange} placeholder="dd/mm/yy"/>
+            <label htmlFor="registrationDate" style={modalStyles.label}>Registration Date</label>
+            <input type="text" id="registrationDate" style={modalStyles.input} value={newMemberData.registrationDate} onChange={handleChange} placeholder="dd/mm/yy"/>
           </div>
 
           <div style={modalStyles.btnRow}>

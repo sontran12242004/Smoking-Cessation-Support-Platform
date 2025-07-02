@@ -16,7 +16,10 @@ const Login = () => {
     try {
       const user = await ApiService.login({ email, password });
       console.log('Login response:', user);
-      
+      // Nếu response có token thì lưu vào localStorage
+      if (user.token) {
+        localStorage.setItem('token', user.token);
+      }
       // Lưu thông tin user vào context
       login(user);
       

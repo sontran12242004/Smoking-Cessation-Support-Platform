@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import EditProfileModal from "../EditProfileModal";
+import EditProfileModal from "../editprofilemodal";
 import { useNavigate } from "react-router-dom";
 import journeyPath from '../assets/journey_path.jpg';
 

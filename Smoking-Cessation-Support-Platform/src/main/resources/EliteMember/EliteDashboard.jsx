@@ -8,7 +8,7 @@ import UserWelcome from '../components/UserWelcome';
 
 function EliteDashboard() {
   const navigate = useNavigate();
-  const { getUserName, logout } = useUser();
+  const { getUserName, logout, user } = useUser();
   const [healthMetrics, setHealthMetrics] = useState({
     daysSmokeFree: "--",
     daysToNext: "--",
@@ -21,7 +21,7 @@ function EliteDashboard() {
   const [heartDiseaseRisk, setHeartDiseaseRisk] = useState("--");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const userId = 4; // Replace with actual user ID from auth context
+  const userId = user?.id;
   const [daysSmokeFree, setDaysSmokeFree] = useState("--");
   const [moneySaved, setMoneySaved] = useState("--");
   const [healthImproved, setHealthImproved] = useState("--");

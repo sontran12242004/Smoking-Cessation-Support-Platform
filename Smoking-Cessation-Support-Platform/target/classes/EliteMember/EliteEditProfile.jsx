@@ -17,6 +17,8 @@ function EliteEditProfile() {
     primaryMotivation: '',
   });
 
+  const token = localStorage.getItem('token');
+
   useEffect(() => {
     if (!userId) return;
     fetch(`http://localhost:8080/api/members/${userId}/edit-profile`)
@@ -32,25 +34,42 @@ function EliteEditProfile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!userId) return;
+  
+    console.log(token);
+  
+    if (!userId) {
+      console.warn('⚠️ Không có userId, không gửi PUT');
+      return;
+    }
+  
+    console.log('📦 profile gửi đi:', profile);
+  
     try {
       const response = await fetch(`http://localhost:8080/api/members/${userId}/edit-profile`, {
         method: 'PUT', // hoặc 'POST' nếu backend yêu cầu
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token') || ''}`, // Thêm token nếu cần
         },
         body: JSON.stringify(profile),
       });
+  
+      console.log('📡 Server response status:', response.status);
+  
       if (response.ok) {
-        alert('Profile updated successfully!');
+        alert('✅ Profile updated successfully!');
         navigate('/elite/home');
       } else {
-        alert('Failed to update profile');
+        const errData = await response.json().catch(() => ({}));
+        console.error('❌ Failed response:', errData);
+        alert('❌ Failed to update profile');
       }
     } catch (error) {
-      alert('Error updating profile');
+      console.error('💥 Lỗi fetch PUT:', error);
+      alert('❌ Error updating profile');
     }
   };
+  
 
   const styles = `
     body {
@@ -74,7 +93,7 @@ function EliteEditProfile() {
     background: #DFF5DE;
     opacity: 0.7;
     z-index: 0;
-    pointer-events: none; /* <-- thêm dòng này */
+    pointer-events: none;
 }
 
     .content-wrap {
@@ -332,15 +351,15 @@ function EliteEditProfile() {
         </nav>
 
         <main className="form-container">
-          <form className="edit-profile-form" onSubmit={handleSubmit}> 
+          <form className="edit-profile-form" onSubmit={handleSubmit}>
             <h2 className="form-title">Edit Your Profile</h2>
             <div className="form-row">
               <div className="form-group">
-                <label htmlFor="firstname">First Name</label>
+                <label htmlFor="firstName">First Name</label>
                 <input type="text" id="firstname" name="firstname" value={profile.firstname} onChange={handleInputChange} />
               </div>
               <div className="form-group">
-                <label htmlFor="lastname">Last Name</label>
+                <label htmlFor="lastName">Last Name</label>
                 <input type="text" id="lastname" name="lastname" value={profile.lastname} onChange={handleInputChange} />
               </div>
             </div>
@@ -354,14 +373,14 @@ function EliteEditProfile() {
                 <input type="date" id="quitDate" name="quitDate" value={profile.quitDate} onChange={handleInputChange} />
               </div>
               <div className="form-group">
-                <label htmlFor="formerDailyUsage">Former Daily Usage</label>
+                <label htmlFor="dailyUsage">Former Daily Usage</label>
                 <input type="number" id="formerDailyUsage" name="formerDailyUsage" value={profile.formerDailyUsage} onChange={handleInputChange} min="1" />
                 <span className="usage-note">cigarettes per day</span>
               </div>
             </div>
             <div className="form-group">
-              <label htmlFor="primaryMotivation">Primary Motivation</label>
-              <select id="primaryMotivation" name="primaryMotivation" value={profile.primaryMotivation} onChange={handleInputChange}>
+              <label htmlFor="motivation">Primary Motivation</label>
+                <select id="primaryMotivation" name="primaryMotivation" value={profile.primaryMotivation} onChange={handleInputChange}>
                 <option>Better Health</option>
                 <option>Save Money</option>
                 <option>Family</option>
@@ -384,7 +403,7 @@ function EliteEditProfile() {
 
             <div className="form-buttons">
               <button type="button" className="cancel-btn" onClick={() => navigate(-1)}>Cancel</button>
-              <button type="submit" className="save-btn">Save Changes</button>
+              <button type="submit" className="save-btn" onClick={handleSubmit}>Save Changes</button>
             </div>
           </form>
         </main>

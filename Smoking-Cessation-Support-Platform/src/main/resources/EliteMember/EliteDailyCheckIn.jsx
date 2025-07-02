@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import EditProfileModal from '../EditProfileModal';
+import EditProfileModal from '../editprofilemodal';
 import { Link, useNavigate } from 'react-router-dom';
 
 function DailyCheckIn() {
