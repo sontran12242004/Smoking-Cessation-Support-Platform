@@ -77,27 +77,28 @@ public class AuthenticationService implements UserDetailsService {
             member.setCreatedAt(LocalDateTime.now());
             member.setActive(true);
             member.setAccount(newAccount);  // Liên kết với Account
-            
+
             membersRepository.save(member);
         }
-        
+
         // Nếu role là ADMIN thì tự động tạo Admin entity và liên kết
         if (account.getRole() == Role.ADMIN) {
             Admin admin = new Admin();
             admin.setFullName(account.getFullName());
-            
+
             Admin savedAdmin = adminRepository.save(admin);
             newAccount.setAdmin(savedAdmin);  // Liên kết với Account
             authenticationRepository.save(newAccount);  // Cập nhật Account
         }
-        
+
         // Nếu role là COACH thì tự động tạo Coach entity và liên kết
         if (account.getRole() == Role.COACH) {
             Coach coach = new Coach();
             coach.setName(account.getFullName());
-            coach.setActive(true);
+            coach.setActive(true);  // Đảm bảo Coach luôn active
             coach.setCreatedAt(LocalDateTime.now());
-            
+            coach.setAccount(newAccount);  // Liên kết với Account trước khi save
+
             Coach savedCoach = coachRepository.save(coach);
             newAccount.setCoach(savedCoach);  // Liên kết với Account
             authenticationRepository.save(newAccount);  // Cập nhật Account
@@ -127,6 +128,13 @@ public class AuthenticationService implements UserDetailsService {
         AccountDTO accountResponse = modelMapper.map(account, AccountDTO.class);
         String token = tokenService.generateToken(account);
         accountResponse.setToken(token);
+        accountResponse.setUserId(account.getId()); // Thêm userId vào response
+
+        // Nếu là COACH thì thêm coachId
+        if (account.getRole() == Role.COACH && account.getCoach() != null) {
+            accountResponse.setCoachId(account.getCoach().getId());
+        }
+
         return accountResponse;
     }
     public void forgotPassword(ForgotPasswordDTO  forgotPasswordRequest) {
@@ -167,12 +175,12 @@ public class AuthenticationService implements UserDetailsService {
     public List<Account> getCoachs() {
         return authenticationRepository.findByRole(Role.COACH);
     }
-    
+
     // Method để lấy Members entity từ Account email
     public Members getMemberByAccountEmail(String email) {
         return membersRepository.findByEmail(email).orElse(null);
     }
-    
+
     // Method để lấy Members entity từ current Account
     public Members getCurrentMember() {
         Account currentAccount = getCurrentAccount();
@@ -181,7 +189,7 @@ public class AuthenticationService implements UserDetailsService {
         }
         return null;
     }
-    
+
     // Method để lấy Admin entity từ current Account
     public Admin getCurrentAdmin() {
         Account currentAccount = getCurrentAccount();
@@ -190,7 +198,7 @@ public class AuthenticationService implements UserDetailsService {
         }
         return null;
     }
-    
+
     // Method để lấy Coach entity từ current Account
     public Coach getCurrentCoach() {
         Account currentAccount = getCurrentAccount();

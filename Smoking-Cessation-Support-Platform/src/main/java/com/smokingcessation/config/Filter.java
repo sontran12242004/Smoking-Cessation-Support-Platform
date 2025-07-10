@@ -35,35 +35,47 @@ public class Filter extends OncePerRequestFilter {
     // Danh sách public endpoints không cần token
     private final List<String> PUBLIC_ENDPOINTS = List.of(
             // Swagger UI
-            "/swagger-ui",
+            "/swagger-ui/**",
             "/swagger-ui.html",
-            "/v3/api-docs",
-            "/swagger-resources",
-            "/webjars",
-            
+            "/v3/api-docs/**",
+            "/swagger-resources/**",
+            "/webjars/**",
+
             // Authentication (chỉ register, login, forgot-password)
             "/api/register",
-            "/api/login", 
+            "/api/login",
             "/api/forgot-password",
-            
-            // Public data
+
+            // Public data - membership plans (basic endpoints only)
             "/api/membership-plans",
-            "/api/health-metrics",
-            "/api/medicineService",
-            "/api/{memberId}/edit-profile"
+            "/api/membership-plans/[0-9]+",
+            "/api/health-metrics/**",
+            "/api/medicineService/**",
+            "/api/quit-plans",
+            "/api/members/*/edit-profile",
+            "/api/members/*/available-plans",
+            "/member/{memberId}/submit",
+
+            // Appointment endpoints (nếu muốn public)
+            "/api/appointment/api/members/appoiment/",
+            "/api/appointment/upcoming/coach/*",
+
+            // Coach endpoints - public access
+            "/api/coaches",
+            "/api/coaches/**"
     );
 
     private boolean isPublicEndpoint(String uri) {
         AntPathMatcher matcher = new AntPathMatcher();
-        return PUBLIC_ENDPOINTS.stream().anyMatch(pattern -> 
-            matcher.match(pattern + "/**", uri) || matcher.match(pattern, uri)
+        return PUBLIC_ENDPOINTS.stream().anyMatch(pattern ->
+                matcher.match(pattern, uri)
         );
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String uri = request.getRequestURI();
-        
+
         // Bỏ qua token validation cho public endpoints
         if (isPublicEndpoint(uri)) {
             filterChain.doFilter(request, response);
@@ -91,8 +103,8 @@ public class Filter extends OncePerRequestFilter {
         }
 
         // Token hợp lệ - set authentication context
-        UsernamePasswordAuthenticationToken authToken = 
-            new UsernamePasswordAuthenticationToken(account, token, account.getAuthorities());
+        UsernamePasswordAuthenticationToken authToken =
+                new UsernamePasswordAuthenticationToken(account, token, account.getAuthorities());
         authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authToken);
 

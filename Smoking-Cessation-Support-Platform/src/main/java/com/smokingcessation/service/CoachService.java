@@ -4,6 +4,7 @@ import com.smokingcessation.dto.AssignRequest;
 import com.smokingcessation.dto.CoachDTO;
 import com.smokingcessation.entity.Admin;
 import com.smokingcessation.entity.Coach;
+import com.smokingcessation.enums.AppointmentEnum;
 import com.smokingcessation.repository.AdminRepository;
 import com.smokingcessation.repository.AppointmentRepository;
 import com.smokingcessation.repository.CoachRepository;
@@ -70,14 +71,32 @@ public class CoachService {
 
     public Coach adminEditCoach(Long id, CoachDTO coachDTO) {
         return coachRepository.findById(id).map(coach -> {
-            coach.setName(coachDTO.getName());
-            coach.setTitle(coachDTO.getTitle());
-            coach.setBio(coachDTO.getBio());
-            coach.setCertifications(coachDTO.getCertifications());
-            coach.setHourlyRate(coachDTO.getHourlyRate());
-            coach.setSpecialization(coachDTO.getSpecialization());
-            coach.setExperience(coachDTO.getExperience());
-            // Có thể cập nhật thêm các trường khác nếu cần
+            // Update tất cả fields từ DTO
+            if (coachDTO.getName() != null) {
+                coach.setName(coachDTO.getName());
+            }
+            if (coachDTO.getTitle() != null) {
+                coach.setTitle(coachDTO.getTitle());
+            }
+            if (coachDTO.getBio() != null) {
+                coach.setBio(coachDTO.getBio());
+            }
+            if (coachDTO.getCertifications() != null) {
+                coach.setCertifications(coachDTO.getCertifications());
+            }
+            if (coachDTO.getHourlyRate() != null) {
+                coach.setHourlyRate(coachDTO.getHourlyRate());
+            }
+            if (coachDTO.getSpecialization() != null) {
+                coach.setSpecialization(coachDTO.getSpecialization());
+            }
+            if (coachDTO.getExperience() != null) {
+                coach.setExperience(coachDTO.getExperience());
+            }
+            if (coachDTO.getActive() != null) {
+                coach.setActive(coachDTO.getActive());
+            }
+
             return coachRepository.save(coach);
         }).orElse(null);
     }
@@ -114,16 +133,22 @@ public class CoachService {
     }
 
     public double calculateSuccessRateForCoach(Long coachId) {
-        int[] starCounts = ratingService.countStarsForCoach(coachId);
-        int modeStar = 0;
-        int maxCount = 0;
-        for (int i = 1; i <= 5; i++) {
-            if (starCounts[i] > maxCount) {
-                maxCount = starCounts[i];
-                modeStar = i;
-            }
+        // Tính success rate dựa trên appointment completion
+        long totalAppointments = appointmentRepository.findAll().stream()
+                .filter(apt -> apt.getCoach() != null && apt.getCoach().getId().equals(coachId))
+                .filter(apt -> apt.getMember() != null) // Chỉ tính những appointment đã có member book
+                .count();
+
+        long completedAppointments = appointmentRepository.findAll().stream()
+                .filter(apt -> apt.getCoach() != null && apt.getCoach().getId().equals(coachId))
+                .filter(apt -> apt.getStatus() == AppointmentEnum.COMPLETED)
+                .count();
+
+        if (totalAppointments == 0) {
+            return 0.0; // Không có appointment nào thì success rate = 0
         }
-        return (modeStar / 5.0) * 100;
+
+        return (completedAppointments * 100.0) / totalAppointments;
     }
 
     public double getAvgRatingForCoach(Long coachId) {
@@ -191,13 +216,13 @@ public class CoachService {
     // Method mới: gộp cả summary và coach card list
     public Map<String, Object> getCoachDashboardData() {
         Map<String, Object> result = new java.util.HashMap<>();
-        
+
         // Thêm summary data
         result.putAll(getCoachDashboardSummary());
-        
+
         // Thêm coach card list
         result.put("coachCards", getCoachCardList());
-        
+
         return result;
     }
 

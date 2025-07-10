@@ -7,7 +7,6 @@ import lombok.Data;
 public class CoachDTO {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
-
     private String name;
     private String email;
     private String phone;
@@ -18,4 +17,6 @@ public class CoachDTO {
     private String specialization;
     private String certifications;
     private String experience;
+    private Boolean active; // Thêm field active
+    private Boolean coachActive; // Thêm field coachActive (nếu cần)
 }

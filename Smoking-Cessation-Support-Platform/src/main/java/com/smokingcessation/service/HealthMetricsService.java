@@ -28,7 +28,7 @@ public class HealthMetricsService {
 
     @Autowired
     private CigaretteLogRepository cigaretteLogRepository;
-    
+
     @Autowired
     private DailyProcessRepository dailyProcessRepository;
 
@@ -50,14 +50,13 @@ public class HealthMetricsService {
     public int getMoneySaved(Long memberId) {
         Members member = membersRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("Member not found"));
-        
-        // Lấy tổng priceSmoked từ tất cả DailyProcess records của member
-        List<DailyProcess> dailyProcesses = dailyProcessRepository.findByMember_MemberID(memberId);
-        int totalMoneySaved = dailyProcesses.stream()
-                .mapToInt(process -> process.getPriceSmoked() != null ? process.getPriceSmoked() : 0)
-                .sum();
-        
-        return totalMoneySaved;
+        // Số ngày đã cai (dùng getDaysSmokeFree)
+        int daysSmokeFree = getDaysSmokeFree(member);
+        // Giá 1 điếu thuốc (có thể lấy từ cấu hình hoặc truyền vào)
+        int pricePerCigarette = 500; // ví dụ
+        // Số tiền tiết kiệm được tăng dần mỗi ngày
+        int moneySaved =  pricePerCigarette * daysSmokeFree;
+        return moneySaved;
     }
     /**
      * Lấy tổng số điếu thuốc đã hút từ DailyProcess records
@@ -70,28 +69,18 @@ public class HealthMetricsService {
     }
 
     /**
-     * Kiểm tra dữ liệu đầu vào của user
-     */
-    private void validateUserData(Members user) {
-        if (user.getCigarettesPer() < 0) {
-            throw new IllegalArgumentException("Số tiền hút thuốc mỗi ngày không hợp lệ");
-        }
-    }
-
-    /**
      * Helper method để tính tổng cigaretteStrength và cigarettesSmokedToday từ DailyProcess
      */
     private Map<String, Object> calculateDailyProcessTotals(Long memberId) {
         List<DailyProcess> dailyProcesses = dailyProcessRepository.findByMember_MemberID(memberId);
-        
+
         double totalStrength = dailyProcesses.stream()
                 .mapToDouble(process -> process.getCigaretteStrength() != null ? process.getCigaretteStrength() : 0)
                 .sum();
-        
+
         int totalCigarettesSmoked = dailyProcesses.stream()
                 .mapToInt(process -> process.getCigarettesSmokedToday())
                 .sum();
-        
         Map<String, Object> result = new HashMap<>();
         result.put("totalStrength", totalStrength);
         result.put("totalCigarettesSmoked", totalCigarettesSmoked);
@@ -105,10 +94,10 @@ public class HealthMetricsService {
     public double getHealthImprovedPercent(Members user) {
         int days = getDaysSmokeFree(user);
         Map<String, Object> totals = calculateDailyProcessTotals(user.getMemberID());
-        
+
         double totalStrength = (Double) totals.get("totalStrength");
         int totalCigarettesSmoked = (Integer) totals.get("totalCigarettesSmoked");
-        
+
         // Công thức mới: 100% + (số ngày * 2%) - (tổng strength * 0.5%) - (tổng điếu * 1%)
         double percent = 100.0 + (days * 2.0) - (totalStrength * 0.5) - (totalCigarettesSmoked * 1.0);
         return Math.max(0, Math.min(100, percent));
@@ -121,10 +110,10 @@ public class HealthMetricsService {
     public double getHeartAttackRisk(Members user) {
         int days = getDaysSmokeFree(user);
         Map<String, Object> totals = calculateDailyProcessTotals(user.getMemberID());
-        
+
         double totalStrength = (Double) totals.get("totalStrength");
         int totalCigarettesSmoked = (Integer) totals.get("totalCigarettesSmoked");
-        
+
         // Công thức mới: 100% - (số ngày * 1.2%) - (tổng strength * 0.3%) - (tổng điếu * 0.8%)
         double percent = 100.0 - (days * 1.2) - (totalStrength * 0.3) - (totalCigarettesSmoked * 0.8);
         return Math.max(0, Math.min(100, percent));
@@ -137,10 +126,10 @@ public class HealthMetricsService {
     public double getLungCancerRisk(Members user) {
         int days = getDaysSmokeFree(user);
         Map<String, Object> totals = calculateDailyProcessTotals(user.getMemberID());
-        
+
         double totalStrength = (Double) totals.get("totalStrength");
         int totalCigarettesSmoked = (Integer) totals.get("totalCigarettesSmoked");
-        
+
         // Công thức mới: 100% - (số ngày * 1.1%) - (tổng strength * 0.4%) - (tổng điếu * 0.7%)
         double percent = 100.0 - (days * 1.1) - (totalStrength * 0.4) - (totalCigarettesSmoked * 0.7);
         return Math.max(0, Math.min(100, percent));
@@ -153,10 +142,10 @@ public class HealthMetricsService {
     public double getHeartDiseaseRisk(Members user) {
         int days = getDaysSmokeFree(user);
         Map<String, Object> totals = calculateDailyProcessTotals(user.getMemberID());
-        
+
         double totalStrength = (Double) totals.get("totalStrength");
         int totalCigarettesSmoked = (Integer) totals.get("totalCigarettesSmoked");
-        
+
         // Công thức mới: 100% - (số ngày * 1.9%) - (tổng strength * 0.2%) - (tổng điếu * 0.5%), tối đa giảm 27%
         double percent = 100.0 - Math.min(27, (days * 1.9) + (totalStrength * 0.2) + (totalCigarettesSmoked * 0.5));
         return Math.max(0, Math.min(100, percent));
@@ -169,10 +158,10 @@ public class HealthMetricsService {
     public double getImmuneFunction(Members user) {
         int days = getDaysSmokeFree(user);
         Map<String, Object> totals = calculateDailyProcessTotals(user.getMemberID());
-        
+
         double totalStrength = (Double) totals.get("totalStrength");
         int totalCigarettesSmoked = (Integer) totals.get("totalCigarettesSmoked");
-        
+
         // Công thức mới: (số ngày * 1.6%) - (tổng strength * 0.1%) - (tổng điếu * 0.2%), tối đa 22%
         double percent = Math.min(22, (days * 1.6) - (totalStrength * 0.1) - (totalCigarettesSmoked * 0.2));
         return Math.max(0, Math.min(100, percent));
@@ -185,10 +174,10 @@ public class HealthMetricsService {
     public double getTeethWhitening(Members user) {
         int days = getDaysSmokeFree(user);
         Map<String, Object> totals = calculateDailyProcessTotals(user.getMemberID());
-        
+
         double totalStrength = (Double) totals.get("totalStrength");
         int totalCigarettesSmoked = (Integer) totals.get("totalCigarettesSmoked");
-        
+
         // Công thức mới: (số ngày * 1.3%) - (tổng strength * 0.08%) - (tổng điếu * 0.15%), tối đa 19%
         double percent = Math.min(19, (days * 1.3) - (totalStrength * 0.08) - (totalCigarettesSmoked * 0.15));
         return Math.max(0, Math.min(100, percent));
@@ -201,10 +190,10 @@ public class HealthMetricsService {
     public double getBreathFreshness(Members user) {
         int days = getDaysSmokeFree(user);
         Map<String, Object> totals = calculateDailyProcessTotals(user.getMemberID());
-        
+
         double totalStrength = (Double) totals.get("totalStrength");
         int totalCigarettesSmoked = (Integer) totals.get("totalCigarettesSmoked");
-        
+
         // Công thức mới: (số ngày * 2.75%) - (tổng strength * 0.15%) - (tổng điếu * 0.3%), tối đa 38.5%
         double percent = Math.min(38.5, (days * 2.75) - (totalStrength * 0.15) - (totalCigarettesSmoked * 0.3));
         return Math.max(0, Math.min(100, percent));
@@ -217,10 +206,10 @@ public class HealthMetricsService {
     public double getTasteAndSmell(Members user) {
         int days = getDaysSmokeFree(user);
         Map<String, Object> totals = calculateDailyProcessTotals(user.getMemberID());
-        
+
         double totalStrength = (Double) totals.get("totalStrength");
         int totalCigarettesSmoked = (Integer) totals.get("totalCigarettesSmoked");
-        
+
         // Công thức mới: (số ngày * 3.2%) - (tổng strength * 0.2%) - (tổng điếu * 0.4%), tối đa 45%
         double percent = Math.min(45, (days * 3.2) - (totalStrength * 0.2) - (totalCigarettesSmoked * 0.4));
         return Math.max(0, Math.min(100, percent));
@@ -233,10 +222,10 @@ public class HealthMetricsService {
     public double getCOLvls(Members user) {
         int days = getDaysSmokeFree(user);
         Map<String, Object> totals = calculateDailyProcessTotals(user.getMemberID());
-        
+
         double totalStrength = (Double) totals.get("totalStrength");
         int totalCigarettesSmoked = (Integer) totals.get("totalCigarettesSmoked");
-        
+
         // Công thức mới: (số ngày * 5.9%) - (tổng strength * 0.3%) - (tổng điếu * 0.6%), tối đa 83%
         double percent = Math.min(83, (days * 5.9) - (totalStrength * 0.3) - (totalCigarettesSmoked * 0.6));
         return Math.max(0, Math.min(100, percent));
@@ -249,10 +238,10 @@ public class HealthMetricsService {
     public double getOxygenLvls(Members user) {
         int days = getDaysSmokeFree(user);
         Map<String, Object> totals = calculateDailyProcessTotals(user.getMemberID());
-        
+
         double totalStrength = (Double) totals.get("totalStrength");
         int totalCigarettesSmoked = (Integer) totals.get("totalCigarettesSmoked");
-        
+
         // Công thức mới: (số ngày * 0.85%) - (tổng strength * 0.05%) - (tổng điếu * 0.1%), tối đa 12%
         double percent = Math.min(12, (days * 0.85) - (totalStrength * 0.05) - (totalCigarettesSmoked * 0.1));
         return Math.max(0, Math.min(100, percent));
@@ -263,7 +252,6 @@ public class HealthMetricsService {
      */
     @Transactional(rollbackFor = Exception.class)
     public HealthMetricsDTO getOrCreateTodayMetrics(Members user) {
-        validateUserData(user);
         LocalDate today = LocalDate.now();
         Optional<HealthMetrics> existing = healthMetricsRepository.findByUserAndDate(user, today);
         if (existing.isPresent()) {

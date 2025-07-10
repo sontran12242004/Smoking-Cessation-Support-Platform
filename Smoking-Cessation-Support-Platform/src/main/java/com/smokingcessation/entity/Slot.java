@@ -16,12 +16,10 @@ public class Slot
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
-
     String label;
     LocalTime start;
     LocalTime end;
     boolean isDelete =false;
-
     @OneToMany(mappedBy = "slot")
     List<AccountSlot> accountSlots;
 }

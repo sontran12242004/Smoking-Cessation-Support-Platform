@@ -28,7 +28,7 @@ public class MembersController {
 
     @Autowired
     private MembershipPlanService membershipPlanService;
-    
+
     @Autowired
     private AuthenticationService authenticationService;
 

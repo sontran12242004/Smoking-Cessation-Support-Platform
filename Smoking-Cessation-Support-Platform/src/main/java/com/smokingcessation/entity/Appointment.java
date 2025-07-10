@@ -46,6 +46,9 @@ public class Appointment {
     private String sessionType;
 
     private Long slotId;
+    
+    private String googleCalendarEventId;
+    
     @OneToMany(mappedBy = "appointment")
     List<Report> reports;
 

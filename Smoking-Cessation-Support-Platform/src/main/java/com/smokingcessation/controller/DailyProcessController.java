@@ -12,24 +12,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @RestController
 @RequestMapping("/api/daily-process")
 public class DailyProcessController {
-    
+
     @Autowired
     private DailyProcessService dailyProcessService;
-    
+
     @Autowired
     private HealthMetricsService healthMetricsService;
-    
+
     @Autowired
     private MembersService membersService;
-    
+
     // AUTHENTICATED - Members (chỉ submit cho mình), Admin (submit cho bất kỳ ai)
     @PostMapping("/member/{memberId}/submit")
     @SecurityRequirement(name = "api")
@@ -43,7 +45,7 @@ public class DailyProcessController {
         DailyProcessDTO savedProcess = dailyProcessService.saveDailyProcess(dailyProcessDTO);
         return ResponseEntity.ok(savedProcess);
     }
-    
+
     // AUTHENTICATED - Members (chỉ xem metrics của mình), Coach (xem assigned members), Admin (xem tất cả)
     @GetMapping("/member/{memberId}/health-metrics")
     @SecurityRequirement(name = "api")
@@ -54,31 +56,31 @@ public class DailyProcessController {
             if (member == null) {
                 return ResponseEntity.notFound().build();
             }
-            
+
             HealthMetricsDTO metrics = healthMetricsService.getOrCreateTodayMetrics(member);
             return ResponseEntity.ok(metrics);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
-    
+
     // AUTHENTICATED - Members (chỉ thêm cho mình), Admin (thêm cho bất kỳ ai)
     @PostMapping("/member/{memberId}")
     @SecurityRequirement(name = "api")
     public ResponseEntity<DailyProcessDTO> addDailyProcess(
             @PathVariable Long memberId,
             @Valid @RequestBody DailyProcessDTO dailyProcessDTO) {
-        
+
         // Validate memberId
         if (memberId == null) {
             return ResponseEntity.badRequest().build();
         }
-        
+
         dailyProcessDTO.setMemberId(memberId);
         if (dailyProcessDTO.getDate() == null) {
             dailyProcessDTO.setDate(LocalDateTime.now());
         }
-        
+
         try {
             DailyProcessDTO savedProcess = dailyProcessService.saveDailyProcess(dailyProcessDTO);
             return ResponseEntity.ok(savedProcess);
@@ -89,7 +91,7 @@ public class DailyProcessController {
             return ResponseEntity.badRequest().build();
         }
     }
-    
+
     // AUTHENTICATED - Members (chỉ xem của mình), Coach (xem assigned members), Admin (xem tất cả)
     @GetMapping("/member/{memberId}")
     @SecurityRequirement(name = "api")
@@ -105,8 +107,10 @@ public class DailyProcessController {
     @PreAuthorize("hasAnyRole('MEMBERS', 'COACH', 'ADMIN')")
     public ResponseEntity<DailyProcessDTO> getProcessForDate(
             @PathVariable Long memberId,
-            @PathVariable LocalDateTime date) {
-        Optional<DailyProcessDTO> processOpt = dailyProcessService.getProcessForDate(memberId, date);
+            @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+        // Convert LocalDate to LocalDateTime with start of day
+        LocalDateTime dateTime = date.atStartOfDay();
+        Optional<DailyProcessDTO> processOpt = dailyProcessService.getProcessForDate(memberId, dateTime);
         return processOpt
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

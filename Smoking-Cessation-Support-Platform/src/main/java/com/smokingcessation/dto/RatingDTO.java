@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public class RatingDTO {
     public long id;
     int rating;
-    long serviceId;
+    Long serviceId; // Đổi thành Long để có thể null (optional)
     private String memberName;
     String feedback;
     LocalDate createdAt;

@@ -31,22 +31,22 @@ public class DailyProcessService {
     @Getter
     @Autowired
     private DailyProcessRepository dailyProcessRepository;
-    
+
     @Autowired
     private MembersRepository membersRepository;
-    
+
     @Autowired
     private CigaretteLogRepository cigaretteLogRepository;
-    
+
     @Autowired
     private HealthMetricsService healthMetricsService;
-    
+
     @Autowired
     private QuitPlansService quitPlansService;
-    
+
     @Autowired
     private MembersService membersService;
-    
+
     // Create or update daily process record and update health metrics
     @Transactional
     public DailyProcessDTO saveDailyProcess(DailyProcessDTO dailyProcessDTO) {
@@ -54,24 +54,25 @@ public class DailyProcessService {
         if (dailyProcessDTO.getMemberId() == null) {
             throw new RuntimeException("Member ID is required");
         }
-        
+
         Optional<Members> memberOpt = membersRepository.findById(dailyProcessDTO.getMemberId());
         if (!memberOpt.isPresent()) {
             throw new RuntimeException("Member not found");
         }
-        
+
         Members member = memberOpt.get();
-        
+
         // Check if there's already a record for today
-        Optional<DailyProcess> existingProcess = 
-            dailyProcessRepository.findByMember_MemberIDAndDate(member.getMemberID(), dailyProcessDTO.getDate());
-        
+        LocalDate dateOnly = dailyProcessDTO.getDate().toLocalDate();
+        List<DailyProcess> existingProcesses =
+                dailyProcessRepository.findByMember_MemberIDAndDateOnly(member.getMemberID(), dateOnly);
+
         DailyProcess dailyProcess;
         boolean isFirstEntry = false;
-        
-        if (existingProcess.isPresent()) {
-            // Update existing record
-            dailyProcess = existingProcess.get();
+
+        if (!existingProcesses.isEmpty()) {
+            // Update existing record (use the first/most recent one)
+            dailyProcess = existingProcesses.get(0);
         } else {
             // Create new record
             dailyProcess = new DailyProcess();
@@ -107,7 +108,7 @@ public class DailyProcessService {
         dailyProcess.setConfidence(dailyProcessDTO.getConfidence());
         dailyProcess.setDate(dailyProcessDTO.getDate());
         dailyProcess.setCigarettesSmokedToday(dailyProcessDTO.getCigarettesSmokedToday());
-        
+
         return dailyProcessDTO;
     }
     // Save cigarette log for the day
@@ -128,32 +129,37 @@ public class DailyProcessService {
     public List<DailyProcessDTO> getAllProcessesForMember(Long memberId) {
         List<DailyProcess> processes = dailyProcessRepository.findByMember_MemberID(memberId);
         return processes.stream()
-            .map(this::convertToDTO)
-            .collect(Collectors.toList());
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
     // Get daily process for a specific date
     public Optional<DailyProcessDTO> getProcessForDate(Long memberId, LocalDateTime date) {
-        Optional<DailyProcess> processOpt = 
-            dailyProcessRepository.findByMember_MemberIDAndDate(memberId, date);
-        
-        return processOpt.map(this::convertToDTO);
+        // Convert LocalDateTime to LocalDate for date-only comparison
+        LocalDate dateOnly = date.toLocalDate();
+        List<DailyProcess> processes =
+                dailyProcessRepository.findByMember_MemberIDAndDateOnly(memberId, dateOnly);
+
+        // Return the first (most recent) process if exists, otherwise empty
+        return processes.isEmpty() ?
+                Optional.empty() :
+                Optional.of(convertToDTO(processes.get(0)));
     }
-    
+
     // Get daily processes within a date range
     public List<DailyProcessDTO> getProcessesForDateRange(Long memberId, LocalDateTime startDate, LocalDateTime endDate) {
-        List<DailyProcess> processes = 
-            dailyProcessRepository.findByMember_MemberIDAndDateBetween(memberId, startDate, endDate);
-        
+        List<DailyProcess> processes =
+                dailyProcessRepository.findByMember_MemberIDAndDateBetween(memberId, startDate, endDate);
+
         return processes.stream()
-            .map(this::convertToDTO)
-            .collect(Collectors.toList());
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
-    
+
     // Delete a daily process record
     public void deleteDailyProcess(Long processId) {
         dailyProcessRepository.deleteById(processId);
     }
-    
+
     // Helper method to convert Entity to DTO
     private DailyProcessDTO convertToDTO(DailyProcess dailyProcess) {
         DailyProcessDTO dto = new DailyProcessDTO();
@@ -174,7 +180,7 @@ public class DailyProcessService {
     public Members getMemberById(Long memberId) {
         return membersRepository.findById(memberId).orElse(null);
     }
-    
+
     /**
      * Helper method để tìm milestone hiện tại
      */
@@ -189,7 +195,7 @@ public class DailyProcessService {
         }
         return currentMilestoneLabel;
     }
-    
+
     /**
      * Helper method để tính toán milestone info
      */
@@ -198,12 +204,12 @@ public class DailyProcessService {
         String nextMilestone = "24 giờ";
         int daysToNext = 1;
         boolean isCompleted = false;
-        
+
         // Tìm milestone hiện tại và tiếp theo
         for (int i = 0; i < MILESTONE_DAYS.length; i++) {
             if (daysSmokeFree >= MILESTONE_DAYS[i]) {
                 currentMilestone = MILESTONE_LABELS[i];
-                
+
                 // Kiểm tra xem có phải milestone cuối cùng không
                 if (i == MILESTONE_DAYS.length - 1) {
                     isCompleted = true;
@@ -221,13 +227,13 @@ public class DailyProcessService {
                 break;
             }
         }
-        
+
         Map<String, Object> milestoneInfo = new HashMap<>();
         milestoneInfo.put("currentMilestone", currentMilestone);
         milestoneInfo.put("nextMilestone", nextMilestone);
         milestoneInfo.put("daysToNext", daysToNext);
         milestoneInfo.put("isCompleted", isCompleted);
-        
+
         return milestoneInfo;
     }
 
@@ -242,13 +248,13 @@ public class DailyProcessService {
         int daysSmokeFree = getDaysSmokeFree(memberId);
         // Lấy danh sách ngày DailyProcess đã sort tăng dần
         List<LocalDate> processDates = dailyProcessRepository.findByMember_MemberIDOrderByDateAsc(memberId)
-            .stream().map(p -> p.getDate().toLocalDate()).collect(Collectors.toList());
+                .stream().map(p -> p.getDate().toLocalDate()).collect(Collectors.toList());
         List<Map<String, Object>> milestones = getMilestonesForFE(daysSmokeFree, processDates);
         Map<String, Object> result = new HashMap<>();
         result.put("milestones", milestones);
         return result;
     }
-    
+
     /**
      * Tính toán milestone hiện tại và tiếp theo
      */
@@ -261,23 +267,23 @@ public class DailyProcessService {
         result.put("daysToNext", milestoneInfo.get("daysToNext"));
         return result;
     }
-    
+
     /**
      * Lấy danh sách milestones chuẩn cho FE
      */
     private List<Map<String, Object>> getMilestonesForFE(int daysSmokeFree, List<LocalDate> processDates) {
         List<Map<String, Object>> milestones = new ArrayList<>();
-        
+
         // Tìm milestone hiện tại đang theo đuổi
         String currentMilestoneLabel = getCurrentMilestoneLabel(daysSmokeFree);
-        
+
         for (int i = 0; i < MILESTONE_DAYS.length; i++) {
             Map<String, Object> milestone = new HashMap<>();
             milestone.put("label", MILESTONE_LABELS[i]);
             milestone.put("daysRequired", MILESTONE_DAYS[i]);
             milestone.put("isAchieved", daysSmokeFree >= MILESTONE_DAYS[i]);
             milestone.put("isCurrent", MILESTONE_LABELS[i].equals(currentMilestoneLabel));
-            
+
             if (daysSmokeFree >= MILESTONE_DAYS[i]) {
                 milestone.put("daysCompleted", MILESTONE_DAYS[i]);
                 milestone.put("daysRemaining", 0);
@@ -287,20 +293,20 @@ public class DailyProcessService {
                 milestone.put("daysRemaining", MILESTONE_DAYS[i] - daysSmokeFree);
                 milestone.put("completedAt", null);
             }
-            
+
             milestones.add(milestone);
         }
-        
+
         return milestones;
     }
-    
+
     /**
      * Đếm số ngày smoke-free hiện tại
      */
     public int getDaysSmokeFree(Long memberId) {
         return (int) dailyProcessRepository.countByMember_MemberID(memberId);
     }
-    
+
     /**
      * Lấy thông tin milestone hiện tại và tiếp theo
      */
@@ -310,32 +316,32 @@ public class DailyProcessService {
         milestoneInfo.put("daysSmokeFree", daysSmokeFree);
         return milestoneInfo;
     }
-    
+
     /**
      * Kiểm tra xem có đạt được milestone mới không
      */
     public boolean hasReachedNewMilestone(Long memberId) {
         int daysSmokeFree = getDaysSmokeFree(memberId);
-        
+
         for (int milestone : MILESTONE_DAYS) {
             if (daysSmokeFree == milestone) {
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     /**
      * Lấy danh sách tất cả milestones với trạng thái
      */
     public List<Map<String, Object>> getAllMilestones(Long memberId) {
         int daysSmokeFree = getDaysSmokeFree(memberId);
-        
+
         // Lấy danh sách ngày DailyProcess đã sort tăng dần
         List<LocalDate> processDates = dailyProcessRepository.findByMember_MemberIDOrderByDateAsc(memberId)
                 .stream().map(p -> p.getDate().toLocalDate()).collect(Collectors.toList());
-        
+
         // Tái sử dụng logic từ getMilestonesForFE
         return getMilestonesForFE(daysSmokeFree, processDates);
     }
@@ -365,7 +371,7 @@ public class DailyProcessService {
         result.putAll(milestoneInfo);
         result.put("milestones", milestoneProgress.get("milestones"));
         result.put("hasNewMilestone", hasNewMilestone);
-        
+
         return result;
     }
 }

@@ -38,7 +38,6 @@ public class SlotService {
             //=> da co lich roi
             throw new BadRequestException("........");
         }
-
         for (Slot slot : slotRepository.findAll()) {
             AccountSlot accountSlot = new AccountSlot();
             accountSlot.setSlot(slot);

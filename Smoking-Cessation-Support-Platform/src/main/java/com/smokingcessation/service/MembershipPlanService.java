@@ -45,8 +45,6 @@ public class MembershipPlanService {
 
     @PostConstruct
     public void resetAndInitDefaultPlans() {
-
-
         // 2. Seed lại các gói mặc định
         addPlanIfNotExists("Elite Package - Mastery Program (1 year)",
                 365,

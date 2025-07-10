@@ -10,5 +10,10 @@ import java.util.List;
 
 public interface RatingRepository extends JpaRepository<Rating, Long> {
     boolean existsByAccountAndMedicineService(Account account, MedicineService medicineService);
-    List<Rating> findByCoachId(Long coachId);
+
+    // Tìm ratings cho coach
+    List<Rating> findByCoach_Id(Long coachId);
+
+    // Đếm ratings cho coach
+    long countByCoach_Id(Long coachId);
 }

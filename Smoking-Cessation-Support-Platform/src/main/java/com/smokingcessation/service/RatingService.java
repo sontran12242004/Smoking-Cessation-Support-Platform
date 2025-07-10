@@ -37,28 +37,34 @@ public class RatingService {
         }
         // lay account thang tao rating
         Account currentAcount = authenticationService.getCurrentAccount();
-        // lay service
-        MedicineService medicineService = medicineServiceRepository.findById(ratingRequest.getServiceId())
-                .orElseThrow(() -> new BadRequestException("Service not found"));
 
-//        check xem thang nay da rating cai service nay hay chua
-        if(ratingRepository.existsByAccountAndMedicineService(currentAcount,medicineService)){
-            throw new BadRequestException("Rating already exists");
-        }else{
-            Rating rating = new Rating();
-            rating.setAccount(currentAcount);
-            rating.setMedicineService(medicineService);
-            rating.setRating(ratingRequest.getRating());
-            rating.setFeedback(ratingRequest.getFeedback());
-            rating.setCreatedAt(LocalDateTime.now());
-            return ratingRepository.save(rating);
+        MedicineService medicineService = null;
+
+        // Nếu có serviceId thì tìm service, nếu không thì để null
+        if (ratingRequest.getServiceId() != null) {
+            medicineService = medicineServiceRepository.findById(ratingRequest.getServiceId())
+                    .orElse(null); // Không throw exception, chỉ set null
         }
+
+        // Check xem đã rating service này hay chưa (chỉ khi có service)
+        if (medicineService != null && ratingRepository.existsByAccountAndMedicineService(currentAcount, medicineService)) {
+            throw new BadRequestException("Rating already exists for this service");
+        }
+
+        // Tạo rating
+        Rating rating = new Rating();
+        rating.setAccount(currentAcount);
+        rating.setMedicineService(medicineService); // Có thể null
+        rating.setRating(ratingRequest.getRating());
+        rating.setFeedback(ratingRequest.getFeedback());
+        rating.setCreatedAt(LocalDateTime.now());
+        return ratingRepository.save(rating);
 
 
     }
     public int[] countStarsForCoach(Long coachId) {
         int[] starCounts = new int[6]; // 0 unused, 1-5
-        List<Rating> ratings = ratingRepository.findByCoachId(coachId);
+        List<Rating> ratings = ratingRepository.findByCoach_Id(coachId);
         for (Rating r : ratings) {
             if (r.getRating() >= 1 && r.getRating() <= 5) {
                 starCounts[r.getRating()]++;

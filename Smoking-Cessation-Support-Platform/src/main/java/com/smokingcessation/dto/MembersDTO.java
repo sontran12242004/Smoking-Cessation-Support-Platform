@@ -2,6 +2,7 @@ package com.smokingcessation.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.smokingcessation.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,8 @@ public class MembersDTO {
     private String packageType;       // Loại gói subscription
     @JsonProperty("status")
     private String status;            // Trạng thái tài khoản
+    @JsonProperty("role")
+    private Role role;                // Role của member
     // Thông tin bổ sung cho member edit profile
     @JsonProperty("firstname")
     private String firstname;         // Tên cho edit profile

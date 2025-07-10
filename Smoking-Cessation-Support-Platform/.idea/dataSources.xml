@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="Smoking-Cessation-Support-Platform@localhost" uuid="80f76393-00ce-4dad-aaf6-7a530eec0629">
+    <data-source source="LOCAL" name="Smoking-Cessation-Support-Platform@167.99.78.5" uuid="80f76393-00ce-4dad-aaf6-7a530eec0629">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
-      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/Smoking-Cessation-Support-Platform</jdbc-url>
+      <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://167.99.78.5:3306/Smoking-Cessation-Support-Platform</jdbc-url>
       <jdbc-additional-properties>
         <property name="com.intellij.clouds.kubernetes.db.host.port" />
         <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />

@@ -9,6 +9,8 @@ import java.util.List;
 @Data
 public class AppointmentDTO {
     public long id;
+    private Long appointmentId; // ID của appointment muốn book (từ available-schedules)
+    private Long memberId; // Thêm memberId để xác định member tạo appointment
     private Long slotId;
     private Long coachId;
     private LocalDate appointmentDate;

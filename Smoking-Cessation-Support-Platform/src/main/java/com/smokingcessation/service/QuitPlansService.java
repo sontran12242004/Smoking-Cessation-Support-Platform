@@ -17,16 +17,16 @@ import java.util.Optional;
 
 @Service
 public class QuitPlansService {
-    
+
     @Autowired
     private QuitPlansRepository quitPlansRepository;
-    
+
     @Autowired
     private MembersRepository membersRepository;
-    
+
     @Autowired
     private ObjectMapper objectMapper;
-    
+
     /**
      * Danh sách các lựa chọn hợp lệ cho từng trường (theo UI)
      */
@@ -36,7 +36,7 @@ public class QuitPlansService {
     private static final List<String> ALLOWED_TRIED_BEFORE = List.of("No, this is my first time", "Yes, once", "Yes, multiple times");
     private static final List<String> ALLOWED_WEEKLY_SPENDING = List.of("Under $10", "$10 - $25", "$26 - $50", "Over $50");
     private static final List<String> ALLOWED_TRIGGERS = List.of("Morning coffee", "Stressful situations", "Social gatherings", "After meals", "When bored");
-    
+
     /**
      * Tạo quit plan cho member cụ thể
      */
@@ -72,20 +72,20 @@ public class QuitPlansService {
                 }
             }
         }
-        
+
         Members member = membersRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("Member not found"));
-        
+
         // Kiểm tra xem member đã có quit plan chưa
         Optional<QuitPlans> existingPlan = quitPlansRepository.findByMember(member);
         if (existingPlan.isPresent()) {
             throw new RuntimeException("Member already has a quit plan");
         }
-        
+
         // Tạo quit plan mới
         QuitPlans quitPlan = new QuitPlans();
         quitPlan.setMember(member);
-        
+
         // Set basic information with null checks
         quitPlan.setDailyCigarettes(quitPlanDTO.getDailyCigarettes());
         quitPlan.setFirstCigaretteAfterWaking(quitPlanDTO.getFirstCigaretteAfterWaking());
@@ -94,7 +94,7 @@ public class QuitPlansService {
         quitPlan.setTriedBefore(quitPlanDTO.getTriedBefore());
         quitPlan.setQuitGoal(quitPlanDTO.getQuitGoal() != null ? quitPlanDTO.getQuitGoal() : "Quit completely");
         quitPlan.setTargetDays(quitPlanDTO.getTargetDays() != null ? quitPlanDTO.getTargetDays() : 365);
-        
+
         // Convert triggers list to JSON string
         if (quitPlanDTO.getTriggers() != null && !quitPlanDTO.getTriggers().isEmpty()) {
             try {
@@ -104,26 +104,26 @@ public class QuitPlansService {
                 throw new RuntimeException("Error processing triggers data", e);
             }
         }
-        
+
         quitPlan.setActive(true);
         quitPlan.setCreatedAt(LocalDateTime.now());
-        
+
         QuitPlans savedPlan = quitPlansRepository.save(quitPlan);
         return convertToDTO(savedPlan);
     }
-    
+
     /**
      * Lấy quit plan của member
      */
     public QuitPlansDTO getQuitPlan(Long memberId) {
         Members member = membersRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("Member not found"));
-        
+
         return quitPlansRepository.findByMember(member)
                 .map(this::convertToDTO)
                 .orElse(null);
     }
-    
+
     /**
      * Cập nhật quit plan
      */
@@ -131,10 +131,10 @@ public class QuitPlansService {
     public QuitPlansDTO updateQuitPlan(Long memberId, QuitPlansDTO quitPlanDTO) {
         Members member = membersRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("Member not found"));
-        
+
         QuitPlans quitPlan = quitPlansRepository.findByMember(member)
                 .orElseThrow(() -> new RuntimeException("Quit plan not found"));
-        
+
         // Validate các trường nếu có cập nhật
         if (quitPlanDTO.getDailyCigarettes() != null && !ALLOWED_DAILY_CIGARETTES.contains(quitPlanDTO.getDailyCigarettes())) {
             throw new RuntimeException("Invalid daily cigarettes value");
@@ -158,7 +158,7 @@ public class QuitPlansService {
                 }
             }
         }
-        
+
         // Update fields if provided
         if (quitPlanDTO.getDailyCigarettes() != null) {
             quitPlan.setDailyCigarettes(quitPlanDTO.getDailyCigarettes());
@@ -181,7 +181,7 @@ public class QuitPlansService {
         if (quitPlanDTO.getTargetDays() != null) {
             quitPlan.setTargetDays(quitPlanDTO.getTargetDays());
         }
-        
+
         // Update triggers if provided
         if (quitPlanDTO.getTriggers() != null && !quitPlanDTO.getTriggers().isEmpty()) {
             try {
@@ -191,11 +191,11 @@ public class QuitPlansService {
                 throw new RuntimeException("Error processing triggers data", e);
             }
         }
-        
+
         QuitPlans updatedPlan = quitPlansRepository.save(quitPlan);
         return convertToDTO(updatedPlan);
     }
-    
+
     /**
      * Xóa quit plan
      */
@@ -203,24 +203,24 @@ public class QuitPlansService {
     public void deleteQuitPlan(Long memberId) {
         Members member = membersRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("Member not found"));
-        
+
         QuitPlans quitPlan = quitPlansRepository.findByMember(member)
                 .orElseThrow(() -> new RuntimeException("Quit plan not found"));
-        
+
         quitPlansRepository.delete(quitPlan);
     }
-    
+
     /**
      * Convert Entity to DTO
      */
     private QuitPlansDTO convertToDTO(QuitPlans quitPlan) {
         QuitPlansDTO dto = new QuitPlansDTO();
         dto.setId(quitPlan.getId());
-        
+
         if (quitPlan.getMember() != null) {
             dto.setMemberId(quitPlan.getMember().getMemberID());
         }
-        
+
         dto.setDailyCigarettes(quitPlan.getDailyCigarettes());
         dto.setFirstCigaretteAfterWaking(quitPlan.getFirstCigaretteAfterWaking());
         dto.setWeeklySpending(quitPlan.getWeeklySpending());
@@ -229,23 +229,23 @@ public class QuitPlansService {
         dto.setQuitGoal(quitPlan.getQuitGoal());
         dto.setTargetDays(quitPlan.getTargetDays());
         dto.setActive(quitPlan.isActive());
-        
+
         // Convert triggers JSON string back to list
         if (quitPlan.getTriggers() != null && !quitPlan.getTriggers().trim().isEmpty()) {
             try {
-                List<String> triggers = objectMapper.readValue(quitPlan.getTriggers(), 
-                    objectMapper.getTypeFactory().constructCollectionType(List.class, String.class));
+                List<String> triggers = objectMapper.readValue(quitPlan.getTriggers(),
+                        objectMapper.getTypeFactory().constructCollectionType(List.class, String.class));
                 dto.setTriggers(triggers);
             } catch (Exception e) {
                 // If conversion fails, set empty list
                 dto.setTriggers(List.of());
             }
         }
-        
+
         if (quitPlan.getCreatedAt() != null) {
             dto.setCreatedAt(quitPlan.getCreatedAt().toString());
         }
-        
+
         return dto;
     }
 
