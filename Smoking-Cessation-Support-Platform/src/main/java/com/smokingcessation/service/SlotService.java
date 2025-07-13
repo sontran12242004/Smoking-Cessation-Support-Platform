@@ -2,7 +2,6 @@ package com.smokingcessation.service;
 import com.smokingcessation.dto.RegisterSlotDTO;
 import com.smokingcessation.entity.Account;
 import com.smokingcessation.entity.AccountSlot;
-import com.smokingcessation.entity.Coach;
 import com.smokingcessation.entity.Slot;
 import com.smokingcessation.exception.exceptions.BadRequestException;
 import com.smokingcessation.repository.AccountSlotRepository;
@@ -55,13 +54,11 @@ public class SlotService {
         LocalTime start = LocalTime.of(9, 0);
         LocalTime end = LocalTime.of(16, 30);
         List<Slot> slots = new ArrayList<>();
-
         while (start.plusMinutes(45).isBefore(end) || start.plusMinutes(45).equals(end)) {
             Slot slot = new Slot();
             slot.setStart(start);
             slot.setLabel(start.toString());
             slot.setEnd(start.plusMinutes(45));
-
             slots.add(slot);
             start = start.plusMinutes(45); // Di chuyển sang slot kế tiếp
         }
@@ -73,14 +70,12 @@ public class SlotService {
     public List<AccountSlot> getRegisteredSlots(Long coachId, LocalDate date) {
         Account coach = authenticationRepository.findById(coachId)
                 .orElseThrow(() -> new BadRequestException("Coach not found"));
-
         List<AccountSlot> accountSlots = accountSlotRepository.findAccountSlotsByAccountAndDate(coach,date);
         List<AccountSlot> slotsAvailable = new ArrayList<>();
         for(AccountSlot accountSlot : accountSlots){
             if(accountSlot.isAvailable()){
                 slotsAvailable.add(accountSlot);
             }
-
         }
         return  slotsAvailable;
     }

@@ -8,7 +8,6 @@ import com.smokingcessation.repository.AuthenticationRepository;
 import com.smokingcessation.repository.ReminderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -34,7 +33,6 @@ public class ReminderService {
             reminder.setCreatedAt(LocalDateTime.now());
             reminder.setUser(user);
             reminderRepository.save(reminder);
-
             // Gửi email cho từng member
             EmailDetail emailDetail = new EmailDetail();
             emailDetail.setReceiver(user);

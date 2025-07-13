@@ -9,7 +9,6 @@ import com.smokingcessation.repository.AppointmentRepository;
 import com.smokingcessation.repository.ReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 
 @Service

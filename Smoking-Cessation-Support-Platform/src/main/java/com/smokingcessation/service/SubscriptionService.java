@@ -41,7 +41,7 @@ public class SubscriptionService {
     }
 
     // lấy subscription theo ID
-    public Subscription getSubscriptionById(Integer id) {
+    public Subscription getSubscriptionById(long id) {
         return subscriptionRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy subscription"));
     }
@@ -235,7 +235,7 @@ public class SubscriptionService {
     }
 
     // validate request đăng ký subscription
-    private void validateSubscriptionRequest(Long memberId, Integer planId) {
+    private void validateSubscriptionRequest(Long memberId, Long planId) {
         // Check if member exists
         if (!membersRepository.existsById(memberId)) {
             throw new BadRequestException("Member not found");

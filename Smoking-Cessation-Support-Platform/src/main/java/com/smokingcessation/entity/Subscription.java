@@ -34,9 +34,9 @@ public class Subscription {
     private boolean isActive;
 
     private String paymentMethod;
-    
+
     private String notes;
-    
+
     private LocalDateTime createdAt;
 
     @PrePersist

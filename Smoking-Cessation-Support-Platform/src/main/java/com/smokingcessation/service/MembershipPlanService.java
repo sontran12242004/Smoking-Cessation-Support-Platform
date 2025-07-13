@@ -1,13 +1,16 @@
 package com.smokingcessation.service;
 
 import com.smokingcessation.entity.MembershipPlan;
+import com.smokingcessation.entity.Payment;
 import com.smokingcessation.entity.Subscription;
+import com.smokingcessation.enums.PaymentStatus;
+import com.smokingcessation.exception.exceptions.NotFoundException;
 import com.smokingcessation.repository.MembershipPlanRepository;
+import com.smokingcessation.repository.PaymentRepository;
 import com.smokingcessation.repository.SubscriptionRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,6 +25,13 @@ public class MembershipPlanService {
 
     @Autowired
     private SubscriptionRepository subscriptionRepository;
+
+    @Autowired
+    private PaymentService paymentService;
+
+    @Autowired
+    private PaymentRepository paymentRepository;
+
 
     // Khởi tạo dữ liệu mặc định
     public void addPlanIfNotExists(
@@ -45,6 +55,8 @@ public class MembershipPlanService {
 
     @PostConstruct
     public void resetAndInitDefaultPlans() {
+
+
         // 2. Seed lại các gói mặc định
         addPlanIfNotExists("Elite Package - Mastery Program (1 year)",
                 365,
@@ -70,7 +82,7 @@ public class MembershipPlanService {
         return membershipPlanRepository.findAll();
     }
 
-    public Optional<MembershipPlan> getPlanById(Integer id) {
+    public Optional<MembershipPlan> getPlanById(long id) {
         return membershipPlanRepository.findById(id);
     }
 
@@ -107,7 +119,7 @@ public class MembershipPlanService {
     }
 
     // Method 2: Edit gói
-    public MembershipPlan editPlan(Integer planId, MembershipPlan updatedPlan) {
+    public MembershipPlan editPlan(long planId, MembershipPlan updatedPlan) {
         MembershipPlan existingPlan = membershipPlanRepository.findById(planId)
                 .orElseThrow(() -> new RuntimeException("Plan not found with ID: " + planId));
         // Cập nhật thông tin gói
@@ -119,7 +131,7 @@ public class MembershipPlanService {
         return membershipPlanRepository.save(existingPlan);
     }
     // Method 3: Xóa gói
-    public boolean deletePlanById(Integer planId) {
+    public boolean deletePlanById(long planId) {
         MembershipPlan plan = membershipPlanRepository.findById(planId)
                 .orElseThrow(() -> new RuntimeException("Plan not found with ID: " + planId));
         // Kiểm tra xem có subscription nào đang sử dụng gói này không
@@ -133,4 +145,22 @@ public class MembershipPlanService {
         membershipPlanRepository.delete(plan);
         return true;
     }
+    public String buyMembershipPackage(long packageId, String clientIp) {
+        MembershipPlan membershipPackage = membershipPlanRepository.findById(packageId)
+                .orElseThrow(() -> new NotFoundException("ko thay goi thanh vien"));
+
+//        Payment
+        float price = membershipPackage.getPrice().floatValue();
+        Payment payment = new Payment();
+        payment.setStatus(PaymentStatus.CREATED);
+        payment.setCreatedAt(LocalDateTime.now());
+        payment.setAmount(price);
+        paymentRepository.save(payment);
+        try{
+            return paymentService.createVNPayUrl(String.valueOf(packageId),String.valueOf(payment.getId()), (long) payment.getAmount(), clientIp );
+        } catch (Exception e){
+            throw new NotFoundException("ko tạo được URL");
+        }
+    }
+
 }

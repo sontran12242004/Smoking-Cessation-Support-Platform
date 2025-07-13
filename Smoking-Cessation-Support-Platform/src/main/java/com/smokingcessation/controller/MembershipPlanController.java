@@ -3,6 +3,7 @@ package com.smokingcessation.controller;
 import com.smokingcessation.entity.MembershipPlan;
 import com.smokingcessation.service.MembershipPlanService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -83,5 +84,18 @@ public class MembershipPlanController {
             }
             return ResponseEntity.badRequest().body("Error deleting plan: " + e.getMessage());
         }
+    }
+
+    @PostMapping("/buy/{packageId}")
+    public ResponseEntity buyPackage(@PathVariable long packageId,
+                                     HttpServletRequest request
+    ) {
+        String clientIP = request.getHeader("X-forwarded-For");
+        if(clientIP == null || clientIP.isEmpty()) {
+            clientIP = request.getRemoteAddr();
+        }
+        String URL = membershipPlanService.buyMembershipPackage(packageId,clientIP);
+
+        return ResponseEntity.ok(URL);
     }
 }

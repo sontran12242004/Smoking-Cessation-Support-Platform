@@ -76,7 +76,8 @@ public class SecurityConfig {
 
                                         // Coach endpoints - public access
                                         "/api/coaches",
-                                        "/api/coaches/**"
+                                        "/api/coaches/**",
+                                        "api/payment"
                                 ).permitAll()
 
                                 // Tất cả endpoints khác cần authentication
