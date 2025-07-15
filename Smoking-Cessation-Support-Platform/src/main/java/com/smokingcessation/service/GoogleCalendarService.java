@@ -8,7 +8,6 @@ import com.smokingcessation.repository.SlotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -24,7 +23,6 @@ import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.*;
 import com.google.api.client.util.DateTime;
-
 import java.io.*;
 import java.util.*;
 import java.time.ZonedDateTime;

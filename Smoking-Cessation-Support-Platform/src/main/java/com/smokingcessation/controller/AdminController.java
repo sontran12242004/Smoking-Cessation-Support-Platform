@@ -18,13 +18,13 @@ public class AdminController {
 
     @Autowired
     private AdminService adminService;
-
     // ADMIN - Chỉ admin mới có thể xem danh sách admin
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public List<Admin> getAllAdmins() {
         return adminService.getAllAdmins();
     }
+
 
     // ADMIN - Chỉ admin mới có thể xem thông tin admin khác
     @GetMapping("/{id}")

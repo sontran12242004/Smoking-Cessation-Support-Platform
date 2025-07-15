@@ -2,7 +2,6 @@ package com.smokingcessation.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -27,6 +26,8 @@ public class MembershipPlan {
     private String description;
 
     private boolean active = true;
+    private boolean isActive;
+
 
     private LocalDateTime createdAt;
 }

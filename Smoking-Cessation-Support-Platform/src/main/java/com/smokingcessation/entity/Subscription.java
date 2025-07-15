@@ -3,7 +3,6 @@ package com.smokingcessation.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 

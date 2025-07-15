@@ -3,18 +3,15 @@ package com.smokingcessation.service;
 
 import com.smokingcessation.dto.*;
 import com.smokingcessation.entity.Account;
-import com.smokingcessation.entity.ForgotPassword;
 import com.smokingcessation.entity.Members;
 import com.smokingcessation.entity.Admin;
 import com.smokingcessation.entity.Coach;
 import com.smokingcessation.enums.Role;
 import com.smokingcessation.exception.exceptions.AuthenticationException;
-import com.smokingcessation.repository.AccountSlotRepository;
 import com.smokingcessation.repository.AuthenticationRepository;
 import com.smokingcessation.repository.MembersRepository;
 import com.smokingcessation.repository.AdminRepository;
 import com.smokingcessation.repository.CoachRepository;
-import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -171,40 +168,4 @@ public class AuthenticationService implements UserDetailsService {
         return authenticationRepository.findAccountByEmail(email);
     }
 
-
-    public List<Account> getCoachs() {
-        return authenticationRepository.findByRole(Role.COACH);
-    }
-
-    // Method để lấy Members entity từ Account email
-    public Members getMemberByAccountEmail(String email) {
-        return membersRepository.findByEmail(email).orElse(null);
-    }
-
-    // Method để lấy Members entity từ current Account
-    public Members getCurrentMember() {
-        Account currentAccount = getCurrentAccount();
-        if (currentAccount != null && currentAccount.getRole() == Role.MEMBERS) {
-            return currentAccount.getMember();  // Sử dụng relationship thay vì tìm theo email
-        }
-        return null;
-    }
-
-    // Method để lấy Admin entity từ current Account
-    public Admin getCurrentAdmin() {
-        Account currentAccount = getCurrentAccount();
-        if (currentAccount != null && currentAccount.getRole() == Role.ADMIN) {
-            return currentAccount.getAdmin();  // Sử dụng relationship thay vì tìm theo email
-        }
-        return null;
-    }
-
-    // Method để lấy Coach entity từ current Account
-    public Coach getCurrentCoach() {
-        Account currentAccount = getCurrentAccount();
-        if (currentAccount != null && currentAccount.getRole() == Role.COACH) {
-            return currentAccount.getCoach();  // Sử dụng relationship thay vì tìm theo account
-        }
-        return null;
-    }
 }

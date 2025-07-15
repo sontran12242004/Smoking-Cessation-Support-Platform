@@ -15,7 +15,6 @@ import java.util.Optional;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
-import com.smokingcessation.repository.CigaretteLogRepository;
 import com.smokingcessation.repository.DailyProcessRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,9 +23,6 @@ public class HealthMetricsService {
 
     @Autowired
     private HealthMetricsRepository healthMetricsRepository;
-
-    @Autowired
-    private CigaretteLogRepository cigaretteLogRepository;
 
     @Autowired
     private DailyProcessRepository dailyProcessRepository;

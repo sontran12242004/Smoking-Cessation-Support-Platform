@@ -13,10 +13,8 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -113,12 +111,6 @@ public class Account implements UserDetails {
     @JsonIgnore
     private Coach coach;
 
-
-//    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
-//    List<Rating> ratings;
-//
-//    @OneToMany(mappedBy = "account")
-//    List<Report> reports;
 
 
 }

@@ -1,8 +1,6 @@
 package com.smokingcessation.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.smokingcessation.enums.Role;
 import lombok.Data;
 import jakarta.persistence.*;
 import lombok.Getter;

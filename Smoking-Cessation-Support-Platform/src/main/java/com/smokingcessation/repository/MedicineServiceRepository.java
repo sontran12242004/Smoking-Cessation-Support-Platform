@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface MedicineServiceRepository extends JpaRepository<MedicineService, Long> {
-    List<MedicineService> findByIdIn(List<Long> ids);
+
 }

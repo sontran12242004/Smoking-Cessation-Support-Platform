@@ -5,33 +5,56 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ffc493ea-3553-487b-a91d-c3c0aacb3ac3" name="Changes" comment="Authorization">
-      <change afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/dto/WorkScheduleRequestDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/Smoking-Cessation-Support-Platform.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/d0efde17-7053-4ad0-8519-0387c6b3c262.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/d0efde17-7053-4ad0-8519-0387c6b3c262/storage_v2/_src_/schema/information_schema.FNRwLQ.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/d0efde17-7053-4ad0-8519-0387c6b3c262/storage_v2/_src_/schema/mysql.osA4Bg.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/d0efde17-7053-4ad0-8519-0387c6b3c262/storage_v2/_src_/schema/performance_schema.kIw0nw.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/SmokingCessationSupportPlatformApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/SmokingCessationSupportPlatformApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/config/Filter.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/config/Filter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/config/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/config/WebConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/controller/AppointmentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/controller/AppointmentController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/controller/CoachController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/controller/CoachController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/controller/MembersController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/controller/MembersController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/controller/MembershipPlanController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/controller/MembershipPlanController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/dto/AccountDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/dto/AccountDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/dto/AppointmentDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/dto/AppointmentDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/dto/CoachDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/dto/CoachDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/dto/MembersDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/dto/MembersDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/controller/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/controller/AdminController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/controller/RatingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/controller/RatingController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/dto/RatingDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/dto/RatingDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/Account.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/AccountMemberShip.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/AccountMemberShip.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/AccountSlot.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/AccountSlot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/Appointment.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/Appointment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/Coach.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/Coach.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/DailyProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/DailyProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/HealthMetrics.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/HealthMetrics.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/MedicineService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/MedicineService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/Members.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/Members.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/repository/AccountSlotRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/repository/AccountSlotRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/MembershipPlan.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/MembershipPlan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/Payment.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/Payment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/QuitPlans.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/QuitPlans.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/Rating.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/Rating.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/Reminder.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/Reminder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/Report.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/Report.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/ResetPassword.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/ResetPassword.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/Slot.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/Slot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/Subscription.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/entity/Subscription.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/repository/AppointmentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/repository/AppointmentRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/repository/AuthenticationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/repository/AuthenticationRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/repository/CigaretteLogRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/repository/CigaretteLogRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/repository/CoachRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/repository/CoachRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/repository/DailyProcessRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/repository/DailyProcessRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/repository/HealthMetricsRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/repository/HealthMetricsRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/repository/MedicineServiceRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/repository/MedicineServiceRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/repository/MembersRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/repository/MembersRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/repository/MembershipPlanRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/repository/MembershipPlanRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/repository/QuitPlansRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/repository/QuitPlansRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/repository/RatingRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/repository/RatingRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/repository/SubscriptionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/repository/SubscriptionRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/service/AdminService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/service/AdminService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/service/AppointmentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/service/AppointmentService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/service/AuthenticationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/service/AuthenticationService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/service/CoachService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/service/CoachService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/service/GoogleCalendarService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/service/GoogleCalendarService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/service/HealthMetricsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/service/HealthMetricsService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/service/MembersService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/service/MembersService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/service/QuitPlansService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/service/QuitPlansService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/service/RatingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/service/RatingService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/service/SlotService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Smoking-Cessation-Support-Platform/src/main/java/com/smokingcessation/service/SlotService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,7 +81,7 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/sontran12242004/Smoking-Cessation-Support-Platform.git&quot;,
+    &quot;url&quot;: &quot;https://github.com/sontran12242004/Smoking-Cessation-Support-Platform&quot;,
     &quot;accountId&quot;: &quot;e007b810-98d6-4185-a735-012032afa471&quot;
   }
 }</component>
@@ -73,48 +96,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Unnamed.executor&quot;: &quot;Run&quot;,
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Back__End&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.SmokingCessationSupportPlatformApplication.executor": "Run",
+    "Application.Unnamed.executor": "Coverage",
+    "DefaultHtmlFileTemplate": "HTML File",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "#12 on Back__End",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/ADMIN/Documents/GitHub/Back_End/Smoking-Cessation-Support-Platform",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\ADMIN\Documents\GitHub\Smoking-Cessation-Support-Platform\Smoking-Cessation-Support-Platform\src\main\resources" />
     </key>
-  </component>
-  <component name="RunManager">
-    <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.smokingcessation.SmokingCessationSupportPlatformApplication" />
-      <module name="Smoking-Cessation-Support-Platform" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-  </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.26094.121" />
-        <option value="bundled-js-predefined-d6986cc7102b-b26f3e71634d-JavaScript-IU-251.26094.121" />
-      </set>
-    </attachedChunks>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -164,5 +173,11 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Authorization" />
     <option name="LAST_COMMIT_MESSAGE" value="Authorization" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Smoking_Cessation_Support_Platform$SmokingCessationSupportPlatformApplication.ic" NAME="SmokingCessationSupportPlatformApplication Coverage Results" MODIFIED="1752511869363" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>com.smokingcessation.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/Smoking_Cessation_Support_Platform$Unnamed.ic" NAME="Unnamed Coverage Results" MODIFIED="1752512159947" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
   </component>
 </project>

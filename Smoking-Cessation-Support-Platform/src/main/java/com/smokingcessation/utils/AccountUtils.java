@@ -19,8 +19,8 @@ public class AccountUtils implements ApplicationContextAware {
     }
 
     public Account getCurrentAccount() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return userRepo.findByfullName(username).orElseThrow();
+        return userRepo.findAccountByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
     }
+
 
 }

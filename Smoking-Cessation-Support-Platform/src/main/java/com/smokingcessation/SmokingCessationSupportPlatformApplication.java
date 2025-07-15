@@ -11,9 +11,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @OpenAPIDefinition(info = @Info(title = "Student API", version = "1.0", description = "Information"))
 @SecurityScheme(name = "api", scheme = "bearer", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
 public class SmokingCessationSupportPlatformApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(SmokingCessationSupportPlatformApplication.class, args);
     }
-
 }
+

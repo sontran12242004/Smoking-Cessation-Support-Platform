@@ -63,7 +63,8 @@ public class Filter extends OncePerRequestFilter {
             // Coach endpoints - public access
             "/api/coaches",
             "/api/coaches/**",
-            "api/payment"
+            "api/payment",
+            "/rating/coach"
     );
 
     private boolean isPublicEndpoint(String uri) {
