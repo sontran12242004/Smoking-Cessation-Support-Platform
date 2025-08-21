@@ -24,23 +24,23 @@
 
 ---
 
-**Smoking Cessation Support Platform**
+Smoking Cessation Support Platform
 
-* **Homepage** introduces platform information, achievement leaderboard, experience-sharing blog, …
-* **User registration & membership**: allow users to sign up, choose a membership plan, and make payments to access system features.
-* **Smoking status tracking**: record current smoking situation such as number of cigarettes, smoking frequency, cost of cigarettes, …
-* **Quit plan setup**: users can create a smoking cessation plan (reasons, stages, start date, expected quit date, …). The system can also generate a suggested quit plan for users to customize.
-* **Progress tracking**: log quitting progress (smoking data, health condition, …) to calculate smoke-free days, money saved, health improvements, …
-* **Motivational notifications**: send periodic reminders (daily, weekly, …) with motivational messages and quitting reasons.
-* **Achievement badges**: notify users of milestones earned during their quit journey (e.g., *1-day smoke free, 100K money saved, …*).
-* **Community sharing**: allow members to share badges, encourage each other, exchange advice, and get support from peers.
-* **Live coaching**: provide direct communication with platform coaches for quitting consultation.
-* **Membership plans management**.
-* **Rating & feedback management**.
-* **User profile management**.
-* **Dashboard & reporting**.
++Homepage introduces platform information, achievement leaderboard, experience-sharing blog, …
++User registration & membership: allow users to sign up, choose a membership plan, and make payments to access system features.
++Smoking status tracking: record current smoking situation such as number of cigarettes, smoking frequency, cost of cigarettes, …
++Quit plan setup: users can create a smoking cessation plan (reasons, stages, start date, expected quit date, …). The system can also generate a suggested quit plan for users to customize.
++Progress tracking: log quitting progress (smoking data, health condition, …) to calculate smoke-free days, money saved, health improvements, …
++Motivational notifications: send periodic reminders (daily, weekly, …) with motivational messages and quitting reasons.
++Achievement badges: notify users of milestones earned during their quit journey (e.g., 1-day smoke free, 100K money saved, …).
++Community sharing: allow members to share badges, encourage each other, exchange advice, and get support from peers.
++Live coaching: provide direct communication with platform coaches for quitting consultation.
++Membership plans management.
++Rating & feedback management.
++User profile management.
++Dashboard & reporting.
 
-**Actors**: Guest, Member, Coach, Admin
+Actors: Guest, Member, Coach, Admin
 
 ---
 
